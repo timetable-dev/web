@@ -1,0 +1,69 @@
+{
+    "clientName": "Thunder Client",
+    "collectionName": "Requests",
+    "collectionId": "95263444-d4b8-4633-b7c9-af75d03c9632",
+    "dateExported": "2025-02-05T19:30:13.408Z",
+    "version": "1.2",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "e785ef4d-09a9-456e-8828-9f6a25b61b3e",
+            "colId": "95263444-d4b8-4633-b7c9-af75d03c9632",
+            "containerId": "",
+            "name": "Teachers",
+            "url": "http://localhost:5173/api/getTimetableData?entityId=1580&entityType=teacher&weekType=currentWeek",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2025-02-05T19:29:09.760Z",
+            "modified": "2025-02-05T19:29:09.760Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "entityId",
+                    "value": "1580",
+                    "isPath": false
+                },
+                {
+                    "name": "entityType",
+                    "value": "teacher",
+                    "isPath": false
+                },
+                {
+                    "name": "weekType",
+                    "value": "currentWeek",
+                    "isPath": false
+                }
+            ]
+        },
+        {
+            "_id": "d288d1e7-15c6-44b2-803a-923a1530ac2d",
+            "colId": "95263444-d4b8-4633-b7c9-af75d03c9632",
+            "containerId": "",
+            "name": "Groups",
+            "url": "http://localhost:5173/api/getTimetableData?entityId=224002986&entityType=group&weekType=currentWeek",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2025-02-05T19:29:36.789Z",
+            "modified": "2025-02-05T19:29:36.789Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "entityId",
+                    "value": "224002986",
+                    "isPath": false
+                },
+                {
+                    "name": "entityType",
+                    "value": "group",
+                    "isPath": false
+                },
+                {
+                    "name": "weekType",
+                    "value": "currentWeek",
+                    "isPath": false
+                }
+            ]
+        }
+    ],
+    "ref": "lQR0XooR_pKsbSDeKUKHv65f0gZW6zE72iZPVM1idhpKTedItJjtRZ6RMWjsTJ_NbRtYQmWwMaWvdJeac2DrsQ"
+}
