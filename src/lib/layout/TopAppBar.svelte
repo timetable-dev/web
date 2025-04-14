@@ -21,7 +21,7 @@
         selectedEntityId = $addedEntities[0].id;
     }
 
-    let version = $state<string>("v 0.1");
+    let version = $state<string>("v 0.1.1");
     let counter = $state<number>(0);
     let timeout = $state<boolean>(true)
 
