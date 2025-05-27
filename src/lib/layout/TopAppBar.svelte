@@ -21,7 +21,7 @@
         selectedEntityId = $addedEntities[0].id;
     }
 
-    let version = $state<string>("v 0.1.1");
+    let version = $state<string>("v 0.2");
     let counter = $state<number>(0);
     let timeout = $state<boolean>(true)
 
@@ -56,9 +56,9 @@
     <!-- <div class="flex order-1 grow pl-2.5 lg:grow-0"> -->
     <div class="flex pl-2.5 lg:shrink-0 ">
         {#if $mode == "dark"}
-            <img src="/logo-dark.svg" alt="Расписание МГЛУ" class="h-16 lg:p-1"/>
+            <img src="/logo/logo-dark.svg" alt="Расписание МГЛУ" class="h-16 lg:p-1"/>
         {:else}
-            <img src="/logo-light.svg" alt="Расписание МГЛУ" class="h-16 lg:p-1"/>
+            <img src="/logo/logo-light.svg" alt="Расписание МГЛУ" class="h-16 lg:p-1"/>
         {/if}
     </div>
 
@@ -85,7 +85,7 @@
                             <div class="flex w-min h-min p-2.5 rounded-md bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-200">
                                 <RotateCw size="22" />
                             </div>
-                            <p class="text-lg text-balance">Самое свежее расписание загружается автоматически при каждом обновлении страницы.</p>
+                            <p class="text-lg text-balance">Самое актуальное расписание загружается автоматически при каждом обновлении страницы.</p>
                         </div>
                         <div class="flex flex-col md:flex-row gap-2 md:gap-4">
                             <div class="flex w-min h-min p-2.5 rounded-md bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-200">
