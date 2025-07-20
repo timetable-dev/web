@@ -22,7 +22,7 @@
 <Tabs.Root
     bind:value = {selectedWeek}
     class="fixed inset-x-0 bottom-0 w-full flex justify-center">
-    <Tabs.List class="flex flex-row justify-center gap-1 p-2 m-2 w-full w-max rounded-lg md:mb-1.5 md:p-1
+    <Tabs.List class="flex flex-row justify-center gap-1 p-2 m-2  w-max rounded-lg md:mb-1.5 md:p-1
                     bg-zinc-50 dark:bg-zinc-800 outline-1 outline-zinc-200 dark:outline-zinc-700">
 
         {#each weeks as week}
