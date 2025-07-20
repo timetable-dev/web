@@ -1,1 +1,1 @@
-Unofficial web client for MSLU timetable. Written in Svelte and TS, hosted on `fly.io`. All data is automatically being loaded from the official website: http://schedule.mslu.by
+Unofficial web client for MSLU timetable. Written in Svelte and TS, hosted on Fly.io. All data is fetched automatically from the official website: http://schedule.mslu.by
