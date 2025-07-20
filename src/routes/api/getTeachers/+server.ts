@@ -3,8 +3,12 @@ import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async (): Promise<Response> => {
 
+    // const ENDPOINT = "http://schedule.mslu.by"
+    // const ENDPOINT = "http://localhost:3000"
+    const ENDPOINT = "https://bbaf9a53f261s823eb2e.containers.yandexcloud.net"
+
     // Requesting MSLU backend
-    let res = await fetch("http://schedule.mslu.by/backend/getTeacherNames");
+    let res = await fetch(`${ENDPOINT}/backend/getTeacherNames`);
     
     // Convert the answer to the desired form and return the list of groups
 

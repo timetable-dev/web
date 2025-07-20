@@ -11,8 +11,12 @@ export const GET: RequestHandler = async ({ url }): Promise<Response> => {
         return error(400, "Query params must include facultyId and educationMode.")
     }
 
+    // const ENDPOINT = "http://schedule.mslu.by"
+    // const ENDPOINT = "http://localhost:3000"
+    const ENDPOINT = "https://bbaf9a53f261s823eb2e.containers.yandexcloud.net"
+
     // Requesting MSLU backend
-    let groupUrl = new URL("http://schedule.mslu.by/backend/buttonClicked")
+    let groupUrl = new URL(`${ENDPOINT}/backend/buttonClicked`)
     groupUrl.searchParams.append("facultyId", facultyId)
     groupUrl.searchParams.append("educationForm", educationMode)
     const res = await fetch(groupUrl);

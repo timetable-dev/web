@@ -12,15 +12,19 @@ export const GET: RequestHandler = async ({ url }): Promise<Response> => {
     let _fetchUrl: string;
     let _fetchParam: string;
 
+    // const ENDPOINT = "http://schedule.mslu.by"
+    // const ENDPOINT = "http://localhost:3000"
+    const ENDPOINT = "https://bbaf9a53f261s823eb2e.containers.yandexcloud.net"
+
     // Choosing MSLU endpoint and type param depending on the entity type
     // In case of search params invalid returning 400
     if (!entityId || !entityType || !weekType) {
         return error(400, "Query params must include entityId, entityType and weekType.")
     } else if (entityType === "group") {
-        _fetchUrl = "http://schedule.mslu.by/backend/";
+        _fetchUrl = `${ENDPOINT}/backend`;
         _fetchParam = "groupId"
     } else if (entityType === "teacher") {
-        _fetchUrl = "http://schedule.mslu.by/backend/teachers";
+        _fetchUrl = `${ENDPOINT}/backend/teachers`;
         _fetchParam = "teacherId"
     } else {
         return error(400, "Param entityType must be either group or teacher.")
@@ -46,6 +50,7 @@ export const GET: RequestHandler = async ({ url }): Promise<Response> => {
                 return error(502, "Ошибка обработки данных с сервера МГЛУ.")
             }
         } catch (e) {
+            console.error(e)
             return error(502, "Ошибка обработки данных с сервера МГЛУ.")
         }
     } else {
