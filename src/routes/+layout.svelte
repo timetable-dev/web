@@ -1,5 +1,5 @@
 <script>
-    import { ModeWatcher, mode } from "mode-watcher";
+    import { ModeWatcher } from "mode-watcher";
     let { children } = $props()
     import "../app.css";
 </script>
