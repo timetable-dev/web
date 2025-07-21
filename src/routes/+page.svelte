@@ -1,6 +1,5 @@
 <script lang="ts">
     import { TimetableContent, TopAppBar } from "$lib/layout";
-    import { ErrorView } from "$lib/components";
     import { addedEntities } from "$lib/stores";
 
     let selectedEntityId = $state<string | undefined>(

@@ -55,7 +55,7 @@
     <!-- Logo -->
     <!-- <div class="flex order-1 grow pl-2.5 lg:grow-0"> -->
     <div class="flex pl-2.5 lg:shrink-0 ">
-        {#if $mode == "dark"}
+        {#if mode.current === "dark"}
             <img src="/logo/logo-dark.svg" alt="Расписание МГЛУ" class="h-16 lg:p-1"/>
         {:else}
             <img src="/logo/logo-light.svg" alt="Расписание МГЛУ" class="h-16 lg:p-1"/>
