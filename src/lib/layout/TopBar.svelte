@@ -1,7 +1,7 @@
 <script lang="ts">
     import { ToggleGroup, Button, DropdownMenu } from "bits-ui";
     import { AddEntityDialog } from "$lib/components";
-    import { addedEntities } from "$lib/stores";
+    import { addedEntities } from "$lib/persisted_store";
     import { EllipsisVertical, Trash2, Plus, ArrowLeftToLine } from 'lucide-svelte';
     
     let { selectedEntityId = $bindable() }: { selectedEntityId:  string | undefined } = $props();

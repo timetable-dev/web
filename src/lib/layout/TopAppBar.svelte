@@ -3,7 +3,7 @@
     import { AddEntityDialog } from "$lib/components";
     import { flyAndScale } from "$lib/transitions";
     import { mode } from "mode-watcher";
-    import { addedEntities } from "$lib/stores";
+    import { addedEntities } from "$lib/persisted_store";
     import { EllipsisVertical, Trash2, Plus } from 'lucide-svelte';
     
     let { selectedEntityId = $bindable() }: { selectedEntityId:  string | undefined } = $props();

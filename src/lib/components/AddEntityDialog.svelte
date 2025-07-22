@@ -5,7 +5,7 @@
     import Skeleton from "./SkeletonSmall.svelte";
     import type { Entity } from "../types";
 
-    import { addedEntities } from "$lib/stores";
+    import { addedEntities } from "$lib/persisted_store";
 
     let { dialogOpen = $bindable(false), newEntitySubmitted }: {dialogOpen: boolean, newEntitySubmitted: () => void} = $props();
 

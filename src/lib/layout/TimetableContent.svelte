@@ -2,7 +2,7 @@
     import { fade } from "$lib/transitions";
     import { WeekPicker, SkeletonLarge, ErrorView, AddEntityDialog } from "$lib/components";
     import type { Entity, TimetableData } from "$lib/types"
-    import { addedEntities } from "$lib/stores";
+    import { addedEntities } from "$lib/persisted_store";
     import { LessonView } from "$lib/components";
     import { Plus } from "lucide-svelte";
     import InfoDialog from "$lib/components/InfoDialog.svelte";
