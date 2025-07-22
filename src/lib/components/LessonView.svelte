@@ -23,12 +23,20 @@
         entity = lesson.groups.join(", ");
     };
 
+    // if (lesson.type === "Практ") {
+    //     typeStyling = "underline decoration-solid decoration-2 decoration-rose-500 dark:decoration-rose-400";
+    // } else if (lesson.type === "Лек") {
+    //     typeStyling = "underline decoration-solid decoration-2 decoration-emerald-500 dark:decoration-emerald-300";
+    // } else if (lesson.type === "Сем") {
+    //     typeStyling = "underline decoration-solid decoration-2 decoration-yellow-500 dark:decoration-amber-300"
+    // }
+
     if (lesson.type === "Практ") {
-        typeStyling = "underline decoration-solid decoration-2 decoration-rose-500 dark:decoration-rose-400";
+        typeStyling = "bg-rose-100 text-rose-800 outline-rose-200 dark:bg-rose-900 dark:text-rose-200 dark:outline-rose-800";
     } else if (lesson.type === "Лек") {
-        typeStyling = "underline decoration-solid decoration-2 decoration-emerald-500 dark:decoration-emerald-300";
+        typeStyling = "bg-emerald-100 text-emerald-800 outline-emerald-200 dark:bg-emerald-900 dark:text-emerald-200 dark:outline-emerald-800";
     } else if (lesson.type === "Сем") {
-        typeStyling = "underline decoration-solid decoration-2 decoration-yellow-500 dark:decoration-amber-300"
+        typeStyling = "bg-amber-100 text-amber-800 outline-amber-200 dark:bg-amber-900 dark:text-amber-200 dark:outline-amber-800"
     }
 
     // NOTE: Think about type styling of badge with background color instead of colored underline
@@ -47,9 +55,9 @@
         <div class="line-clamp-2 text-lg">{lesson.title}</div>
         <div class="truncate rounded-sm opacity-70">{entity}</div>
     </div>
-    <div class="flex flex-col justify-center">
+    <div class="flex flex-col gap-0.5 justify-center">
         <div class="justify-self-start line-clamp-2 font-medium">{lesson.room}</div>
-        <div class="justify-self-start truncate {typeStyling}">{lesson.type}</div>
+        <div class="justify-self-start truncate text-sm rounded-sm w-min px-1 {typeStyling}">{lesson.type}</div>
     </div>
 </div>
 

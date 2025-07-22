@@ -1,8 +1,7 @@
 <script lang="ts">
-    import { Dialog, ToggleGroup, Button, DropdownMenu } from "bits-ui";
-    import { RotateCw, CirclePlus, ListCollapse } from "lucide-svelte";
+    import { ToggleGroup, Button, DropdownMenu } from "bits-ui";
     import { AddEntityDialog } from "$lib/components";
-    import { flyAndScale, fade } from "$lib/transitions";
+    import { flyAndScale } from "$lib/transitions";
     import { mode } from "mode-watcher";
     import { addedEntities } from "$lib/stores";
     import { EllipsisVertical, Trash2, Plus } from 'lucide-svelte';
@@ -21,110 +20,25 @@
         selectedEntityId = $addedEntities[0].id;
     }
 
-    let version = $state<string>("v 0.2");
-    let counter = $state<number>(0);
-    let timeout = $state<boolean>(true)
-
-    function revealGithub() {
-        if (counter < 5) {
-            counter += 1;
-            console.log(`Click ${6 - counter} more time${counter == 5 ? "" : "s"}`)
-        } else if (counter == 5) {
-            counter += 1;
-            version = "GitHub";
-            setTimeout(() => {
-                timeout = false;
-                console.log("Timeout ended")
-            }, 1000);
-        } else if (counter == 6 && !timeout) {
-            console.log("Going to GitHub")
-            window.location.href = "https://github.com/timetable-dev/web"
-        } else {
-            console.log("Wait a second...")
-        }
-    }
-
 </script>
 
-<div class="relative flex flex-col rounded-xl
-            lg:flex-row gap-2 lg:gap-4 outline-1
-            py-3 lg:py-1
-            w-full md:w-2/3 lg:w-full
+<div class="flex flex-row flex-wrap gap-2 px-3 py-3 lg:py-1
+            lg:flex-nowrap lg:gap-4
+            w-full md:w-2/3 lg:w-full rounded-xl outline-1
             bg-zinc-50 dark:bg-zinc-800 outline-zinc-200 dark:outline-zinc-700">
 
     <!-- Logo -->
-    <!-- <div class="flex order-1 grow pl-2.5 lg:grow-0"> -->
-    <div class="flex pl-2.5 lg:shrink-0 ">
+    <div class="flex order-1 grow h-16 p-1">
         {#if mode.current === "dark"}
-            <img src="/logo/logo-dark.svg" alt="Расписание МГЛУ" class="h-16 lg:p-1"/>
+            <img src="/logo/logo-dark.svg" alt="Расписание МГЛУ" />
         {:else}
-            <img src="/logo/logo-light.svg" alt="Расписание МГЛУ" class="h-16 lg:p-1"/>
+            <img src="/logo/logo-light.svg" alt="Расписание МГЛУ" />
         {/if}
     </div>
 
-    <!-- Info -->
-    <div class="absolute top-6 lg:top-[16px] right-4 lg:right-3 flex items-center">
-        <Dialog.Root>
-            <Dialog.Trigger class="hover:bg-zinc-200 dark:hover:bg-zinc-700 duration-200 p-2 mr-2 rounded-lg cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info text-zinc-800 dark:text-white"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-            </Dialog.Trigger>
-            <Dialog.Portal>
-                <Dialog.Overlay
-                    transition={fade}
-                    transitionConfig={{ duration: 150 }}
-                    class="fixed inset-0 z-50 bg-black/50 dark:bg-zinc-800/80"
-                />
-                <Dialog.Content
-                    transition={flyAndScale}
-                    class="fixed left-1/2 top-1/2 translate-[-50%] z-50
-                           flex flex-col gap-6 rounded-lg w-[90%] md:w-1/2 lg:w-1/3 max-h-5/6 p-5 pt-8
-                         bg-white outline-zinc-300 dark:bg-zinc-900 dark:outline-zinc-800">
-
-                    <div class="flex flex-col overflow-y-auto gap-8">
-                        <div class="flex flex-col md:flex-row gap-2 md:gap-4">
-                            <div class="flex w-min h-min p-2.5 rounded-md bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-200">
-                                <RotateCw size="22" />
-                            </div>
-                            <p class="text-lg text-balance">Самое актуальное расписание загружается автоматически при каждом обновлении страницы.</p>
-                        </div>
-                        <div class="flex flex-col md:flex-row gap-2 md:gap-4">
-                            <div class="flex w-min h-min p-2.5 rounded-md bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-200">
-                                <CirclePlus size="22" />
-                            </div>
-                            <p class="text-lg text-balance">Чтобы добавить расписание, нажмите на плюсик, а чтобы удалить – на три точки.</p>
-                        </div>
-                        <div class="flex flex-col md:flex-row gap-2 md:gap-4">
-                            <div class="flex w-min h-min p-2.5 rounded-md bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-200">
-                                <ListCollapse size="22" />
-                            </div>
-                            <p class="text-lg text-balance">Нажмите на занятие, чтобы посмотреть подробную информацию о нём.</p>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-row justify-between items-center">
-
-                        <button class="pl-6 pr-12 py-2 rounded-md active:transition-all duration-75
-                                       active:bg-zinc-200 active:dark:bg-zinc-700 active:scale-[0.95]"
-                                onclick={revealGithub}
-                                       >
-                                       {version}
-                        </button>
-
-                        <Dialog.Close
-                            class="flex self-end px-6 py-2 mt-2 outline-1 rounded-lg cursor-pointer duration-100 active:scale-[0.98]
-                                   text-zinc-900 dark:text-zinc-50 outline-zinc-200 dark:outline-zinc-600 bg-zinc-100 dark:bg-zinc-700 hover:bg-zinc-200 hover:dark:bg-zinc-800 hover:dark:outline-zinc-700">
-                            Понятно
-                        </Dialog.Close>
-                    </div>
-
-                </Dialog.Content>
-            </Dialog.Portal>
-        </Dialog.Root>
-    </div>
-
     <!-- Entity selector -->
-    <div class="flex px-3 items-center overflow-x-scroll scrollbar-hidden lg:mr-20">
-        <ToggleGroup.Root class="flex flex-row gap-2 items-center w-full h-max" type="single" bind:value={selectedEntityId}>
+    <div class="flex items-center grow overflow-x-scroll order-3 lg:order-2 scrollbar-hidden">
+        <ToggleGroup.Root class="flex flex-row gap-2 items-center w-full" type="single" bind:value={selectedEntityId}>
 
             {#each $addedEntities as entity}
                 <div class="flex flex-row flex-nowrap items-center rounded-xl
@@ -156,7 +70,7 @@
                     <!-- NOTE: maybe base pl-3.5 -->
                     <ToggleGroup.Item
                         value={entity.id}
-                        class="flex flex-row pl-4 lg:pl-3.5 py-2 lg:py-1.5  text-nowrap text-lg whitespace-nowrap cursor-pointer"> 
+                        class="flex flex-row pl-4 lg:pl-3.5 py-2 lg:py-1.5 text-nowrap text-lg whitespace-nowrap cursor-pointer"> 
                         {entity.name}
                     </ToggleGroup.Item>
 
@@ -196,13 +110,19 @@
                 </div>
             {/each}
 
-            <!-- Add schedule button -->
-            <Button.Root on:click={() => (addEntityDialogOpen = true)} class="p-2.5 shrink-0 active:scale-[0.98] bg-zinc-100 dark:bg-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-600 transition-all duration-100 rounded-full">
-                <Plus />
-            </Button.Root>
-            <div class="text-zinc-50 dark:text-zinc-800 select-none">AT</div> 
-
-            <AddEntityDialog newEntitySubmitted={submitNewEntity} bind:dialogOpen={addEntityDialogOpen} />
+            <!-- <div class="text-zinc-50 dark:text-zinc-800 select-none">AT</div>  -->
+            
         </ToggleGroup.Root>
+        
     </div>
+
+    <!-- Add button -->
+    <div class="flex aspect-square self-center order-2 lg:order-3 shrink">
+        <Button.Root on:click={() => (addEntityDialogOpen = true)} class="flex flex-row p-3 active:scale-[0.98] bg-blue-100 dark:bg-zinc-700 hover:bg-blue-200 dark:hover:bg-zinc-600 transition-all duration-100 rounded-xl">
+            <Plus class="flex text-blue-800 dark:text-white"/>
+        </Button.Root>
+    </div>
+
 </div>
+
+<AddEntityDialog newEntitySubmitted={submitNewEntity} bind:dialogOpen={addEntityDialogOpen} />

@@ -5,10 +5,13 @@
     import { addedEntities } from "$lib/stores";
     import { LessonView } from "$lib/components";
     import { Plus } from "lucide-svelte";
+    import InfoDialog from "$lib/components/InfoDialog.svelte";
 
     type Week = "currentWeek" | "nextWeek" | "thirdWeek" | "fourthWeek";
 
     let selectedWeek = $state<Week>("currentWeek")
+
+    let infoDialogOpen = $state(false)
 
     function submitNewEntity() {
         const newEntityId = [...$addedEntities][$addedEntities.length - 1].id;
@@ -141,20 +144,32 @@
     {:else}
         <div class="flex flex-col self-center items-center gap-8 w-full md:w-2/3 lg:w-1/2">
             <p class="pt-36 text-center text-xl text-balance">
-                Добавьте новое расписание или выберите одно из добавленных
+                Откройте новое расписание или выберите одно из добавленных
             </p>
-            <button
-                onclick={() => {addEntityDialogOpen = true}}
-                class="flex flex-row items-center gap-2 font-medium w-max pr-4 pl-3 py-2.5 rounded-lg outline-1 cursor-pointer transition-all duration-150 active:scale-[0.98]
-                       bg-blue-600 dark:bg-sky-900 text-blue-50 dark:text-sky-50 outline-blue-500 dark:outline-sky-800"
-            >
-            <Plus />
-            Добавить расписание
-            </button>
+            <div class="flex flex-col gap-2">
+                <button
+                    onclick={() => {addEntityDialogOpen = true}}
+                    class="flex flex-row items-center gap-2 font-medium w-max pr-4 pl-3 py-2.5 rounded-lg outline-1 cursor-pointer transition-all duration-150 active:scale-[0.98]
+                           bg-blue-600 dark:bg-sky-900 text-blue-50 dark:text-sky-50 outline-blue-500 dark:outline-sky-800"
+                >
+                <Plus />
+                Открыть расписание
+                </button>
+                            <button
+                    onclick={() => {infoDialogOpen = true}}
+                    class="flex flex-row w-full justify-center align-middle items-center gap-3 font-medium pr-4 pl-3 py-2.5 rounded-lg outline-1 cursor-pointer transition-all duration-100 active:scale-[0.98]
+                           text-zinc-900 dark:text-zinc-50 outline-zinc-200 dark:outline-zinc-600 bg-zinc-100 dark:bg-zinc-700 hover:bg-zinc-200 hover:dark:bg-zinc-800 hover:dark:outline-zinc-700"
+                >
+                <!-- <InfoIcon size="21" class="text-zinc-800 dark:text-zinc-50"/> -->
+                Как это работает?
+                </button>
+            </div>
         </div>
 
     {/if}
 </div>
+
+<InfoDialog bind:open = {infoDialogOpen}/>
 
 <WeekPicker bind:selectedWeek/>
 <AddEntityDialog newEntitySubmitted={submitNewEntity} bind:dialogOpen={addEntityDialogOpen} />

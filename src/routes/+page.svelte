@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { TimetableContent, TopAppBar } from "$lib/layout";
+    import { TimetableContent, TopBar } from "$lib/layout";
     import { addedEntities } from "$lib/stores";
 
     let selectedEntityId = $state<string | undefined>(
@@ -8,6 +8,6 @@
 </script>
 
 <div class="flex flex-col items-center w-full p-2">
-    <TopAppBar bind:selectedEntityId />
+    <TopBar bind:selectedEntityId />
     <TimetableContent bind:selectedEntityId/>
 </div>
