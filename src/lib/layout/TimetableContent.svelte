@@ -2,7 +2,7 @@
     import { fade } from "$lib/transitions";
     import { WeekPicker, SkeletonLarge, ErrorView, AddEntityDialog } from "$lib/components";
     import type { Entity, TimetableData } from "$lib/types"
-    import { addedEntities } from "$lib/persisted_store";
+    import { addedEntities } from "$lib/persisted_entities";
     import { LessonView } from "$lib/components";
     import { Plus } from "lucide-svelte";
     import InfoDialog from "$lib/components/InfoDialog.svelte";
@@ -13,41 +13,15 @@
 
     let infoDialogOpen = $state(false)
 
-    function submitNewEntity() {
-        const newEntityId = [...$addedEntities][$addedEntities.length - 1].id;
-        selectedEntityId = newEntityId;
-    }
-
     let { selectedEntityId = $bindable() }: { selectedEntityId: string | undefined } = $props()
     let selectedEntity: Entity | undefined = $derived(
-        $addedEntities.find(({ id }) => id === selectedEntityId)
+        addedEntities.current.find(({ id }) => id === selectedEntityId)
     );
 
     let timetableData = $state<Promise<TimetableData>>()
     let isSkeletonInTransition = $state<boolean>(false)
 
     let addEntityDialogOpen = $state<boolean>(false)
-
-    // $effect(() => {
-    //     if (selectedEntity) {
-    //         async function getTimetableData(entity: Entity, week: Week): Promise<TimetableData> {
-    //             const res = await fetch( 
-    //                 `/api/getTimetableData?entityId=${selectedEntity?.mslu_id}&entityType=${selectedEntity?.type}&weekType=${selectedWeek}`, 
-    //                 {method: 'GET', },
-    //             );
-    //             if (res.ok) {
-    //                 return await res.json();
-    //             } else {
-    //                 const err = await res.statusText
-    //                 throw new Error(err)
-    //             }
-    //         }
-    //         timetableData = getTimetableData(selectedEntity, selectedWeek);
-    //     } else {
-    //         timetableData = undefined;
-    //     }
-        
-    // })
 
     $effect(() => {
         if (selectedEntity) {
@@ -193,4 +167,4 @@
 <InfoDialog bind:open = {infoDialogOpen}/>
 
 <WeekPicker bind:selectedWeek/>
-<AddEntityDialog newEntitySubmitted={submitNewEntity} bind:dialogOpen={addEntityDialogOpen} />
+<AddEntityDialog bind:selectedEntityId bind:dialogOpen={addEntityDialogOpen} />

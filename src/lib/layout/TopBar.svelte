@@ -1,26 +1,32 @@
 <script lang="ts">
     import { ToggleGroup, Button, DropdownMenu } from "bits-ui";
     import { AddEntityDialog } from "$lib/components";
-    import { addedEntities } from "$lib/persisted_store";
+    import { addedEntities } from "$lib/persisted_entities";
     import { EllipsisVertical, Trash2, Plus, ArrowLeftToLine } from 'lucide-svelte';
     
     let { selectedEntityId = $bindable() }: { selectedEntityId:  string | undefined } = $props();
     
     let addEntityDialogOpen = $state<boolean>(false);
 
-    function submitNewEntity() {
-        const newEntityId = [...$addedEntities][$addedEntities.length - 1].id;
-        selectedEntityId = newEntityId;
+    function getEntityPosition(entity_id: string | number): number {
+        return addedEntities.current.findIndex(({ id }) => id === entity_id);
     }
 
     function deleteEntity(entity_id: string) {
-        $addedEntities = $addedEntities.filter((entity) => entity.id !== entity_id);
-        selectedEntityId = $addedEntities[0].id;
+        const index = addedEntities.current.findIndex((entity) => entity.id === entity_id);
+        if (index != -1) {
+            addedEntities.current.splice(index, 1)
+        }
+        console.log(`Deleted ${entity_id}`)
     }
 
     function makeEntityDefault(entity_id: string) {
-        $addedEntities = $addedEntities.filter((entity) => entity.id !== entity_id);
-        selectedEntityId = $addedEntities[0].id;
+        const index = addedEntities.current.findIndex((entity) => entity.id === entity_id);
+        if (index != -1) {
+            const entity = addedEntities.current.splice(index, 1)
+            addedEntities.current.unshift(...entity)
+        }
+        console.log(`Made default ${entity_id}`)
     }
 
 </script>
@@ -30,7 +36,7 @@
     <!-- Container styling -->
     <ToggleGroup.Root class="flex flex-nowrap gap-2 w-full items-center overflow-scroll scrollbar-hidden" type="single" bind:value={selectedEntityId}>
 
-            {#each $addedEntities as entity}
+            {#each addedEntities.current as entity}
 
                 <!-- Individual element styling -->
                 <div class="flex flex-row flex-nowrap gap-1 items-center
@@ -70,22 +76,24 @@
                                    dark:bg-zinc-800 dark:border-zinc-700">
 
                             <!-- Make default button -->
-                            <DropdownMenu.Item>
-                                <Button.Root
-                                    on:click={() => {console.log(`Made ${entity.id} default`)}}
-                                    class="flex flex-row flex-nowrap gap-3 items-center
-                                           px-4 py-2 lg:py-1.5 font-medium transition-all duration-150 rounded-md
-                                           text-zinc-900 dark:text-zinc-50 hover:bg-zinc-100 dark:hover:bg-zinc-700">
-                                    <ArrowLeftToLine size={22}/>
-                                    В начало
-                                </Button.Root>
-                            </DropdownMenu.Item>
+                            {#if getEntityPosition(entity.id) !== 0 }
+                                <DropdownMenu.Item>
+                                    <Button.Root
+                                        on:click={() => {makeEntityDefault(entity.id)}}
+                                        class="flex flex-row flex-nowrap gap-3 items-center
+                                            px-4 py-2 lg:py-1.5 font-medium transition-all duration-150 rounded-md
+                                            text-zinc-900 dark:text-zinc-50 hover:bg-zinc-100 dark:hover:bg-zinc-700">
+                                        <ArrowLeftToLine size={22}/>
+                                        В начало
+                                    </Button.Root>
+                                </DropdownMenu.Item>
+                            {/if}
 
                             <!-- Delete button -->
                             <DropdownMenu.Item>
                                 <Button.Root
                                     on:click={() => {deleteEntity(entity.id)}}
-                                    class="flex flex-row flex-nowrap gap-3 items-center
+                                    class="flex flex-row flex-nowrap gap-3 items-center w-full
                                            px-4 py-2 lg:py-1.5 font-medium transition-all duration-150 rounded-md
                                            text-red-500 dark:text-red-300 hover:bg-red-100 dark:hover:bg-zinc-700">
                                     <Trash2 size={22}/>
@@ -127,4 +135,4 @@
 
 </div>
 
-<AddEntityDialog newEntitySubmitted={submitNewEntity} bind:dialogOpen={addEntityDialogOpen} />
+<AddEntityDialog bind:selectedEntityId bind:dialogOpen={addEntityDialogOpen} />

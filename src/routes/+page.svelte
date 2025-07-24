@@ -1,9 +1,9 @@
 <script lang="ts">
     import { TimetableContent, TopBar } from "$lib/layout";
-    import { addedEntities } from "$lib/persisted_store";
+    import { addedEntities } from "$lib/persisted_entities";
 
     let selectedEntityId = $state<string | undefined>(
-        [...$addedEntities].length ? [...$addedEntities][0].id : undefined
+        addedEntities.current.length ? addedEntities.current[0].id : undefined
     )
 </script>
 
