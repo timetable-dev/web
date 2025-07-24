@@ -2,7 +2,7 @@ import type { RequestHandler } from './$types';
 import type { TimetableData } from "$lib/types";
 import { forGroups, forTeachers } from "./utils";
 import { json, error } from "@sveltejs/kit";
-import { MSLU_BACKEND_ENDPOINT } from '$env/static/private';
+// import { MSLU_BACKEND_ENDPOINT } from '$env/static/private';
 
 export const GET: RequestHandler = async ({ params }): Promise<Response> => {
 
@@ -10,7 +10,7 @@ export const GET: RequestHandler = async ({ params }): Promise<Response> => {
     const type = params.type;
     const week = params.week;
 
-    const fetchUrl = new URL(MSLU_BACKEND_ENDPOINT || "http://schedule.mslu.by");
+    const fetchUrl = new URL("http://schedule.mslu.by");
 
     if (type === "group") {
         fetchUrl.pathname = "/backend";

@@ -1,4 +1,4 @@
-import { MSLU_BACKEND_ENDPOINT } from '$env/static/private';
+// import { MSLU_BACKEND_ENDPOINT } from '$env/static/private';
 import type { RequestHandler } from './$types';
 import { json, error } from "@sveltejs/kit";
 import { z } from 'zod';
@@ -12,7 +12,7 @@ const MsluResponse = z.object({
 
 export const GET: RequestHandler = async ({ params }): Promise<Response> => {
 
-    const endpoint: string = MSLU_BACKEND_ENDPOINT || "http://schedule.mslu.by"
+    const endpoint = "http://schedule.mslu.by"
     const faculty = params.faculty;
     const mode = params.mode;
 
