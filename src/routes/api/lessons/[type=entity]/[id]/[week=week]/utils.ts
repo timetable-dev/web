@@ -30,35 +30,6 @@ const MsluDataSchema = z.array(z.object({
     DateOut: z.string(),
 }))
 
-// export interface MsluScheduleItem {
-//     Classroom: string;
-//     DateIn: string;
-//     DateOut: string;
-//     Day: string;
-//     DayNumber: number;
-//     Discipline: string;
-//     Discipline_Type: string;
-//     FIO_teacher?: string; // Absent for teachers
-//     Faculty: string;
-//     Group: string;
-//     IdGroup: string;
-//     IdSchedule: number;
-//     Lesson: number;
-//     TimeIn: string;
-//     TimeOut: string;
-// }
-  
-// export interface PrepItem {
-//     TimeIn: string;
-//     TimeOut: string;
-//     DayNumber: number;
-//     Classroom: string;
-//     Discipline: string;
-//     Discipline_Type: string;
-//     Groups: string[];
-//     FIO_teacher?: string;
-// }
-
 export function forGroups(data: any): Lesson[] {
 
     const lessons: Lesson[] = []; 
@@ -113,39 +84,3 @@ export function forTeachers(data: any): Lesson[] {
 
     return lessons;
 }
-  
-// export function forTeachers(items: MsluScheduleItem[]): ScheduleItem[] {
-//     const joinedItems: ScheduleItem[] = [];
-  
-//     for (const item of items) {
-//         const existingItem = joinedItems.find(
-//             (joinedItem) =>
-//                 joinedItem.Classroom === item.Classroom &&
-//                 joinedItem.Day === item.Day &&
-//                 joinedItem.DayNumber === item.DayNumber &&
-//                 joinedItem.Discipline === item.Discipline &&
-//                 joinedItem.Discipline_Type === item.Discipline_Type &&
-//                 joinedItem.Lesson === item.Lesson &&
-//                 joinedItem.TimeIn === item.TimeIn &&
-//                 joinedItem.TimeOut === item.TimeOut
-//         );
-  
-//         if (existingItem) {
-//             existingItem.Groups.push(item.Group);
-//         } else {
-//             joinedItems.push({
-//                 Classroom: item.Classroom,
-//                 Day: item.Day,
-//                 DayNumber: item.DayNumber,
-//                 Discipline: item.Discipline,
-//                 Discipline_Type: item.Discipline_Type,
-//                 Lesson: item.Lesson,
-//                 TimeIn: item.TimeIn,
-//                 TimeOut: item.TimeOut,
-//                 Groups: [item.Group],
-//             });
-//         }
-//     }
-  
-//     return joinedItems;
-// }

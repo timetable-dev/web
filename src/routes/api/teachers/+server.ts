@@ -1,0 +1,39 @@
+import type { RequestHandler } from './$types';
+import { json, error } from "@sveltejs/kit";
+import { z } from "zod"; 
+
+const MsluResponse = z.object({
+    data: z.array(z.object({
+        IdTeacher: z.number(),
+        FIO_teacher: z.string(),
+    }))
+});
+
+export const GET: RequestHandler = async (): Promise<Response> => {
+
+    const endpoint = "https://bbaf9a53f261s823eb2e.containers.yandexcloud.net" // "http://schedule.mslu.by" or "http://localhost:3000"
+    const res = await fetch(`${endpoint}/backend/getTeacherNames`);
+
+    // Checking if the response is ok
+    if (!res.ok) {
+        console.error(res.status, res.statusText);
+        return error(503, "Ошибка связи с сервером МГЛУ.");
+    }
+
+    try {
+        const data = await res.json();                // Parse the response as JSON
+        const parsedData = MsluResponse.parse(data);  // Validate its structure
+        const groups = parsedData.data.map(           // Map the data to SelectArray format
+            ({ IdTeacher, FIO_teacher }) => ({
+                value: IdTeacher,
+                label: FIO_teacher
+            })
+        );
+        console.info("Fetched teachers from MSLU backend.");
+        return json(groups, { status: 200 });
+
+    } catch (err) {
+        console.error("Error parsing MSLU response: ", err);
+        return error(503, "Неверный ответ сервера МГЛУ.");
+    }
+}

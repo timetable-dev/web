@@ -7,9 +7,11 @@
 
     import { addedEntities } from "$lib/persisted_store";
 
+    type SelectItem = { value: string, label: string }
+    
     let { dialogOpen = $bindable(false), newEntitySubmitted }: {dialogOpen: boolean, newEntitySubmitted: () => void} = $props();
 
-    let faculties: { value: string, label: string }[] = [
+    let faculties: SelectItem[] = [
         {value: "202", label: "ФАЯ"},
         {value: "196", label: "ФНЯ"},
         {value: "222", label: "ФРЯ"},
@@ -20,27 +22,22 @@
     ];
 
     let selectedType = $state<"group" | "teacher">("group");
-    let selectedFaculty = $state<{ value: string, label: string }>();
+    let selectedFaculty = $state<SelectItem>();
     let selectedMode = $state<"1" | "2">();
 
     // Automatically fetching either a list of groups if group tab is active
     // and faculty and mode are selected or a list of teachers if teacher tab is active.
 
-    let groupList = $state<Promise<{ value: string, label: string }[]>>();
-    let teacherList = $state<Promise<{ value: string, label: string }[]>>();
+    let groupList = $state<Promise<SelectItem[]>>();
+    let teacherList = $state<Promise<SelectItem[]>>();
 
-    async function getGroups(selectedFaculty: any, selectedMode: any): Promise<{ value: string, label: string }[]> {
-        let res = await fetch(
-            `/api/getGroups?facultyId=${selectedFaculty.value}&educationMode=${selectedMode}`, 
-            {method: 'GET', }
-        );
+    async function getGroups(selectedFaculty: any, selectedMode: any): Promise<SelectItem[]> {
+        const res = await fetch(`/api/groups/${selectedFaculty.value}/${selectedMode}`);
         return await res.json()
     }
 
-    async function getTeachers(): Promise<{ value: string, label: string }[]> {
-        let res = await fetch(
-            '/api/getTeachers',
-            {method: 'GET', })
+    async function getTeachers(): Promise<SelectItem[]> {
+        let res = await fetch("/api/teachers")
         return await res.json()
     }
 
@@ -52,13 +49,17 @@
         }
     })
 
-    // Submitting group
+    // Submitting entity
 
-    let selectedGroup = $state<{ value: string, label: string }>()
-    let selectedTeacher = $state<{ value: string, label: string }>()
+    let selectedGroup = $state<SelectItem>()
+    let selectedTeacher = $state<SelectItem>()
 
     let submitButtonActive = $state<boolean>(false)
-    let submitButtonStyle = $derived(submitButtonActive ? "bg-blue-500 text-white hover:bg-blue-600 cursor-pointer" : "bg-zinc-50 text-zinc-400 cursor-not-allowed dark:bg-zinc-800")
+    let submitButtonStyle = $derived((
+        submitButtonActive
+        ? "bg-blue-500 text-white hover:bg-blue-600 cursor-pointer"
+        : "bg-zinc-50 text-zinc-400 cursor-not-allowed dark:bg-zinc-800"
+    ))
 
     $effect(() => {
         if (selectedType === "group" && selectedGroup) {

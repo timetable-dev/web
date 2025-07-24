@@ -1,7 +1,9 @@
+export type EntityType = "group" | "teacher";
+
 export interface Entity {
     id: string;
     name: string;
-    type: "group" | "teacher";
+    type: EntityType;
     mslu_id: string;
 }
 
@@ -27,38 +29,36 @@ export interface TimetableData {
 
 // The following code is not used for now
 
-type WeekId = "currentWeek" | "nextWeek" | "thirdWeek" | "fourthWeek";
+// interface Week {
+//     msluId: WeekId;
+//     nameNom: string;
+//     nameAcc: string;
+//     nameShort: string;
+// }
 
-interface Week {
-    msluId: WeekId;
-    nameNom: string;
-    nameAcc: string;
-    nameShort: string;
-}
-
-export const Weeks = new Map<WeekId, Week>([
-    ["currentWeek", { 
-        msluId: "currentWeek", 
-        nameNom: "Текущая неделя", 
-        nameAcc: "текущую неделю", 
-        nameShort: "Тек. нед." 
-    }],
-    ["nextWeek", { 
-        msluId: "nextWeek", 
-        nameNom: "Следующая неделя", 
-        nameAcc: "следующую неделю", 
-        nameShort: "След. нед." 
-    }],
-    ["thirdWeek", { 
-        msluId: "thirdWeek", 
-        nameNom: "Третья неделя", 
-        nameAcc: "третью неделю", 
-        nameShort: "3-я нед." 
-    }],
-    ["fourthWeek", { 
-        msluId: "fourthWeek", 
-        nameNom: "Четвёртая неделя", 
-        nameAcc: "четвёртую неделю", 
-        nameShort: "4-я нед." 
-    }]
-]);
+// export const Weeks = new Map<WeekId, Week>([
+//     ["currentWeek", { 
+//         msluId: "currentWeek", 
+//         nameNom: "Текущая неделя", 
+//         nameAcc: "текущую неделю", 
+//         nameShort: "Тек. нед." 
+//     }],
+//     ["nextWeek", { 
+//         msluId: "nextWeek", 
+//         nameNom: "Следующая неделя", 
+//         nameAcc: "следующую неделю", 
+//         nameShort: "След. нед." 
+//     }],
+//     ["thirdWeek", { 
+//         msluId: "thirdWeek", 
+//         nameNom: "Третья неделя", 
+//         nameAcc: "третью неделю", 
+//         nameShort: "3-я нед." 
+//     }],
+//     ["fourthWeek", { 
+//         msluId: "fourthWeek", 
+//         nameNom: "Четвёртая неделя", 
+//         nameAcc: "четвёртую неделю", 
+//         nameShort: "4-я нед." 
+//     }]
+// ]);

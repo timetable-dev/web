@@ -28,13 +28,33 @@
 
     let addEntityDialogOpen = $state<boolean>(false)
 
+    // $effect(() => {
+    //     if (selectedEntity) {
+    //         async function getTimetableData(entity: Entity, week: Week): Promise<TimetableData> {
+    //             const res = await fetch( 
+    //                 `/api/getTimetableData?entityId=${selectedEntity?.mslu_id}&entityType=${selectedEntity?.type}&weekType=${selectedWeek}`, 
+    //                 {method: 'GET', },
+    //             );
+    //             if (res.ok) {
+    //                 return await res.json();
+    //             } else {
+    //                 const err = await res.statusText
+    //                 throw new Error(err)
+    //             }
+    //         }
+    //         timetableData = getTimetableData(selectedEntity, selectedWeek);
+    //     } else {
+    //         timetableData = undefined;
+    //     }
+        
+    // })
+
     $effect(() => {
         if (selectedEntity) {
-            async function getTimetableData(entity: Entity, week: Week): Promise<TimetableData> {
-                const res = await fetch( 
-                    `/api/getTimetableData?entityId=${selectedEntity?.mslu_id}&entityType=${selectedEntity?.type}&weekType=${selectedWeek}`, 
-                    {method: 'GET', },
-                );
+
+            async function getTimetableData(): Promise<TimetableData> {
+                const url = `/api/lessons/${selectedEntity?.type}/${selectedEntity?.mslu_id}/${selectedWeek}`;
+                const res = await fetch(url, {method: 'GET', });
                 if (res.ok) {
                     return await res.json();
                 } else {
@@ -42,7 +62,8 @@
                     throw new Error(err)
                 }
             }
-            timetableData = getTimetableData(selectedEntity, selectedWeek);
+            
+            timetableData = getTimetableData();
         } else {
             timetableData = undefined;
         }
