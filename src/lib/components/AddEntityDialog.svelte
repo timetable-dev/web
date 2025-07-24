@@ -5,11 +5,11 @@
     import Skeleton from "./SkeletonSmall.svelte";
     import type { Entity } from "../types";
 
-    import { addedEntities } from "$lib/persisted_store";
+    import { addedEntities } from "$lib/persisted_entities";
 
     type SelectItem = { value: string, label: string }
     
-    let { dialogOpen = $bindable(false), newEntitySubmitted }: {dialogOpen: boolean, newEntitySubmitted: () => void} = $props();
+    let { dialogOpen = $bindable(false), selectedEntityId = $bindable() }: {dialogOpen: boolean, selectedEntityId: string | undefined} = $props();
 
     let faculties: SelectItem[] = [
         {value: "202", label: "ФАЯ"},
@@ -84,14 +84,16 @@
     function submitEntityAndClose() {
         if (selectedType === "group" && selectedGroup) {
             const selectedEntity: Entity = { id: crypto.randomUUID(), name: selectedGroup.label, mslu_id: selectedGroup.value, type: "group"};
-            addedEntities.update(currentEntities => [...$addedEntities, selectedEntity]);
-            newEntitySubmitted(); // Let the parent +page know we've added new entity
-            dialogOpen = false;
+            addedEntities.current.push(selectedEntity);
+            selectedEntityId = selectedEntity.id;
+            // newEntitySubmitted(); // Let the parent +page know we've added new entity
+            // dialogOpen = false;
         } else if (selectedType === "teacher" && selectedTeacher) {
             const selectedEntity: Entity = { id: crypto.randomUUID(), name: selectedTeacher.label, mslu_id: selectedTeacher.value, type: "teacher"};
-            addedEntities.update(currentEntities => [...$addedEntities, selectedEntity]);
-            newEntitySubmitted(); // Let the parent +page know we've added new entity
-            dialogOpen = false;
+            addedEntities.current.push(selectedEntity);
+            selectedEntityId = selectedEntity.id;
+            // newEntitySubmitted(); // Let the parent +page know we've added new entity
+            // dialogOpen = false;
         }
 
         clearInput();
@@ -208,9 +210,9 @@
                 <Dialog.Close on:click={clearInput} class="py-2.5 font-medium cursor-pointer active:scale-[0.98] rounded-md transition-all duration-150 bg-zinc-100 dark:bg-zinc-600 hover:bg-zinc-200 dark:hover:bg-zinc-700">
                     Отмена
                 </Dialog.Close>
-                <Button.Root on:click={() => {submitEntityAndClose()}} class="py-2.5 font-medium rounded-md transition-all duration-150 active:scale-[0.98] {submitButtonStyle}">
+                <Dialog.Close on:click={() => {submitEntityAndClose()}} class="py-2.5 font-medium rounded-md transition-all duration-150 active:scale-[0.98] {submitButtonStyle}">
                     Добавить
-                </Button.Root>
+                </Dialog.Close>
             </div>
         </Dialog.Content>
     </Dialog.Portal>

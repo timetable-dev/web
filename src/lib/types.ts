@@ -4,7 +4,7 @@ export interface Entity {
     id: string;
     name: string;
     type: EntityType;
-    mslu_id: string;
+    mslu_id: string | number;
 }
 
 export interface Lesson {
