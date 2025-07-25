@@ -12,7 +12,7 @@ const MsluResponse = z.object({
 
 export const GET: RequestHandler = async ({ params }): Promise<Response> => {
 
-    const endpoint = "http://schedule.mslu.by"
+    const endpoint = "https://bbaf9a53f261s823eb2e.containers.yandexcloud.net" // "http://schedule.mslu.by"
     const faculty = params.faculty;
     const mode = params.mode;
 

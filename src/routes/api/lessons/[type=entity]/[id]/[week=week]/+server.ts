@@ -10,7 +10,7 @@ export const GET: RequestHandler = async ({ params }): Promise<Response> => {
     const type = params.type;
     const week = params.week;
 
-    const fetchUrl = new URL("http://schedule.mslu.by");
+    const fetchUrl = new URL("https://bbaf9a53f261s823eb2e.containers.yandexcloud.net"); // "http://schedule.mslu.by"
 
     if (type === "group") {
         fetchUrl.pathname = "/backend";
