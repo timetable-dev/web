@@ -107,27 +107,27 @@
             {/each}
 
             <!-- ??? -->
-            <div class="text-zinc-50 dark:text-zinc-800 select-none">AT</div> 
+            <!-- <div class="text-zinc-50 dark:text-zinc-800 select-none">AT</div>  -->
             
         </ToggleGroup.Root>
 {/snippet}
 
-<div class="flex flex-row flex-wrap gap-2 px-3 p-3
+<div class="flex flex-row flex-wrap gap-x-2 px-3 p-3
             lg:flex-nowrap lg:gap-4 justify-between
             w-full md:w-2/3 lg:w-full rounded-xl outline-1
             bg-zinc-50 dark:bg-zinc-800 outline-zinc-200 dark:outline-zinc-700">
 
     <!-- Logo -->
-    <img src="/logo/logo-dark.svg" alt="Расписание МГЛУ" class="hidden dark:block h-12 min-w-max ml-1 overflow-hidden"/>
+    <img src="/logo/logo-dark.svg" alt="Расписание МГЛУ" class="hidden dark:block h-12 min-w-max ml-1 py-0.5 overflow-hidden"/>
     <img src="/logo/logo-light.svg" alt="Расписание МГЛУ" class="block dark:hidden h-12 min-w-max ml-1 overflow-hidden"/>
 
     <!-- Entity selector -->
-    <div class="flex items-center grow overflow-x-scroll order-3 lg:order-2 scrollbar-hidden">
+    <div class="flex basis-full pt-2.5 lg:pt-0 lg:basis-auto items-center grow overflow-x-scroll order-3 lg:order-2 scrollbar-hidden">
         {@render entity_selector()}
     </div>
 
     <!-- Add button -->
-    <div class="flex aspect-square self-center order-2 lg:order-3 shrink">
+    <div class="flex aspect-square self-center order-2 lg:order-3">
         <Button.Root on:click={() => (addEntityDialogOpen = true)} class="flex flex-row p-3 active:scale-[0.98] bg-blue-100 dark:bg-zinc-700 hover:bg-blue-200 dark:hover:bg-zinc-600 transition-all duration-100 rounded-xl">
             <Plus class="flex text-blue-800 dark:text-white"/>
         </Button.Root>
