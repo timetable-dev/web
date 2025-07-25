@@ -1,6 +1,5 @@
 <script lang="ts">
     import { Dialog } from "bits-ui";
-    import { fade, flyAndScale } from "$lib/transitions";
     import { Sunrise, Sunset, User, MapPin, Presentation, BookCheck } from "lucide-svelte";
     import type { Lesson } from "$lib/types";
 
@@ -63,13 +62,11 @@
 
 <Dialog.Root bind:open={infoOpen}>
     <Dialog.Portal >
-        <Dialog.Overlay 
-            transition={fade}
+        <Dialog.Overlay
             transitionConfig={{ duration: 150 }}
             class="fixed inset-0 z-50 bg-black/50 dark:bg-zinc-800/80"
         />
         <Dialog.Content
-            transition={flyAndScale}
             class="fixed left-1/2 top-1/2 translate-[-50%] flex flex-col gap-2 p-5 pb-4 z-50 outline-1 rounded-lg w-[90%] md:w-2/3 lg:w-1/3
                  bg-white outline-zinc-300 dark:bg-zinc-900 dark:outline-zinc-800"
         >

@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { fade } from "$lib/transitions";
     import { WeekPicker, SkeletonLarge, ErrorView, AddEntityDialog } from "$lib/components";
     import type { Entity, TimetableData } from "$lib/types"
     import { addedEntities } from "$lib/persisted_entities";
@@ -51,7 +50,6 @@
     {#if timetableData}
         {#await timetableData}    
             <div
-                transition:fade={{ duration: 200 }}
                 onintrostart={() => (isSkeletonInTransition = true)}
                 onoutrostart={() => (isSkeletonInTransition = true)}
                 onintroend={() => (isSkeletonInTransition = false)}

@@ -1,6 +1,5 @@
 <script lang="ts">
     import { Dialog, Tabs, Select, RadioGroup, ScrollArea, Label, Button } from "bits-ui";
-    import { flyAndScale, fade } from "$lib/transitions";
     import Combobox from "$lib/components/Combobox.svelte";
     import Skeleton from "./SkeletonSmall.svelte";
     import type { Entity } from "../types";
@@ -104,13 +103,11 @@
 <Dialog.Root bind:open={dialogOpen}>
     <Dialog.Trigger />
     <Dialog.Portal>
-        <Dialog.Overlay 
-            transition={fade}
+        <Dialog.Overlay
             transitionConfig={{ duration: 150 }}
             class="fixed inset-0 z-50 bg-black/50 dark:bg-zinc-800/80"
         />
         <Dialog.Content
-            transition={flyAndScale}
             class="fixed left-1/2 top-1/2 translate-[-50%] p-2 pt-4 z-50 flex flex-col gap-3 outline-1 rounded-lg w-[90%] md:w-2/3 lg:w-1/3 shadow-md
                   bg-white outline-zinc-300 text-zinc-950 dark:text-zinc-50 dark:bg-zinc-900 dark:outline-zinc-800"
         >
@@ -155,7 +152,6 @@
                         </Select.Trigger>
                         <!-- TODO: Highlighted and hovered -->
                         <Select.Content
-                            transition={flyAndScale}
                             sideOffset={4}
                             class="flex flex-col px-1 py-2 my-1 z-51 text bg-white dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700 rounded-md transition-all">
                             {#each faculties as faculty}

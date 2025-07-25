@@ -1,7 +1,5 @@
 <script lang="ts">
-    import type { Selected } from 'bits-ui';
     import { Combobox } from "bits-ui"
-    import { flyAndScale } from "$lib/transitions"
 
     let {items = $bindable(),
          selectedItem = $bindable(),
@@ -36,7 +34,6 @@
     <Combobox.Content
         class="w-full px-1 py-3 max-h-52 overflow-y-auto border-2 rounded-md
                bg-zinc-50 border-zinc-200 dark:bg-zinc-800 dark:border-zinc-700"
-        transition={flyAndScale}
         sideOffset={8}
     >
         {#each filteredItems as item}
