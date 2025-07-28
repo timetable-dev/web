@@ -1,6 +1,9 @@
 <script lang="ts">
     import { Dialog } from "bits-ui";
-    import { RotateCw, CirclePlus, MousePointer2 } from "lucide-svelte";
+    import { ButtonSecondary } from "$lib/components";
+    import RotateCw from "@lucide/svelte/icons/rotate-cw";
+    import CirclePlus from "@lucide/svelte/icons/circle-plus";
+    import MousePointer2 from "@lucide/svelte/icons/mouse-pointer-2";
 
     let { open = $bindable() }: {open: boolean} = $props()
 
@@ -31,7 +34,6 @@
 <Dialog.Root bind:open>
     <Dialog.Portal>
         <Dialog.Overlay
-            transitionConfig={{ duration: 150 }}
             class="fixed inset-0 z-50 bg-black/50 dark:bg-zinc-800/80"
         />
         <Dialog.Content
@@ -73,10 +75,8 @@
                                 {version}
                 </button> -->
 
-                <Dialog.Close
-                    class="flex self-end px-6 py-2 mt-2 outline-1 rounded-lg cursor-pointer duration-100 active:scale-[0.98]
-                            text-zinc-900 dark:text-zinc-50 outline-zinc-200 dark:outline-zinc-600 bg-zinc-100 dark:bg-zinc-700 hover:bg-zinc-200 hover:dark:bg-zinc-800 hover:dark:outline-zinc-700">
-                    Понятно
+                <Dialog.Close>
+                    <ButtonSecondary text="Понятно" />     
                 </Dialog.Close>
             </div>
 

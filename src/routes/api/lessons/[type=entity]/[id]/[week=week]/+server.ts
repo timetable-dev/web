@@ -1,14 +1,19 @@
 import type { RequestHandler } from './$types';
-import type { TimetableData } from "$lib/types";
-import { forGroups, forTeachers } from "./utils";
+import type { WeekData, DebugData, LessonsApiResponse } from "$lib/types";
+import { transform } from "./utils";
 import { json, error } from "@sveltejs/kit";
-// import { MSLU_BACKEND_ENDPOINT } from '$env/static/private';
 
 export const GET: RequestHandler = async ({ params }): Promise<Response> => {
 
     const id = params.id;
     const type = params.type;
     const week = params.week;
+
+    // TODO: Find more elegant way, don't like this approach. 
+    let msluRequestStart: number;
+    let msluRequestTotal: number;
+    let transformStart: number;
+    let transformTotal: number;
 
     const fetchUrl = new URL("https://bbaf9a53f261s823eb2e.containers.yandexcloud.net"); // "http://schedule.mslu.by"
 
@@ -21,53 +26,38 @@ export const GET: RequestHandler = async ({ params }): Promise<Response> => {
     }
 
     fetchUrl.searchParams.append("weekType", week);
+
+    msluRequestStart = Date.now();
     const res = await fetch(fetchUrl);
+    msluRequestTotal = Date.now() - msluRequestStart;
 
     if (!res.ok) {
         console.error(res.status, res.statusText);
         return error(503, "Сервер МГЛУ вне зоны доступа.");
     }
 
-    let lessons;
+    let weekData: WeekData;
     const data = await res.json().then((data) => data.data);
     
+    transformStart = Date.now();
     try {
-        if (type === "group") {
-            lessons = forGroups(data);
-        } else {
-            lessons = forTeachers(data);
-        }
-    } catch (err) {
+        weekData = transform(data, type) // Magic happens here, see utils.ts
+    } catch(err) {
         console.error(err);
         return error(503, "Неверный ответ сервера МГЛУ.");
     }
+    transformTotal = Date.now() - transformStart;
 
-    const timetableData: TimetableData = {
-        mon: [],
-        tue: [],
-        wed: [],
-        thu: [],
-        fri: [],
-        sat: [],
+    const debugData: DebugData = {
+        from_cache: false, // This is a placeholder, caching logic is not implemented yet
+        mslu_response: msluRequestTotal,
+        data_transform: transformTotal,
+    };
+
+    const response: LessonsApiResponse = {
+        week: weekData,
+        debug: debugData,
     }
 
-    for (const lesson of lessons) {
-        if (lesson.day_number === 1) {
-            timetableData.mon.push(lesson)
-        } else if (lesson.day_number === 2) {
-            timetableData.tue.push(lesson)
-        } else if (lesson.day_number === 3) {
-            timetableData.wed.push(lesson)
-        } else if (lesson.day_number === 4) {
-            timetableData.thu.push(lesson)
-        } else if (lesson.day_number === 5) {
-            timetableData.fri.push(lesson)
-        } else if (lesson.day_number === 6) {
-            timetableData.sat.push(lesson)
-        } else {
-            return error(503, "Неверный ответ сервера МГЛУ.")
-        }
-    }
-
-    return json(timetableData)
+    return json(response);
 }

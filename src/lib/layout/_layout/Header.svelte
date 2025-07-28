@@ -1,12 +1,15 @@
 <script lang="ts">
-    import { ToggleGroup, Button, DropdownMenu } from "bits-ui";
-    import { AddEntityDialog } from "$lib/components";
-    import { addedEntities } from "$lib/persisted_entities";
-    import { EllipsisVertical, Trash2, Plus, ArrowLeftToLine } from 'lucide-svelte';
+    import { ToggleGroup, Button, DropdownMenu, Portal } from "bits-ui";
+    import { AddDialog } from "$lib/layout";
+    import { addedEntities } from "$lib/entities";
+    import EllipsisVertical from "@lucide/svelte/icons/ellipsis-vertical";
+    import Trash2 from "@lucide/svelte/icons/trash-2";
+    import Plus from "@lucide/svelte/icons/plus";
+    import ArrowLeftToLine from "@lucide/svelte/icons/arrow-left-to-line";
     
     let { selectedEntityId = $bindable() }: { selectedEntityId:  string | undefined } = $props();
     
-    let addEntityDialogOpen = $state<boolean>(false);
+    let addDialogOpen = $state<boolean>(false);
 
     function getEntityPosition(entity_id: string | number): number {
         return addedEntities.current.findIndex(({ id }) => id === entity_id);
@@ -31,10 +34,12 @@
 
 </script>
 
+<AddDialog bind:selectedEntityId bind:dialogOpen={addDialogOpen} />
+
 {#snippet entity_selector()}
 
     <!-- Container styling -->
-    <ToggleGroup.Root class="flex flex-nowrap gap-2 w-full items-center overflow-scroll scrollbar-hidden" type="single" bind:value={selectedEntityId}>
+    <ToggleGroup.Root type="single" bind:value={selectedEntityId} class="flex flex-nowrap gap-2 w-full items-center overflow-scroll scrollbar-hidden">
 
             {#each addedEntities.current as entity}
 
@@ -69,6 +74,7 @@
                         </DropdownMenu.Trigger>
 
                         <!-- Dropdown content -->
+                        <DropdownMenu.Portal>
                         <DropdownMenu.Content
                             side="bottom" align="end" sideOffset={0}
                             class="flex flex-col p-1 border-1 rounded-lg gap-1 shadow-sm
@@ -79,7 +85,7 @@
                             {#if getEntityPosition(entity.id) !== 0 }
                                 <DropdownMenu.Item>
                                     <Button.Root
-                                        on:click={() => {makeEntityDefault(entity.id)}}
+                                        onclick={() => {makeEntityDefault(entity.id)}}
                                         class="flex flex-row flex-nowrap gap-3 items-center
                                             px-4 py-2 lg:py-1.5 font-medium transition-all duration-150 rounded-md
                                             text-zinc-900 dark:text-zinc-50 hover:bg-zinc-100 dark:hover:bg-zinc-700">
@@ -92,7 +98,7 @@
                             <!-- Delete button -->
                             <DropdownMenu.Item>
                                 <Button.Root
-                                    on:click={() => {deleteEntity(entity.id)}}
+                                    onclick={() => {deleteEntity(entity.id)}}
                                     class="flex flex-row flex-nowrap gap-3 items-center w-full
                                            px-4 py-2 lg:py-1.5 font-medium transition-all duration-150 rounded-md
                                            text-red-500 dark:text-red-300 hover:bg-red-100 dark:hover:bg-zinc-700">
@@ -102,6 +108,7 @@
                             </DropdownMenu.Item>
 
                         </DropdownMenu.Content>
+                        </DropdownMenu.Portal>
                     </DropdownMenu.Root>
                 </div>
             {/each}
@@ -118,21 +125,19 @@
             bg-zinc-50 dark:bg-zinc-800 outline-zinc-200 dark:outline-zinc-700">
 
     <!-- Logo -->
-    <img src="/logo/logo-dark.svg" alt="Расписание МГЛУ" class="hidden dark:block h-12 min-w-max ml-1 py-0.5 overflow-hidden"/>
-    <img src="/logo/logo-light.svg" alt="Расписание МГЛУ" class="block dark:hidden h-12 min-w-max ml-1 overflow-hidden"/>
+    <img src="/logo/logo-dark.svg" alt="Расписание МГЛУ" class="hidden dark:block h-12 min-w-max ml-1 py-0.5 translate-y-[0.100rem] overflow-hidden"/>
+    <img src="/logo/logo-light.svg" alt="Расписание МГЛУ" class="block dark:hidden h-12 min-w-max ml-1 py-0.5 translate-y-[0.100rem] overflow-hidden"/>
 
     <!-- Entity selector -->
-    <div class="flex basis-full pt-2.5 lg:pt-0 lg:basis-auto items-center grow overflow-x-scroll order-3 lg:order-2 scrollbar-hidden">
+    <div class="flex basis-full lg:pt-0 lg:basis-auto items-center grow overflow-x-scroll order-3 lg:order-2 scrollbar-hidden">
         {@render entity_selector()}
     </div>
 
     <!-- Add button -->
     <div class="flex aspect-square self-center order-2 lg:order-3">
-        <Button.Root on:click={() => (addEntityDialogOpen = true)} class="flex flex-row p-3 active:scale-[0.98] bg-blue-100 dark:bg-zinc-700 hover:bg-blue-200 dark:hover:bg-zinc-600 transition-all duration-100 rounded-xl">
+        <Button.Root onclick={() => (addDialogOpen = true)} class="flex flex-row p-3 active:scale-[0.98] bg-blue-100 dark:bg-zinc-700 hover:bg-blue-200 dark:hover:bg-zinc-600 transition-all duration-100 rounded-xl">
             <Plus class="flex text-blue-800 dark:text-white"/>
         </Button.Root>
     </div>
 
 </div>
-
-<AddEntityDialog bind:selectedEntityId bind:dialogOpen={addEntityDialogOpen} />

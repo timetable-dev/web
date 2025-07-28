@@ -1,7 +1,12 @@
 <script lang="ts">
-    import { Dialog } from "bits-ui";
-    import { Sunrise, Sunset, User, MapPin, Presentation, BookCheck } from "lucide-svelte";
     import type { Lesson } from "$lib/types";
+    import { Dialog } from "bits-ui";
+    import Sunrise from "@lucide/svelte/icons/sunrise";
+    import Sunset from "@lucide/svelte/icons/sunset";
+    import User from "@lucide/svelte/icons/user";
+    import MapPin from "@lucide/svelte/icons/map-pin";
+    import Presentation from "@lucide/svelte/icons/presentation";
+    import BookCheck from "@lucide/svelte/icons/book-check";
 
     const {lesson}: {lesson: Lesson} = $props();
 
@@ -22,20 +27,13 @@
         entity = lesson.groups.join(", ");
     };
 
-    // if (lesson.type === "Практ") {
-    //     typeStyling = "underline decoration-solid decoration-2 decoration-rose-500 dark:decoration-rose-400";
-    // } else if (lesson.type === "Лек") {
-    //     typeStyling = "underline decoration-solid decoration-2 decoration-emerald-500 dark:decoration-emerald-300";
-    // } else if (lesson.type === "Сем") {
-    //     typeStyling = "underline decoration-solid decoration-2 decoration-yellow-500 dark:decoration-amber-300"
-    // }
 
     if (lesson.type === "Практ") {
-        typeStyling = "bg-rose-100 text-rose-800 outline-rose-200 dark:bg-rose-900 dark:text-rose-200 dark:outline-rose-800";
+        typeStyling = "bg-rose-100 text-rose-800 outline-rose-200 dark:bg-rose-950 dark:text-rose-100 dark:outline-rose-800";
     } else if (lesson.type === "Лек") {
-        typeStyling = "bg-emerald-100 text-emerald-800 outline-emerald-200 dark:bg-emerald-900 dark:text-emerald-200 dark:outline-emerald-800";
+        typeStyling = "bg-emerald-100 text-emerald-800 outline-emerald-200 dark:bg-emerald-950 dark:text-emerald-100 dark:outline-emerald-800";
     } else if (lesson.type === "Сем") {
-        typeStyling = "bg-amber-100 text-amber-800 outline-amber-200 dark:bg-amber-900 dark:text-amber-200 dark:outline-amber-800"
+        typeStyling = "bg-amber-100 text-amber-800 outline-amber-200 dark:bg-amber-950 dark:text-amber-100 dark:outline-amber-800"
     }
 
     // NOTE: Think about type styling of badge with background color instead of colored underline
@@ -51,7 +49,7 @@
         <div class="justify-self-start text-center font-medium opacity-65">{et}</div>
     </div>
     <div class="flex flex-col justify-center col-span-3">
-        <div class="line-clamp-2 text-lg">{lesson.title}</div>
+        <div class="line-clamp-2">{lesson.title}</div> <!-- text-lg -->
         <div class="truncate rounded-sm opacity-70">{entity}</div>
     </div>
     <div class="flex flex-col gap-0.5 justify-center">
@@ -63,7 +61,6 @@
 <Dialog.Root bind:open={infoOpen}>
     <Dialog.Portal >
         <Dialog.Overlay
-            transitionConfig={{ duration: 150 }}
             class="fixed inset-0 z-50 bg-black/50 dark:bg-zinc-800/80"
         />
         <Dialog.Content
