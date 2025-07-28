@@ -1,9 +1,8 @@
 <script lang="ts">
     import { isHttpError, type HttpError } from "@sveltejs/kit";
+
     let {error: errorObject}: {error: HttpError | any} = $props()
-
     const errorMessage = isHttpError(errorObject) ? errorObject : errorObject.message
-
 </script>
 
 <div class="flex flex-col self-center gap-4 w-full md:w-2/3 mt-2 p-4 rounded-lg text-pretty outline-1 bg-orange-100 outline-orange-300 text-orange-950 dark:bg-zinc-800 dark:outline-zinc-700 dark:text-zinc-50">

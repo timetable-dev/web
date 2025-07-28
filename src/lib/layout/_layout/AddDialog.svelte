@@ -1,10 +1,8 @@
 <script lang="ts">
-    import { Dialog, Tabs, Select, RadioGroup, ScrollArea, Label, Button } from "bits-ui";
-    import Combobox from "$lib/components/Combobox.svelte";
-    import Skeleton from "./SkeletonSmall.svelte";
-    import type { Entity } from "../types";
-
-    import { addedEntities } from "$lib/persisted_entities";
+    import type { Entity } from "$lib/types";
+    import { Select, Combobox, SkeletonSmall } from "$lib/components";
+    import { Dialog, Tabs, RadioGroup, Label } from "bits-ui";
+    import { addedEntities } from "$lib/entities";
 
     type SelectItem = { value: string, label: string }
     
@@ -22,13 +20,22 @@
 
     let selectedType = $state<"group" | "teacher">("group");
     let selectedFaculty = $state<SelectItem>();
-    let selectedMode = $state<"1" | "2">();
+    let selectedMode = $state<"1" | "2" | "">("");
+
+    let selectedFacultyValue = $state<string>();
+
+    $effect(() => {
+        selectedFaculty = faculties.find(({ value }) => value === selectedFacultyValue)
+    })
 
     // Automatically fetching either a list of groups if group tab is active
     // and faculty and mode are selected or a list of teachers if teacher tab is active.
 
     let groupList = $state<Promise<SelectItem[]>>();
     let teacherList = $state<Promise<SelectItem[]>>();
+
+    let selectedGroup = $state<SelectItem>()
+    let selectedTeacher = $state<SelectItem>()
 
     async function getGroups(selectedFaculty: any, selectedMode: any): Promise<SelectItem[]> {
         const res = await fetch(`/api/groups/${selectedFaculty.value}/${selectedMode}`);
@@ -50,9 +57,6 @@
 
     // Submitting entity
 
-    let selectedGroup = $state<SelectItem>()
-    let selectedTeacher = $state<SelectItem>()
-
     let submitButtonActive = $state<boolean>(false)
     let submitButtonStyle = $derived((
         submitButtonActive
@@ -72,7 +76,7 @@
     function clearInput() {
         selectedType = "group";
         selectedFaculty = undefined;
-        selectedMode = undefined;
+        selectedMode = "";
         selectedGroup = undefined;
         selectedTeacher = undefined;
         groupList = undefined;
@@ -85,14 +89,10 @@
             const selectedEntity: Entity = { id: crypto.randomUUID(), name: selectedGroup.label, mslu_id: selectedGroup.value, type: "group"};
             addedEntities.current.push(selectedEntity);
             selectedEntityId = selectedEntity.id;
-            // newEntitySubmitted(); // Let the parent +page know we've added new entity
-            // dialogOpen = false;
         } else if (selectedType === "teacher" && selectedTeacher) {
             const selectedEntity: Entity = { id: crypto.randomUUID(), name: selectedTeacher.label, mslu_id: selectedTeacher.value, type: "teacher"};
             addedEntities.current.push(selectedEntity);
             selectedEntityId = selectedEntity.id;
-            // newEntitySubmitted(); // Let the parent +page know we've added new entity
-            // dialogOpen = false;
         }
 
         clearInput();
@@ -104,7 +104,6 @@
     <Dialog.Trigger />
     <Dialog.Portal>
         <Dialog.Overlay
-            transitionConfig={{ duration: 150 }}
             class="fixed inset-0 z-50 bg-black/50 dark:bg-zinc-800/80"
         />
         <Dialog.Content
@@ -114,9 +113,8 @@
             <!-- Заголовок: Добавить расписание -->
             <Dialog.Title class="text-xl font-medium text-center mb-1 text-zinc-900 dark:text-white">Добавить расписание</Dialog.Title>
             
+            <!-- Для групп / Для преподавателей -->
             <Tabs.Root bind:value={selectedType}>
-
-                <!-- Для групп / Для преподавателей -->
                 <Tabs.List class="grid w-full grid-cols-2 gap-1 rounded-md p-1 font-medium inset-shadow-sm dark:inset-shadow-none
                                   bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-white">
                     <Tabs.Trigger
@@ -143,26 +141,8 @@
                 <Tabs.Content value="group" class="flex flex-col">
 
                     <!-- Выбор факультета -->
-                    <Select.Root bind:selected={selectedFaculty} items={faculties}>
-                        <Label.Root class="p-2 my-1.5 text-zinc-900 dark:text-zinc-100 font-medium">Выбери факультет:</Label.Root>
-                        <Select.Trigger class="flex flex-row gap-4 border-2 rounded-md w-full p-3
-                                               bg-zinc-50 border-zinc-200 text-zinc-900 dark:bg-zinc-800 dark:border-zinc-700 dark:text-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
-                            <Select.Value placeholder="Факультет" />
-                        </Select.Trigger>
-                        <!-- TODO: Highlighted and hovered -->
-                        <Select.Content
-                            sideOffset={4}
-                            class="flex flex-col px-1 py-2 my-1 z-51 text bg-white dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700 rounded-md transition-all">
-                            {#each faculties as faculty}
-                                <Select.Item
-                                    value={faculty.value}
-                                    label={faculty.label}
-                                    class="flex flex-row w-full py-2 px-4 select-none items-center rounded-md data-[highlighted]:bg-background-accent dark:data-[highlighted]:bg-background-accent-dark aria-selected:bg-background-accent dark:aria-selected:bg-background-accent-dark transition-all"
-                                />
-                            {/each}
-                        </Select.Content>
-                    </Select.Root>
+                    <Label.Root class="p-2 my-1.5 text-zinc-900 dark:text-zinc-100 font-medium">Выбери факультет:</Label.Root>
+                    <Select items={faculties} bind:selectedItem={selectedFaculty} placeholder="Факультет"/>
 
                     <!-- Выбор формы обучения -->
                     <Label.Root class="p-2 my-1.5 text-zinc-900 dark:text-zinc-100 font-medium">Выбери форму обучения:</Label.Root>
@@ -180,7 +160,7 @@
                     <!-- Выбор группы -->
                     {#if groupList}
                         {#await groupList}
-                            <Skeleton />
+                            <SkeletonSmall />
                         {:then response} 
                             <Label.Root class="p-2 my-1.5 text-zinc-900 dark:text-zinc-100 font-medium">Выбери группу:</Label.Root>
                             <Combobox items={response} placeholder="Номер группы" bind:selectedItem={selectedGroup}/>
@@ -192,7 +172,7 @@
                 <Tabs.Content value="teacher" class="flex flex-col">
                     {#if teacherList}
                         {#await teacherList}
-                            <Skeleton />
+                            <SkeletonSmall />
                         {:then response}
                             <Label.Root class="p-2 my-1.5 text-zinc-900 dark:text-zinc-100 font-medium">Выберите преподавателя:</Label.Root>
                             <Combobox items={response} placeholder="Фамилия И. О." bind:selectedItem={selectedTeacher}/>
@@ -203,10 +183,10 @@
 
             <!-- Отмена / Добавить -->
             <div class="grid w-full gap-2 grid-cols-2 mt-2">
-                <Dialog.Close on:click={clearInput} class="py-2.5 font-medium cursor-pointer active:scale-[0.98] rounded-md transition-all duration-150 bg-zinc-100 dark:bg-zinc-600 hover:bg-zinc-200 dark:hover:bg-zinc-700">
+                <Dialog.Close onclick={clearInput} class="py-2.5 font-medium cursor-pointer active:scale-[0.98] rounded-md transition-all duration-150 bg-zinc-100 dark:bg-zinc-600 hover:bg-zinc-200 dark:hover:bg-zinc-700">
                     Отмена
                 </Dialog.Close>
-                <Dialog.Close on:click={() => {submitEntityAndClose()}} class="py-2.5 font-medium rounded-md transition-all duration-150 active:scale-[0.98] {submitButtonStyle}">
+                <Dialog.Close onclick={() => {submitEntityAndClose()}} class="py-2.5 font-medium rounded-md transition-all duration-150 active:scale-[0.98] {submitButtonStyle}">
                     Добавить
                 </Dialog.Close>
             </div>
