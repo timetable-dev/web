@@ -24,15 +24,15 @@
 		"svelte": "^5.36.16",
 		"svelte-check": "^4.3.0",
 		"typescript": "^5.8.3",
+		"tailwindcss": "^4.1.11",
+		"@tailwindcss/vite": "^4.1.11",
 		"vite": "^7.0.6"
 	},
 	"dependencies": {
 		"@lucide/svelte": "^0.526.0",
-		"@tailwindcss/vite": "^4.1.11",
 		"bits-ui": "^2.8.12",
 		"mode-watcher": "^1.1.0",
 		"runed": "^0.31.1",
-		"tailwindcss": "^4.1.11",
 		"zod": "^4.0.10"
 	}
 }
