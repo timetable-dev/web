@@ -129,37 +129,44 @@
 {/snippet}
 
 <div
-	class="flex w-full flex-row flex-wrap justify-between gap-x-2
+	class="flex w-full flex-col gap-3
             rounded-xl bg-zinc-50 p-3
             px-3 outline-1 outline-zinc-200 md:w-2/3 lg:w-full
             lg:flex-nowrap lg:gap-4 dark:bg-zinc-800 dark:outline-zinc-700"
 >
-	<!-- Logo -->
-	<img
-		src="/logo/logo-dark.svg"
-		alt="Расписание МГЛУ"
-		class="ml-1 hidden h-12 min-w-max translate-y-[0.100rem] overflow-hidden py-0.5 dark:block"
-	/>
-	<img
-		src="/logo/logo-light.svg"
-		alt="Расписание МГЛУ"
-		class="ml-1 block h-12 min-w-max translate-y-[0.100rem] overflow-hidden py-0.5 dark:hidden"
-	/>
+	<div class="flex flex-row gap-2 flex-wrap lg:flex-nowrap justify-between">
+		<!-- Logo -->
+		<img
+			src="/logo/logo-dark.svg"
+			alt="Расписание МГЛУ"
+			class="ml-1 hidden h-12 min-w-max translate-y-[0.100rem] overflow-hidden py-0.5 dark:block"
+		/>
+		<img
+			src="/logo/logo-light.svg"
+			alt="Расписание МГЛУ"
+			class="ml-1 block h-12 min-w-max translate-y-[0.100rem] overflow-hidden py-0.5 dark:hidden"
+		/>
 
-	<!-- Entity selector -->
-	<div
-		class="scrollbar-hidden order-3 flex grow basis-full items-center overflow-x-scroll lg:order-2 lg:basis-auto lg:pt-0"
-	>
+		<!-- Entity selector on desktop -->
+		<div class="hidden lg:flex scrollbar-hidden overflow-x-scroll">
+			{@render entity_selector()}
+		</div>
+
+		<!-- Add button -->
+		<div class="order-2 flex aspect-square self-center lg:order-3">
+			<Button.Root
+				onclick={() => (addDialogOpen = true)}
+				class="flex flex-row rounded-xl bg-blue-100 p-3 transition-all duration-100 outline-1 outline-blue-200 dark:outline-zinc-600 hover:bg-blue-200 active:scale-[0.98] dark:bg-zinc-700 dark:hover:bg-zinc-600"
+			>
+				<Plus class="flex text-blue-800 dark:text-white" />
+			</Button.Root>
+		</div>
+
+	</div>
+
+	<!-- Entity selector on mobile -->
+	<div class="flex lg:hidden flex-nowrap scrollbar-hidden overflow-x-scroll">
 		{@render entity_selector()}
 	</div>
 
-	<!-- Add button -->
-	<div class="order-2 flex aspect-square self-center lg:order-3">
-		<Button.Root
-			onclick={() => (addDialogOpen = true)}
-			class="flex flex-row rounded-xl bg-blue-100 p-3 transition-all duration-100 hover:bg-blue-200 active:scale-[0.98] dark:bg-zinc-700 dark:hover:bg-zinc-600"
-		>
-			<Plus class="flex text-blue-800 dark:text-white" />
-		</Button.Root>
-	</div>
 </div>
