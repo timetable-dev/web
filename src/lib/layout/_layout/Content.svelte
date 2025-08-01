@@ -33,8 +33,16 @@
 
 <!-- Snippet code for a single day: Monday, Tuesday... -->
 {#snippet weekDay(dayName: DayName, response: LessonsApiResponse)}
-	<p class="p-2 text-xl font-medium text-zinc-800 dark:text-zinc-50">{dayName}</p>
-	<p>{response.week[dayName].date}</p>
+
+{@const formattedDate: string = response.week[dayName].date !== "" ? Intl.DateTimeFormat("ru-RU", {
+		day: "numeric",
+		month: "short",
+	}).format(new Date(response.week[dayName].date)) : ""}
+
+<div class="flex flex-row p-2 items-center justify-between">
+		<p class="text-xl font-medium text-zinc-800 dark:text-zinc-50">{dayName}</p>
+		<p class="text-zinc-500 dark:text-zinc-400">{formattedDate}</p>
+	</div>
 	{#if response.week[dayName].lessons.length > 0}
 		{#each response.week[dayName].lessons as lesson}
 			<LessonCard {lesson} />
