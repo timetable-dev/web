@@ -117,7 +117,8 @@
 		<Dialog.Overlay class="fixed inset-0 z-50 bg-black/50 dark:bg-zinc-800/80" />
 		<Dialog.Content
 			class="fixed top-1/2 left-1/2 z-50 flex w-[90%] translate-[-50%] flex-col gap-3 rounded-lg bg-white p-2 pt-4 text-zinc-950 shadow-md outline-1
-                  outline-zinc-300 md:w-2/3 lg:w-1/3 dark:bg-zinc-900 dark:text-zinc-50 dark:outline-zinc-800"
+                  outline-zinc-300 md:w-2/3 lg:w-1/3 dark:bg-zinc-900 dark:text-zinc-50 dark:outline-zinc-800
+				  data-[state=open]:animate-scale-in data-[state=closed]:animate-scale-out"
 		>
 			<!-- Заголовок: Добавить расписание -->
 			<Dialog.Title class="mb-1 text-center text-xl font-medium text-zinc-900 dark:text-white"
