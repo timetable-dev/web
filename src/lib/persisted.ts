@@ -16,7 +16,7 @@ type Serializer<T> = {
 	deserialize: (value: string) => T | undefined;
 };
 
-const localStorageSerializer: Serializer<Entity[]> = {
+const entitiesSerializer: Serializer<Entity[]> = {
 	deserialize: (value: string): Entity[] => {
 		try {
 			const entities = AddedEntities.parse(JSON.parse(value));
@@ -40,6 +40,6 @@ const localStorageSerializer: Serializer<Entity[]> = {
 	}
 };
 
-export const addedEntities = new PersistedState<Entity[]>("entities_runed", [], {
-	serializer: localStorageSerializer
+export const addedEntities = new PersistedState<Entity[]>("added_entities", [], {
+	serializer: entitiesSerializer
 });

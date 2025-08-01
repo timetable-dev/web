@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { ToggleGroup, Button, DropdownMenu, Portal } from "bits-ui";
 	import { AddDialog } from "$lib/layout";
-	import { addedEntities } from "$lib/entities";
+	import { addedEntities } from "$lib/persisted";
 	import EllipsisVertical from "@lucide/svelte/icons/ellipsis-vertical";
 	import Trash2 from "@lucide/svelte/icons/trash-2";
 	import Plus from "@lucide/svelte/icons/plus";
@@ -164,9 +164,11 @@
 
 	</div>
 
-	<!-- Entity selector on mobile -->
-	<div class="flex lg:hidden flex-nowrap scrollbar-hidden overflow-x-scroll">
-		{@render entity_selector()}
-	</div>
+	<!-- Entity selector on mobile (shown only if there are added entities) -->
+	{#if addedEntities.current.length > 0}	
+		<div class="flex lg:hidden flex-nowrap scrollbar-hidden overflow-x-scroll">
+			{@render entity_selector()}
+		</div>
+	{/if}
 
 </div>

@@ -2,7 +2,7 @@
 	import type { Entity } from "$lib/types";
 	import { Select, Combobox, SkeletonSmall } from "$lib/components";
 	import { Dialog, Tabs, RadioGroup, Label } from "bits-ui";
-	import { addedEntities } from "$lib/entities";
+	import { addedEntities } from "$lib/persisted";
 
 	type SelectItem = { value: string; label: string };
 

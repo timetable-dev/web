@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Content, Header } from "$lib/layout";
-	import { addedEntities } from "$lib/entities";
+	import { addedEntities } from "$lib/persisted";
 
 	let selectedEntityId = $state<string | undefined>(
 		addedEntities.current.length ? addedEntities.current[0].id : undefined

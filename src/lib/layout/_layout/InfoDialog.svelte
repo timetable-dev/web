@@ -1,13 +1,12 @@
 <script lang="ts">
-	import { Dialog, Button } from "bits-ui";
-	import { ButtonSecondary } from "$lib/components";
+	import { Dialog, Switch } from "bits-ui";
 	import { Icon as LucideIcon } from "@lucide/svelte";
 	import RotateCw from "@lucide/svelte/icons/rotate-cw";
 	import CirclePlus from "@lucide/svelte/icons/circle-plus";
 	import MousePointer2 from "@lucide/svelte/icons/mouse-pointer-2";
 	import Github from "@lucide/svelte/icons/github";
 
-	let { open: infoDialogOpen = $bindable() }: { open: boolean } = $props();
+	let { open: infoDialogOpen = $bindable(), debugOn = $bindable(false) }: { open: boolean, debugOn: boolean } = $props();
 
 	let debugMenuOpen = $state<boolean>(false);
 	let version = $state<string>("v 0.2");
@@ -28,7 +27,7 @@
 	{@const Icon = icon}
 	<div class="flex flex-col gap-2 md:flex-row md:gap-4">
 		<span
-			class="flex h-min w-min rounded-md border-2 bg-sky-100 p-2.5 text-sky-600 dark:bg-sky-900 dark:text-sky-200 border-sky-400 dark:border-sky-800"
+			class="flex h-min w-min rounded-md border-2 border-sky-400 bg-sky-100 p-2.5 text-sky-600 dark:border-sky-800 dark:bg-sky-900 dark:text-sky-200"
 		>
 			<Icon size="20" />
 		</span>
@@ -38,23 +37,24 @@
 	</div>
 {/snippet}
 
-<Dialog.Root bind:open={infoDialogOpen}
-	onOpenChange={() => {debugMenuOpen = false; counter = 0}}
+<Dialog.Root
+	bind:open={infoDialogOpen}
+	onOpenChange={() => {
+		debugMenuOpen = false;
+		counter = 0;
+	}}
 >
 	<Dialog.Portal>
 		<Dialog.Overlay class="fixed inset-0 z-50 bg-black/50 dark:bg-zinc-800/80" />
 		<Dialog.Content
-			class="fixed top-1/2 left-1/2 z-50 flex max-h-3/4 lg:max-h-5/6 w-[90%] translate-[-50%] flex-col rounded-xl bg-white outline-zinc-300
-                    md:w-1/2 lg:w-1/3 dark:bg-zinc-900 dark:outline-zinc-800 data-[state=open]:animate-scale-in data-[state=closed]:animate-scale-out"
+			class="data-[state=open]:animate-scale-in data-[state=closed]:animate-scale-out fixed top-1/2 left-1/2 z-50 flex max-h-3/4 w-[90%] translate-[-50%] flex-col rounded-xl bg-white
+                    outline-zinc-300 md:w-1/2 lg:max-h-5/6 lg:w-1/3 dark:bg-zinc-900 dark:outline-zinc-800"
 		>
 			<!-- Title -->
-			<Dialog.Title class="text-center font-medium py-4 text-xl">
-				О приложении
-			</Dialog.Title>
+			<Dialog.Title class="py-4 text-center text-xl font-medium">О приложении</Dialog.Title>
 
 			<!-- Info -->
 			<div class="scrollbar-hidden flex flex-col gap-6 overflow-y-auto px-5">
-
 				<!-- Icon cards -->
 				{@render infoCard(
 					"Чтобы добавить расписание, нажмите на плюсик, а чтобы удалить – на три точки -> «Удалить».",
@@ -76,13 +76,13 @@
 						src="/icons/64m.svg"
 						alt=""
 					/>
-					<div class="flex flex-col gap-1">			
-						<p class="hyphens-auto" lang="ru">
-							Добавьте приложение на главный экран:
-						</p>
-						<ul class="flex flex-col list-disc list-inside gap-1">
-							<li>В меню Chrome выберите «Добавить на гл. экран» ⭢ «Установить»;</li>
-							<li>В Safari нажмите «Поделиться» ⭢ «На экран “Домой”» ⭢ «Добавить».</li>
+					<div class="flex flex-col gap-1">
+						<p class="hyphens-auto" lang="ru">Добавьте приложение на главный экран:</p>
+						<ul class="flex list-inside list-disc flex-col gap-1">
+							<li>В меню Chrome выберите «Добавить на гл. экран» -> «Установить»;</li>
+							<li>
+								В Safari нажмите «Поделиться» -> «На экран “Домой”» -> «Добавить».
+							</li>
 						</ul>
 					</div>
 				</div>
@@ -90,30 +90,42 @@
 
 			<!-- Debug menu -->
 			{#if debugMenuOpen}
-				<div class="flex w-full p-3">
+				<div class="flex flex-col w-full p-3">
 					<a
 						href="https://github.com/timetable-dev/web"
 						target="_blank"
 						rel="noreferrer noopener"
-						class="flex flex-row justify-center-safe content-center gap-2 font-medium w-full p-3 bg-zinc-800 text-zinc-50 rounded-md"
+						class="flex w-full flex-row content-center justify-center-safe gap-2 rounded-md bg-zinc-800 p-3 font-medium text-zinc-50"
 					>
-						<Github size={22}/>
+						<Github size={22} />
 						GitHub
 					</a>
+					<div class="flex flex-row items-center justify-between p-3">
+						<p>Show debug info</p>
+						<Switch.Root
+							bind:checked={debugOn}
+							class="block w-14 h-8 cursor-pointer items-center rounded-full outline-1 outline-zinc-300 dark:outline-zinc-700 data-[state=checked]:bg-sky-600 data-[state=unchecked]:bg-zinc-100 dark:data-[state=unchecked]:bg-zinc-800"
+						> 
+							<Switch.Thumb class="block aspect-square rounded-full w-6 m-1 bg-zinc-200 data-[state=checked]:translate-x-6 transition-transform duration-150" />
+						</Switch.Root>
+					</div>
 				</div>
 			{/if}
 
 			<!-- Controls -->
 			<div class="flex flex-row items-center justify-between p-3">
-				<button class="pl-6 pr-12 py-2.5 rounded-md active:transition-all duration-75 text-zinc-500 dark:text-zinc-400 active:bg-zinc-200 active:dark:bg-zinc-700 active:scale-[0.95]"
-                        onclick={showDebugMenu}
-                >
-                    {version}
-                </button>
+				<button
+					class="rounded-md py-2.5 pr-12 pl-6 text-zinc-500 duration-75 active:scale-[0.95] active:bg-zinc-200 active:transition-all dark:text-zinc-400 active:dark:bg-zinc-700"
+					onclick={showDebugMenu}
+				>
+					{version}
+				</button>
 
-				<Dialog.Close class="cursor-pointer rounded-md px-6 py-2.5 font-medium transition-all duration-150  active:scale-[0.98]
-								   bg-zinc-100 text-zinc-800 outline-1 outline-zinc-200 hover:bg-zinc-200 hover:outline-zinc-300 
-           						   dark:bg-zinc-700 dark:text-zinc-50 dark:outline-zinc-600 hover:dark:bg-zinc-800 hover:dark:outline-zinc-700">
+				<Dialog.Close
+					class="cursor-pointer rounded-md bg-zinc-100 px-6 py-2.5 font-medium text-zinc-800  outline-1
+								   outline-zinc-200 transition-all duration-150 hover:bg-zinc-200 hover:outline-zinc-300 active:scale-[0.98] 
+           						   dark:bg-zinc-700 dark:text-zinc-50 dark:outline-zinc-600 hover:dark:bg-zinc-800 hover:dark:outline-zinc-700"
+				>
 					Понятно
 				</Dialog.Close>
 			</div>

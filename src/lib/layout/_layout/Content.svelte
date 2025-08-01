@@ -2,7 +2,7 @@
 	import type { Entity, LessonsApiResponse, DayName } from "$lib/types";
 	import { SkeletonLarge, ButtonPrimary, ButtonSecondary } from "$lib/components";
 	import { AddDialog, InfoDialog, WeekPicker, LessonCard, ErrorCard } from "$lib/layout";
-	import { addedEntities } from "$lib/entities";
+	import { addedEntities } from "$lib/persisted";
 	import Plus from "@lucide/svelte/icons/plus";
 
 	// Props: local storage id of the selected entity
@@ -13,6 +13,7 @@
 	let selectedWeek = $state<Week>("currentWeek");
 	let infoDialogOpen = $state(false);
 	let addDialogOpen = $state(false);
+	let showDebugInfo = $state(false);
 
 	// Getting selected entity from local storage by id
 	let selectedEntity = $derived<Entity | undefined>(
@@ -84,7 +85,7 @@
 				>
 			</p>
 
-			{#if response.debug}
+			{#if response.debug && showDebugInfo}
 				<div
 					class="mt-8 flex flex-col self-center rounded-xl px-6 py-3 text-zinc-800 outline-2 outline-zinc-500 outline-dashed dark:text-zinc-100"
 				>
@@ -129,7 +130,7 @@
 </div>
 
 <!-- Dialogs and week picker -->
-<InfoDialog bind:open={infoDialogOpen} />
+<InfoDialog bind:open={infoDialogOpen} bind:debugOn={showDebugInfo}/>
 <AddDialog bind:selectedEntityId bind:dialogOpen={addDialogOpen} />
 {#if selectedEntity}
 	<WeekPicker bind:selectedWeek />
