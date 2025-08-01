@@ -1,16 +1,11 @@
 <script lang="ts">
+	import type { SelectItem } from "$lib/types";
 	import { Tabs } from "bits-ui";
 
-	type WeekValue = "currentWeek" | "nextWeek" | "thirdWeek" | "fourthWeek";
+	type Props = { selectedWeek: "currentWeek" | "nextWeek" | "thirdWeek" | "fourthWeek" };
+	let { selectedWeek = $bindable("currentWeek") }: Props = $props();
 
-	let { selectedWeek = $bindable("currentWeek") }: { selectedWeek: WeekValue } = $props();
-
-	interface Week {
-		label: string;
-		value: WeekValue;
-	}
-
-	const weeks: Week[] = [
+	const weeks: SelectItem[] = [
 		{ label: "Тек. нед.", value: "currentWeek" },
 		{ label: "След. нед.", value: "nextWeek" },
 		{ label: "3-я нед.", value: "thirdWeek" },
@@ -18,15 +13,15 @@
 	];
 </script>
 
-<Tabs.Root bind:value={selectedWeek} class="fixed inset-x-0 bottom-0 flex w-full justify-center">
+<Tabs.Root bind:value={selectedWeek} class="fixed inset-x-0 bottom-0 flex w-full justify-center-safe overflow-scroll scrollbar-hidden">
 	<Tabs.List
-		class="m-2 flex w-max flex-row justify-center gap-1  rounded-lg bg-zinc-50 p-2 outline-1
-                    outline-zinc-200 md:mb-1.5 md:p-1 dark:bg-zinc-800 dark:outline-zinc-700"
+		class="m-2 flex w-max flex-row justify-center gap-1 rounded-lg bg-zinc-50 p-1 outline-1
+                    outline-zinc-200 md:mb-1.5 dark:bg-zinc-800 dark:outline-zinc-700"
 	>
 		{#each weeks as week}
 			<Tabs.Trigger
 				value={week.value}
-				class="flex shrink cursor-pointer overflow-hidden rounded-md p-2 text-nowrap whitespace-nowrap transition-all duration-150
+				class="flex shrink cursor-pointer overflow-hidden rounded-md p-2.5 md:p-2 text-nowrap whitespace-nowrap transition-all duration-150
                         active:scale-[0.98] data-[state=active]:bg-zinc-200
                         hover:data-[state=inactive]:bg-zinc-200/50 dark:data-[state=active]:bg-zinc-600
                         dark:hover:data-[state=inactive]:bg-zinc-200/10"
