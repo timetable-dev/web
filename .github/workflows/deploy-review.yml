@@ -1,18 +1,26 @@
-# Review deployment to next.timetable.of.by on every push to dev
+# Review deployment to next-mslu-timetable.fly.dev on every PR to main or dev
 
-name: Fly Deploy Dev
+name: Deploy Review App
 on:
-  push:
+  # Run this workflow when PR to main or dev is opened or reopened and when new commit.
+  pull_request: 
+    types: [opened, reopened, synchronize]
     branches:
+      - main
       - dev
 jobs:
-  deploy:
+  review_app:
     name: Deploy review app
     runs-on: ubuntu-latest
-    concurrency: deploy-group
+
+    # Only run one deployment at a time per PR.
+    concurrency:
+      group: pr-${{ github.event.number }}
+
     environment:
       name: next
       url: https://next-mslu-timetable.fly.dev/
+
     steps:
       - name: Get code
         uses: actions/checkout@v4
