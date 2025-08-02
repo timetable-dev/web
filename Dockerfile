@@ -12,6 +12,12 @@ WORKDIR /app
 # Set production environment
 ENV NODE_ENV="production"
 
+# Set environment variables necessary during build
+ARG MSLU_BACKEND_ENDPOINT
+ENV MSLU_BACKEND_ENDPOINT=${MSLU_BACKEND_ENDPOINT}
+# ARG ORIGIN
+# ENV ORIGIN=${ORIGIN}
+
 
 # Throw-away build stage to reduce size of final image
 FROM base AS build
