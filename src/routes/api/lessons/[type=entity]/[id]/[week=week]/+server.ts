@@ -1,5 +1,6 @@
 import type { RequestHandler } from "./$types";
 import type { WeekData, DebugData, LessonsApiResponse } from "$lib/types";
+import { MSLU_BACKEND_ENDPOINT } from "$env/static/private";
 import { transform } from "./utils";
 import { json, error } from "@sveltejs/kit";
 
@@ -14,7 +15,7 @@ export const GET: RequestHandler = async ({ params }): Promise<Response> => {
 	let transformStart: number;
 	let transformTotal: number;
 
-	const fetchUrl = new URL("https://bbaf9a53f261s823eb2e.containers.yandexcloud.net"); // "http://schedule.mslu.by"
+	const fetchUrl = new URL(MSLU_BACKEND_ENDPOINT);
 
 	if (type === "group") {
 		fetchUrl.pathname = "/backend";

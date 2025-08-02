@@ -1,5 +1,6 @@
 // import { MSLU_BACKEND_ENDPOINT } from '$env/static/private';
 import type { RequestHandler } from "./$types";
+import { MSLU_BACKEND_ENDPOINT } from "$env/static/private";
 import { json, error } from "@sveltejs/kit";
 import { z } from "zod";
 
@@ -13,7 +14,7 @@ const MsluResponse = z.object({
 });
 
 export const GET: RequestHandler = async (): Promise<Response> => {
-	const endpoint = "https://bbaf9a53f261s823eb2e.containers.yandexcloud.net"; // "http://schedule.mslu.by"
+	const endpoint = MSLU_BACKEND_ENDPOINT;
 	const res = await fetch(`${endpoint}/backend/getTeacherNames`);
 
 	// Checking if the response is ok
