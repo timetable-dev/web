@@ -148,7 +148,7 @@
 		/>
 
 		<!-- Entity selector on desktop -->
-		<div class="hidden lg:flex scrollbar-hidden overflow-x-scroll">
+		<div class="hidden lg:flex w-full scrollbar-hidden overflow-x-scroll">
 			{@render entity_selector()}
 		</div>
 
