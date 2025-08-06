@@ -5,6 +5,7 @@
 	import EllipsisVertical from "@lucide/svelte/icons/ellipsis-vertical";
 	import Trash2 from "@lucide/svelte/icons/trash-2";
 	import Plus from "@lucide/svelte/icons/plus";
+	import X from "@lucide/svelte/icons/x";
 	import ArrowLeftToLine from "@lucide/svelte/icons/arrow-left-to-line";
 
 	let { selectedEntityId = $bindable() }: { selectedEntityId: string | undefined } = $props();
@@ -113,8 +114,8 @@
                                            rounded-md px-4 py-2 font-medium text-red-500 transition-all duration-150
                                            hover:bg-red-100 lg:py-1.5 dark:text-red-300 dark:hover:bg-zinc-700"
 								>
-									<Trash2 size={22} />
-									Удалить
+									<X size={22} />
+									Закрыть
 								</Button.Root>
 							</DropdownMenu.Item>
 						</DropdownMenu.Content>

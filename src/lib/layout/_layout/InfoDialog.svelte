@@ -57,7 +57,7 @@
 			<div class="scrollbar-hidden flex flex-col gap-6 overflow-y-auto px-5">
 				<!-- Icon cards -->
 				{@render infoCard(
-					"Чтобы добавить расписание, нажмите на плюсик, а чтобы удалить – на три точки -> «Удалить».",
+					"Чтобы открыть расписание, нажмите на плюсик, а чтобы закрыть – на три точки -> «Закрыть».",
 					CirclePlus
 				)}
 				{@render infoCard(
