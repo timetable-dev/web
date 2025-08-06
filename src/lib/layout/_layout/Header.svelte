@@ -40,7 +40,7 @@
 	<ToggleGroup.Root
 		type="single"
 		bind:value={selectedEntityId}
-		class="scrollbar-hidden flex w-full flex-nowrap items-center gap-2 overflow-scroll"
+		class="scrollbar-hidden px-3 flex w-full flex-nowrap items-center gap-2 overflow-scroll"
 	>
 		{#each addedEntities.current as entity}
 			<!-- Individual element styling -->
@@ -130,11 +130,11 @@
 
 <div
 	class="flex w-full flex-col gap-3
-            rounded-xl bg-zinc-50 p-3
-            px-3 outline-1 outline-zinc-200 md:w-2/3 lg:w-full
+            rounded-xl bg-zinc-50 py-3
+            outline-1 outline-zinc-200 md:w-2/3 lg:w-full
             lg:flex-nowrap lg:gap-4 dark:bg-zinc-800 dark:outline-zinc-700"
 >
-	<div class="flex flex-row gap-2 flex-wrap lg:flex-nowrap justify-between">
+	<div class="flex px-3 flex-row gap-2 flex-wrap lg:flex-nowrap justify-between">
 		<!-- Logo -->
 		<img
 			src="/logo/logo-dark.svg"
