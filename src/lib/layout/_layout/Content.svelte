@@ -54,7 +54,7 @@
 {/snippet}
 
 <!-- Content -->
-<div class="flex w-full flex-col pt-2 pb-24 text-balance">
+<div class="flex w-full flex-col pt-2 pb-24">
 	<!-- When entity is selected, render schedule -->
 	{#if selectedEntity}
 		{#await getLessons(selectedEntity)}
