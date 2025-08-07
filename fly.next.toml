@@ -9,10 +9,10 @@ primary_region = 'fra'
 [build]
 
 [env]
-  ORIGIN = "https://timetable.of.by"
+  ORIGIN = "https://next-mslu-timetable.fly.dev"
 
 [build.args]
-  MSLU_BACKEND_ENDPOINT = "http://schedule.mslu.by"
+  MSLU_BACKEND_ENDPOINT = "https://bbaf9a53f261s823eb2e.containers.yandexcloud.net"
 
 [http_service]
   internal_port = 3000
