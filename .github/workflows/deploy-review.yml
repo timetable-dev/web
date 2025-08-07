@@ -17,7 +17,6 @@ jobs:
     concurrency:
       group: pr-${{ github.event.number }}
 
-    # This environment must contain ORIGIN and MSLU_BACKEND_ENDPOINT variables.
     environment:
       name: next
       url: https://next-mslu-timetable.fly.dev/
