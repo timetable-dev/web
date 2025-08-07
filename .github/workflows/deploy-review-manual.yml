@@ -1,12 +1,12 @@
 # Review deployment to next-mslu-timetable.fly.dev on every PR to main or dev
 
-name: Deploy Review App
+name: Manual App Deploy
 
 on: workflow_dispatch
 
 jobs:
   review_app:
-    name: Deploy review app
+    name: Manual deploy
     runs-on: ubuntu-latest
 
     # Only run one deployment at a time.
