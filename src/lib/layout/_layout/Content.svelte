@@ -1,8 +1,9 @@
 <script lang="ts">
 	import type { Entity, LessonsApiResponse, DayName } from "$lib/types";
-	import { SkeletonLarge, ButtonPrimary, ButtonSecondary } from "$lib/components";
 	import { AddDialog, InfoDialog, WeekPicker, LessonCard, ErrorCard } from "$lib/layout";
+	import { SkeletonLarge } from "$lib/components";
 	import { addedEntities } from "$lib/persisted";
+	import { Button } from "bits-ui";
 	import Plus from "@lucide/svelte/icons/plus";
 
 	// Props: local storage id of the selected entity
@@ -111,19 +112,38 @@
 				</p>
 			{/if}
 			<div class="flex flex-col gap-3">
-				<ButtonPrimary
-					text="Открыть расписание"
+
+				<Button.Root
 					onclick={() => {
 						addDialogOpen = true;
 					}}
-					icon={Plus}
-				/>
-				<ButtonSecondary
-					text="Как это работает?"
+					class="flex flex-row items-center justify-center gap-3 w-full px-4 py-3 lg:py-2.5 outline-2 rounded-lg cursor-pointer transition-all duration-100 active:scale-[0.98]
+						bg-sky-200 text-sky-800 outline-sky-500 hover:bg-sky-300 hover:text-sky-900 hover:outline-sky-600
+						dark:bg-sky-900 dark:text-sky-50 dark:outline-sky-700 hover:dark:bg-sky-800 hover:dark:text-sky-50 hover:dark:outline-sky-700"
+				>
+					<span>
+						<Plus size={22} />
+					</span>
+					<p class="truncate pr-2 font-medium">
+						Открыть расписание
+					</p>
+				</Button.Root>
+
+				<Button.Root
 					onclick={() => {
-						infoDialogOpen = true;
+						addDialogOpen = true;
 					}}
-				/>
+					class="flex flex-row items-center justify-center gap-3 w-full px-4 py-3 lg:py-2.5 outline-2 rounded-lg cursor-pointer transition-all duration-100 active:scale-[0.98]
+						bg-zinc-100 text-zinc-800 outline-zinc-200 hover:bg-zinc-200 hover:outline-zinc-300
+						dark:bg-zinc-700 dark:text-zinc-50 dark:outline-zinc-600 hover:dark:bg-zinc-800 hover:dark:outline-zinc-700"
+				>
+					<span>
+						<!-- <Plus size={22} /> -->
+					</span>
+					<p class="truncate pr-2 font-medium">
+						Как это работает?
+					</p>
+				</Button.Root>
 			</div>
 		</div>
 	{/if}
