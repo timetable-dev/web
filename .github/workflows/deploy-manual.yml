@@ -5,7 +5,7 @@ name: Manual App Deploy
 on: workflow_dispatch
 
 jobs:
-  review_app:
+  manual-deploy:
     name: Manual deploy
     runs-on: ubuntu-latest
 
