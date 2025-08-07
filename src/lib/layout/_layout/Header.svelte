@@ -3,7 +3,6 @@
 	import { AddDialog } from "$lib/layout";
 	import { addedEntities } from "$lib/persisted";
 	import EllipsisVertical from "@lucide/svelte/icons/ellipsis-vertical";
-	import Trash2 from "@lucide/svelte/icons/trash-2";
 	import Plus from "@lucide/svelte/icons/plus";
 	import X from "@lucide/svelte/icons/x";
 	import ArrowLeftToLine from "@lucide/svelte/icons/arrow-left-to-line";
@@ -84,7 +83,7 @@
 							align="end"
 							sideOffset={0}
 							class="flex flex-col gap-1 rounded-lg border-1 border-zinc-300 bg-zinc-50
-                                   p-1 shadow-sm
+                                   p-1 shadow-sm data-[state=open]:animate-scale-in data-[state=closed]:animate-scale-out
                                    dark:border-zinc-700 dark:bg-zinc-800"
 						>
 							<!-- Make default button -->

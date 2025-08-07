@@ -45,9 +45,9 @@
 	}}
 >
 	<Dialog.Portal>
-		<Dialog.Overlay class="fixed inset-0 z-50 bg-black/50 dark:bg-zinc-800/80" />
+		<Dialog.Overlay class="fixed inset-0 z-49 bg-black/50 dark:bg-zinc-800/80 data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out" />
 		<Dialog.Content
-			class="data-[state=open]:animate-scale-in data-[state=closed]:animate-scale-out fixed top-1/2 left-1/2 z-50 flex max-h-3/4 w-[90%] translate-[-50%] flex-col rounded-xl bg-white
+			class="data-[state=open]:animate-scale-in data-[state=closed]:animate-scale-out dialog-center flex max-h-3/4 w-[90%] flex-col rounded-xl bg-white
                     outline-zinc-300 md:w-1/2 lg:max-h-5/6 lg:w-1/3 dark:bg-zinc-900 dark:outline-zinc-800"
 		>
 			<!-- Title -->

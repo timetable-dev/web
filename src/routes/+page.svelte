@@ -12,7 +12,7 @@
 <ModeWatcher />
 
 <div class="flex w-full flex-row justify-center">
-	<div class="flex w-full flex-col lg:w-2/3 p-2">
+	<div class="flex w-full flex-col lg:w-2/3 p-3">
 		<Header bind:selectedEntityId />
 		<Content bind:selectedEntityId />
 	</div>

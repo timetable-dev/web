@@ -58,10 +58,10 @@
 		</div>
 	</Dialog.Trigger>
 	<Dialog.Portal>
-		<Dialog.Overlay class="fixed inset-0 z-49 bg-black/50 dark:bg-zinc-800/80" />
+		<Dialog.Overlay class="fixed inset-0 z-49 bg-black/50 dark:bg-zinc-800/80 data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out" />
 		<Dialog.Content
-			class="dialog-center flex flex-col gap-2 p-4 rounded-lg w-[90%] md:w-2/3 lg:w-1/3 outline-1
-				   data-[state=open]:animate-in data-[state=closed]:animate-out
+			class="dialog-center flex flex-col gap-2 p-4 rounded-xl w-[90%] md:w-2/3 lg:w-1/3 outline-1
+				   data-[state=open]:animate-scale-in data-[state=closed]:animate-scale-out
 				   bg-white outline-zinc-300 dark:bg-zinc-900 dark:outline-zinc-800"
 		>
 			<div class="flex flex-row gap-2">
