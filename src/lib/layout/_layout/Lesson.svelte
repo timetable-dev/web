@@ -15,19 +15,12 @@
 	const et = lesson.end_time.slice(0, 5);
 	const entity = lesson.teacher || lesson.groups.join(", ");
 
-	// svelte-ignore non_reactive_update
-	let typeStyling: string = "";
-
-	if (lesson.type === "Практ") {
-		typeStyling =
-			"bg-rose-100 text-rose-800 outline-rose-200 dark:bg-rose-950 dark:text-rose-100 dark:outline-rose-800";
-	} else if (lesson.type === "Лек") {
-		typeStyling =
-			"bg-emerald-100 text-emerald-800 outline-emerald-200 dark:bg-emerald-950 dark:text-emerald-100 dark:outline-emerald-800";
-	} else if (lesson.type === "Сем") {
-		typeStyling =
-			"bg-amber-100 text-amber-800 outline-amber-200 dark:bg-amber-950 dark:text-amber-100 dark:outline-amber-800";
-	}
+	const typeStyling: string = (
+		lesson.type === "Практ" ? "bg-rose-100 text-rose-800 outline-rose-200 dark:bg-rose-950 dark:text-rose-100 dark:outline-rose-800"
+		: lesson.type === "Лек" ? "bg-emerald-100 text-emerald-800 outline-emerald-200 dark:bg-emerald-950 dark:text-emerald-100 dark:outline-emerald-800"
+		: lesson.type === "Сем" ? "bg-amber-100 text-amber-800 outline-amber-200 dark:bg-amber-950 dark:text-amber-100 dark:outline-amber-800"
+		: "bg-zinc-100 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-200"
+	)
 </script>
 
 {#snippet infoBlock(text: string, icon: typeof LucideIcon)}
