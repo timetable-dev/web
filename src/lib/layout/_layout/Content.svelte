@@ -42,9 +42,15 @@
 		month: "short",
 	}).format(new Date(response.week[dayName].date)) : ""}
 
+{@const specialDate: string = (
+	formattedDate === "3 сент." ? "День прощанья"
+	: formattedDate === "31 дек." ? "Новый год!"
+	: ""
+)}
+
 <div class="flex flex-row p-2 items-center justify-between">
 		<p class="text-xl font-medium text-zinc-800 dark:text-zinc-50">{dayName}</p>
-		<p class="text-zinc-500 dark:text-zinc-400">{formattedDate === "3 сент." ? "День прощанья" : formattedDate}</p>
+		<p class="text-zinc-500 dark:text-zinc-400">{specialDate || formattedDate}</p>
 	</div>
 	{#if response.week[dayName].lessons.length > 0}
 		{#each response.week[dayName].lessons as lesson}
