@@ -1,45 +1,42 @@
-import { z } from "zod";
 import type { Lesson, WeekData, DayName } from "$lib/types";
+import * as v from "valibot"
 
-// Давайте сразу предупрежу, вот эта вся ебатория, O которой я даже считать боюсь, нужна только потому, что я:
-// а) не могу повлиять на вид ответа сервера МГЛУ и б) не хочу случайно показать людям неправильное расписание, ведь это сразу respect--,
-// да и подставить кого-нибудь могу, пусть лучше увидят ошибку и на оф сайт пойдут. Поэтому я сначала проверяю всё зодом, потом сверяю что даты и номера дней совпадают,
-// а потом ещё объединяю группы у преподов, потому что сервер их возвращает не списком, а по отдельности (бред, конечно, но что поделать).
-// TODO: Можно ещё сверять, что среда это реально, допустим, 3 сентября, но это уже слишком, мне вообще фронт надо допиливать.
+const MsluDataSchema = v.array(
+    v.object({
+        // TimeIn: v.union([
+        //     v.pipe(v.string(), v.isoTimeSecond()),
+        //     v.pipe(v.string(), v.isoTimestamp()),
+        // ]),
+        TimeIn: v.pipe(v.string(), v.isoTimeSecond()),
+        TimeOut: v.pipe(v.string(), v.isoTimeSecond()),
+        DateIn: v.string(),
+        DateOut: v.string(),
 
-// Собственно, схема для валидации
-const MsluDataSchema = z.array(
-    z.object({
-        TimeIn: z.iso.time(),
-        TimeOut: z.iso.time(),
-        DateIn: z.string(),
-        DateOut: z.string(),
-
-        Day: z.union([
-            z.literal("Понедельник"),
-            z.literal("Вторник"),
-            z.literal("Среда"),
-            z.literal("Четверг"),
-            z.literal("Пятница"),
-            z.literal("Суббота"),
+        Day: v.union([
+            v.literal("Понедельник"),
+            v.literal("Вторник"),
+            v.literal("Среда"),
+            v.literal("Четверг"),
+            v.literal("Пятница"),
+            v.literal("Суббота"),
         ]),
-        DayNumber: z.number().int().gte(1).lte(6),
+        DayNumber: v.pipe(v.number(), v.integer(), v.minValue(1), v.maxValue(6)),
 
-        Classroom: z.string(),
-        Discipline: z.string(),
-        Discipline_Type: z.string(),
-        FIO_teacher: z.string().optional(), // Absent for teachers
-        Group: z.string(),
+        Classroom: v.string(),
+        Discipline: v.string(),
+        Discipline_Type: v.string(),
+        FIO_teacher: v.optional(v.string()), // Absent for teachers
+        Group: v.string(),
 
         // Fields I don't care about
-        Lesson: z.number(),
-        Faculty: z.string(),
-        IdGroup: z.string(),
-        IdSchedule: z.number(),
+        Lesson: v.number(),
+        Faculty: v.string(),
+        IdGroup: v.string(),
+        IdSchedule: v.number(),
     }),
 );
 
-// Названия дней недели и их номера, чтобы потом сверять
+// Day names and their numbers to check later
 const dayNameToNumber: Record<DayName, number> = {
     Понедельник: 1,
     Вторник: 2,
@@ -49,10 +46,10 @@ const dayNameToNumber: Record<DayName, number> = {
     Суббота: 6,
 };
 
-// Функция для трансформации данных в нужный формат
+// Function to validate and transform MSLU response 
 export function transform(data: any, type: "group" | "teacher"): WeekData {
-    // Validate data with Zod
-    const validatedItems = MsluDataSchema.parse(data);
+    // Validate data with Valibot
+    const validatedItems = v.parse(MsluDataSchema, data);
 
     // Group by day
     const groupedItems = Object.groupBy(validatedItems, (item) => item.Day);
@@ -96,7 +93,7 @@ export function transform(data: any, type: "group" | "teacher"): WeekData {
                 })),
             };
 
-            // For teachers, combine groups for the same lesson
+        // For teachers, combine groups for the same lesson
         } else {
             const lessons: Lesson[] = [];
             for (const item of items) {
