@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ToggleGroup, Button, DropdownMenu, Portal } from "bits-ui";
+	import { ToggleGroup, Button, DropdownMenu } from "bits-ui";
 	import { AddDialog } from "$lib/layout";
 	import { addedEntities } from "$lib/persisted";
 	import EllipsisVertical from "@lucide/svelte/icons/ellipsis-vertical";

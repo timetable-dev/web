@@ -1,11 +1,11 @@
 <script lang="ts">
-	import type { SelectItem } from "$lib/types";
+	import type { SelectItem, WeekType } from "$lib/types";
 	import { Tabs } from "bits-ui";
 
-	type Props = { selectedWeek: "currentWeek" | "nextWeek" | "thirdWeek" | "fourthWeek" };
+	type Props = { selectedWeek: WeekType };
 	let { selectedWeek = $bindable("currentWeek") }: Props = $props();
 
-	const weeks: SelectItem[] = [
+	const weeks: SelectItem<WeekType, string>[] = [
 		{ label: "Тек. нед.", value: "currentWeek" },
 		{ label: "След. нед.", value: "nextWeek" },
 		{ label: "3-я нед.", value: "thirdWeek" },

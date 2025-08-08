@@ -4,8 +4,8 @@
 	import ChevronRight from "@lucide/svelte/icons/chevron-right";
 
 	interface Props {
-		items: SelectItem[];
-		selectedItem: SelectItem | undefined;
+		items: SelectItem<string, string>[];
+		selectedItem: SelectItem<string, string> | undefined;
 		placeholder?: string;
 	}
 

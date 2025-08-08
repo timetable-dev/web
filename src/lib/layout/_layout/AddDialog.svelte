@@ -1,17 +1,15 @@
 <script lang="ts">
-	import type { Entity } from "$lib/types";
+	import type { Entity, SelectItem } from "$lib/types";
 	import { Select, Combobox, SkeletonSmall } from "$lib/components";
 	import { Dialog, Tabs, RadioGroup, Label } from "bits-ui";
 	import { addedEntities } from "$lib/persisted";
-
-	type SelectItem = { value: string; label: string };
 
 	let {
 		dialogOpen = $bindable(false),
 		selectedEntityId = $bindable()
 	}: { dialogOpen: boolean; selectedEntityId: string | undefined } = $props();
 
-	let faculties: SelectItem[] = [
+	let faculties: SelectItem<string, string>[] = [
 		{ value: "202", label: "ФАЯ" },
 		{ value: "196", label: "ФНЯ" },
 		{ value: "222", label: "ФРЯ" },
@@ -22,7 +20,7 @@
 	];
 
 	let selectedType = $state<"group" | "teacher">("group");
-	let selectedFaculty = $state<SelectItem>();
+	let selectedFaculty = $state<SelectItem<string, string>>();
 	let selectedMode = $state<"1" | "2" | "">("");
 
 	let selectedFacultyValue = $state<string>();
@@ -34,18 +32,18 @@
 	// Automatically fetching either a list of groups if group tab is active
 	// and faculty and mode are selected or a list of teachers if teacher tab is active.
 
-	let groupList = $state<Promise<SelectItem[]>>();
-	let teacherList = $state<Promise<SelectItem[]>>();
+	let groupList = $state<Promise<SelectItem<string, string>[]>>();
+	let teacherList = $state<Promise<SelectItem<string, string>[]>>();
 
-	let selectedGroup = $state<SelectItem>();
-	let selectedTeacher = $state<SelectItem>();
+	let selectedGroup = $state<SelectItem<string, string>>();
+	let selectedTeacher = $state<SelectItem<string, string>>();
 
-	async function getGroups(selectedFaculty: any, selectedMode: any): Promise<SelectItem[]> {
+	async function getGroups(selectedFaculty: any, selectedMode: any): Promise<SelectItem<string, string>[]> {
 		const res = await fetch(`/api/groups/${selectedFaculty.value}/${selectedMode}`);
 		return await res.json();
 	}
 
-	async function getTeachers(): Promise<SelectItem[]> {
+	async function getTeachers(): Promise<SelectItem<string, string>[]> {
 		let res = await fetch("/api/teachers");
 		return await res.json();
 	}

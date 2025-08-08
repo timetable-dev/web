@@ -7,8 +7,8 @@
 		selectedItem = $bindable(),
 		placeholder
 	}: {
-		items: SelectItem[];
-		selectedItem: SelectItem | undefined;
+		items: SelectItem<string, string>[];
+		selectedItem: SelectItem<string, string> | undefined;
 		placeholder?: string;
 	} = $props();
 
@@ -30,6 +30,7 @@
 	}}
 >
 	<div class="relative flex flex-row">
+		<!-- TODO: Replace with corresponding Lucide icon -->
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			width="24"
