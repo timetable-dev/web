@@ -1,38 +1,38 @@
 {
-	"name": "web",
-	"private": true,
-	"version": "0.2",
-	"type": "module",
-	"scripts": {
-		"dev": "vite dev",
-		"build": "vite build",
-		"preview": "vite preview",
-		"prepare": "svelte-kit sync || echo ''",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"format": "prettier --write .",
-		"lint": "prettier --check ."
-	},
-	"devDependencies": {
-		"@flydotio/dockerfile": "^0.7.10",
-		"@sveltejs/adapter-node": "^5.2.13",
-		"@sveltejs/kit": "^2.26.1",
-		"@sveltejs/vite-plugin-svelte": "^6.1.0",
-		"prettier": "^3.6.2",
-		"prettier-plugin-svelte": "^3.3.3",
-		"prettier-plugin-tailwindcss": "^0.6.14",
-		"svelte": "^5.36.16",
-		"svelte-check": "^4.3.0",
-		"typescript": "^5.8.3",
-		"tailwindcss": "^4.1.11",
-		"@tailwindcss/vite": "^4.1.11",
-		"vite": "^7.0.6"
-	},
-	"dependencies": {
-		"@lucide/svelte": "^0.526.0",
-		"bits-ui": "^2.8.12",
-		"mode-watcher": "^1.1.0",
-		"runed": "^0.31.1",
-		"zod": "^4.0.10"
-	}
+    "name": "web",
+    "private": true,
+    "version": "0.2",
+    "type": "module",
+    "scripts": {
+        "dev": "vite dev",
+        "build": "vite build",
+        "preview": "vite preview",
+        "prepare": "svelte-kit sync || echo ''",
+        "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+        "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+        "format": "prettier --write .",
+        "lint": "prettier --check ."
+    },
+    "devDependencies": {
+        "@flydotio/dockerfile": "^0.7.10",
+        "@sveltejs/adapter-node": "^5.2.13",
+        "@sveltejs/kit": "^2.26.1",
+        "@sveltejs/vite-plugin-svelte": "^6.1.0",
+        "prettier": "^3.6.2",
+        "prettier-plugin-svelte": "^3.3.3",
+        "prettier-plugin-tailwindcss": "^0.6.14",
+        "svelte": "^5.36.16",
+        "svelte-check": "^4.3.0",
+        "typescript": "^5.8.3",
+        "tailwindcss": "^4.1.11",
+        "@tailwindcss/vite": "^4.1.11",
+        "vite": "^7.0.6"
+    },
+    "dependencies": {
+        "@lucide/svelte": "^0.526.0",
+        "bits-ui": "^2.8.12",
+        "mode-watcher": "^1.1.0",
+        "runed": "^0.31.1",
+        "zod": "^4.0.10"
+    }
 }

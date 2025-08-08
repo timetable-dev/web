@@ -2,33 +2,33 @@
 
 name: Deploy Review App
 on:
-  # Run this workflow when PR to main or dev is opened or reopened and when new commit.
-  pull_request: 
-    types: [opened, reopened, synchronize]
-    branches:
-      - main
-      - dev
+    # Run this workflow when PR to main or dev is opened or reopened and when new commit.
+    pull_request:
+        types: [opened, reopened, synchronize]
+        branches:
+            - main
+            - dev
 jobs:
-  review_app:
-    name: Deploy review app
-    runs-on: ubuntu-latest
+    review_app:
+        name: Deploy review app
+        runs-on: ubuntu-latest
 
-    # Only run one deployment at a time per PR.
-    concurrency:
-      group: pr-${{ github.event.number }}
+        # Only run one deployment at a time per PR.
+        concurrency:
+            group: pr-${{ github.event.number }}
 
-    environment:
-      name: next
-      url: https://next-mslu-timetable.fly.dev/
+        environment:
+            name: next
+            url: https://next-mslu-timetable.fly.dev/
 
-    steps:
-      - name: Get code
-        uses: actions/checkout@v4
+        steps:
+            - name: Get code
+              uses: actions/checkout@v4
 
-      - name: Set-up flyctl
-        uses: superfly/flyctl-actions/setup-flyctl@master
-        
-      - name: Deploy with next config
-        run: flyctl deploy --remote-only --config fly.next.toml 
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+            - name: Set-up flyctl
+              uses: superfly/flyctl-actions/setup-flyctl@master
+
+            - name: Deploy with next config
+              run: flyctl deploy --remote-only --config fly.next.toml
+              env:
+                  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
