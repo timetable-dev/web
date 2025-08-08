@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Entity, LessonsApiResponse, DayName } from "$lib/types";
-	import { AddDialog, InfoDialog, WeekPicker, LessonCard, ErrorCard } from "$lib/layout";
+	import { AddDialog, InfoDialog, WeekPicker, Lesson, Error } from "$lib/layout";
 	import { SkeletonLarge } from "$lib/components";
 	import { addedEntities } from "$lib/persisted";
 	import { Button } from "bits-ui";
@@ -47,7 +47,7 @@
 	</div>
 	{#if response.week[dayName].lessons.length > 0}
 		{#each response.week[dayName].lessons as lesson}
-			<LessonCard {lesson} />
+			<Lesson {lesson} />
 		{/each}
 	{:else}
 		<p class="p-2 px-2 pb-3 pl-10 opacity-50">Нет занятий</p>
@@ -96,7 +96,7 @@
 				</div>
 			{/if}
 		{:catch err}
-			<ErrorCard error={err} />
+			<Error error={err} />
 		{/await}
 
 		<!-- When no entity is selected, render welcome screen -->
