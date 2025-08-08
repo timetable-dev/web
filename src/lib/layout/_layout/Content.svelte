@@ -1,8 +1,9 @@
 <script lang="ts">
-	import type { Entity, LessonsApiResponse, DayName } from "$lib/types";
-	import { AddDialog, InfoDialog, WeekPicker, Lesson, Error } from "$lib/layout";
+	import type { Entity, LessonsApiResponse, DayName, WeekType } from "$lib/types";
+	import { AddDialog, InfoDialog, WeekPicker, Lesson } from "$lib/layout";
 	import { SkeletonLarge } from "$lib/components";
 	import { addedEntities } from "$lib/persisted";
+	import { error, isHttpError } from "@sveltejs/kit";
 	import { Button } from "bits-ui";
 	import Plus from "@lucide/svelte/icons/plus";
 
@@ -10,8 +11,7 @@
 	let { selectedEntityId = $bindable() }: { selectedEntityId: string | undefined } = $props();
 
 	// Selected week and dialog's open states
-	type Week = "currentWeek" | "nextWeek" | "thirdWeek" | "fourthWeek";
-	let selectedWeek = $state<Week>("currentWeek");
+	let selectedWeek = $state<WeekType>("currentWeek");
 	let infoDialogOpen = $state(false);
 	let addDialogOpen = $state(false);
 	let showDebugInfo = $state(false);
@@ -28,7 +28,8 @@
 		if (res.ok) {
 			return await res.json();
 		} else {
-			throw new Error(res.statusText);
+			return error(res.status, {message: res.statusText});
+			// throw new Error(res.statusText);
 		}
 	}
 </script>
@@ -95,11 +96,35 @@
 					<p>Data transform: {response.debug.data_transform} ms</p>
 				</div>
 			{/if}
+
+		<!-- In case of error, render error message and some instructions -->
 		{:catch err}
-			<Error error={err} />
+			{@const errorMessage = isHttpError(err) ? "Неизвестная ошибка" : err.message}
+			<div
+				class="mt-2 flex w-full flex-col gap-4 self-center rounded-lg bg-orange-100 p-4 text-pretty text-orange-950 outline-1 outline-orange-300 md:w-2/3 dark:bg-zinc-800 dark:text-zinc-50 dark:outline-zinc-700"
+			>
+				<p class="pt-2 text-center text-2xl">Упс...</p>
+				<p>Произошла ошибка следующего характера:</p>
+				<p
+					class="rounded-lg bg-orange-200 p-4 break-words outline-1 outline-orange-300 dark:bg-amber-950 dark:text-amber-50 dark:outline-amber-700"
+				>
+					{errorMessage}
+				</p>
+				<p> Пожалуйста, проверьте ваше интернет-соединение, подождите несколько минут и перезагрузите страницу. </p>
+				<p>
+					Если ошибка сохраняется, рекомендуем пользоваться официальным сайтом
+					<a
+						class="underline"
+						target="_blank"
+						rel="noreferrer noopener"
+						href="http://schedule.mslu.by">schedule.mslu.by
+					</a>
+					или, если он тоже не работает, расписанием на стенде, пока мы всё не починим.
+				</p>
+			</div>
 		{/await}
 
-		<!-- When no entity is selected, render welcome screen -->
+	<!-- When no entity is selected, render welcome screen -->
 	{:else}
 		<div class="flex w-full flex-col items-center gap-8 self-center md:w-2/3 lg:w-1/2">
 			{#if addedEntities.current.length >= 1}
@@ -137,9 +162,6 @@
 						bg-zinc-100 text-zinc-800 outline-zinc-200 hover:bg-zinc-200 hover:outline-zinc-300
 						dark:bg-zinc-700 dark:text-zinc-50 dark:outline-zinc-600 hover:dark:bg-zinc-800 hover:dark:outline-zinc-700"
 				>
-					<span>
-						<!-- <Plus size={22} /> -->
-					</span>
 					<p class="truncate pr-2 font-medium">
 						Как это работает?
 					</p>
