@@ -1,13 +1,13 @@
 import type { Entity } from "./types";
 import { PersistedState } from "runed";
-import { z } from "zod";
+import * as v from "valibot"
 
-const AddedEntities = z.array(
-    z.object({
-        id: z.uuid(),
-        name: z.string(),
-        type: z.union([z.literal("group"), z.literal("teacher")]),
-        mslu_id: z.union([z.string(), z.number()]),
+const AddedEntitiesSchema = v.array(
+    v.object({
+        id: v.pipe(v.string(), v.uuid()),
+        name: v.string(),
+        type: v.union([v.literal("group"), v.literal("teacher")]),
+        mslu_id: v.union([v.string(), v.number()]),
     }),
 );
 
@@ -19,7 +19,7 @@ type Serializer<T> = {
 const entitiesSerializer: Serializer<Entity[]> = {
     deserialize: (value: string): Entity[] => {
         try {
-            const entities = AddedEntities.parse(JSON.parse(value));
+            const entities = v.parse(AddedEntitiesSchema, JSON.parse(value));
             return entities;
         } catch (err) {
             console.warn(err, "Error parsing local storage. Fallback to empty list.");
@@ -28,7 +28,7 @@ const entitiesSerializer: Serializer<Entity[]> = {
     },
     serialize: (value: Entity[]): string => {
         try {
-            const entities = AddedEntities.parse(value);
+            const entities = v.parse(AddedEntitiesSchema, value);
             return JSON.stringify(entities);
         } catch (err) {
             console.warn(

@@ -2,16 +2,16 @@
 import type { RequestHandler } from "./$types";
 import { MSLU_BACKEND_ENDPOINT } from "$env/static/private";
 import { json, error } from "@sveltejs/kit";
-import { z } from "zod";
+import * as v from "valibot";
 
-const MsluResponse = z.object({
-    data: z.array(
-        z.object({
-            IdGroup: z.number(),
-            Name: z.string(),
-        }),
-    ),
-});
+const MsluResponseSchema = v.object({
+    data: v.array(
+        v.object({
+            IdGroup: v.number(),
+            Name: v.string(),
+        })
+    )
+})
 
 export const GET: RequestHandler = async ({ params }): Promise<Response> => {
     const endpoint = MSLU_BACKEND_ENDPOINT;
@@ -32,9 +32,9 @@ export const GET: RequestHandler = async ({ params }): Promise<Response> => {
 
     try {
         const data = await res.json(); // Parse the response as JSON
-        const parsedData = MsluResponse.parse(data); // Validate its structure
+        const parsedData = v.parse(MsluResponseSchema, data); // Validate its structure
         const groups = parsedData.data.map(
-            // Map the data to SelectArray format
+            // Map the data to SelectItem format
             ({ IdGroup, Name }) => ({
                 value: IdGroup,
                 label: Name,

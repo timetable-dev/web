@@ -162,7 +162,7 @@
 
                 <Button.Root
                     onclick={() => {
-                        addDialogOpen = true;
+                        infoDialogOpen = true;
                     }}
                     class="flex flex-row items-center justify-center gap-3 w-full px-4 py-3 lg:py-2.5 outline-2 rounded-lg cursor-pointer transition-all duration-100 active:scale-[0.98]
 						bg-zinc-100 text-zinc-800 outline-zinc-200 hover:bg-zinc-200 hover:outline-zinc-300

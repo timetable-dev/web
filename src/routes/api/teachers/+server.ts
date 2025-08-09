@@ -2,16 +2,16 @@
 import type { RequestHandler } from "./$types";
 import { MSLU_BACKEND_ENDPOINT } from "$env/static/private";
 import { json, error } from "@sveltejs/kit";
-import { z } from "zod";
+import * as v from "valibot";
 
-const MsluResponse = z.object({
-    data: z.array(
-        z.object({
-            IdTeacher: z.number(),
-            FIO_teacher: z.string(),
-        }),
-    ),
-});
+const MsluResponseSchema = v.object({
+    data: v.array(
+        v.object({
+            IdTeacher: v.number(),
+            FIO_teacher: v.string(),
+        })
+    )
+})
 
 export const GET: RequestHandler = async (): Promise<Response> => {
     const endpoint = MSLU_BACKEND_ENDPOINT;
@@ -25,16 +25,16 @@ export const GET: RequestHandler = async (): Promise<Response> => {
 
     try {
         const data = await res.json(); // Parse the response as JSON
-        const parsedData = MsluResponse.parse(data); // Validate its structure
-        const groups = parsedData.data.map(
-            // Map the data to SelectArray format
+        const parsedData = v.parse(MsluResponseSchema, data); // Validate its structure
+        const teachers = parsedData.data.map(
+            // Map the data to SelectItem format
             ({ IdTeacher, FIO_teacher }) => ({
                 value: IdTeacher,
                 label: FIO_teacher,
             }),
         );
         console.info("Fetched teachers from MSLU backend.");
-        return json(groups, { status: 200 });
+        return json(teachers, { status: 200 });
     } catch (err) {
         console.error("Error parsing MSLU response: ", err);
         return error(503, "Неверный ответ сервера МГЛУ.");
