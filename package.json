@@ -30,7 +30,6 @@
     },
     "dependencies": {
         "@lucide/svelte": "^0.539.0",
-        "@upstash/redis": "^1.35.3",
         "bits-ui": "^2.9.2",
         "mode-watcher": "^1.1.0",
         "runed": "^0.31.1",
