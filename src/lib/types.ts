@@ -46,9 +46,8 @@ export type WeekData = Record<DayName, DayData>;
 
 /** Debug information for API responses. */
 export interface DebugData {
-    from_cache: boolean;
-    mslu_response: number;
-    data_transform: number;
+    mslu_response?: number;
+    data_transform?: number;
 }
 
 /** Represents the response from the /groups and /teachers API endpoints (with debug data). */

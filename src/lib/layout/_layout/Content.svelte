@@ -2,7 +2,7 @@
     import type { Entity, LessonsApiResponse, DayName, WeekType } from "$lib/types";
     import { AddDialog, InfoDialog, WeekPicker, Lesson } from "$lib/layout";
     import { SkeletonLarge } from "$lib/components";
-    import { addedEntities } from "$lib/persisted";
+    import { addedEntities, showDebug } from "$lib/persisted";
     import { error, isHttpError } from "@sveltejs/kit";
     import { Button } from "bits-ui";
     import Plus from "@lucide/svelte/icons/plus";
@@ -14,17 +14,20 @@
     let selectedWeek = $state<WeekType>("currentWeek");
     let infoDialogOpen = $state(false);
     let addDialogOpen = $state(false);
-    let showDebugInfo = $state(false);
 
     // Getting selected entity from local storage by id
     let selectedEntity = $derived<Entity | undefined>(
         addedEntities.current.find(({ id }) => id === selectedEntityId),
     );
 
+    let totalRequestTime = $state<number>();
+
     // Getting lessons from the api
     async function getLessons(entity: Entity): Promise<LessonsApiResponse> {
+        const apiRequestStart = performance.now()
         const url = `/api/lessons/${entity.type}/${entity.mslu_id}/${selectedWeek}`;
         const res = await fetch(url);
+        totalRequestTime = performance.now() - apiRequestStart;
         if (res.ok) {
             return await res.json();
         } else {
@@ -92,13 +95,13 @@
                 >
             </p>
 
-            {#if response.debug && showDebugInfo}
+            {#if response.debug && showDebug.current}
                 <div
                     class="mt-8 flex flex-col self-center rounded-xl px-6 py-3 text-zinc-800 outline-2 outline-zinc-500 outline-dashed dark:text-zinc-100"
                 >
-                    <p>From cache: {response.debug.from_cache}</p>
-                    <p>Mslu response: {response.debug.mslu_response} ms</p>
-                    <p>Data transform: {response.debug.data_transform} ms</p>
+                    <p>Mslu response: {(response.debug?.mslu_response ?? 0).toFixed(4)} ms</p>
+                    <p>Data transform: {(response.debug?.data_transform ?? 0).toFixed(4)} ms</p>
+                    <p>Total response: {totalRequestTime} ms</p>
                 </div>
             {/if}
 
@@ -176,7 +179,7 @@
 </div>
 
 <!-- Dialogs and week picker -->
-<InfoDialog bind:open={infoDialogOpen} bind:debugOn={showDebugInfo} />
+<InfoDialog bind:open={infoDialogOpen} />
 <AddDialog bind:selectedEntityId bind:dialogOpen={addDialogOpen} />
 {#if selectedEntity}
     <WeekPicker bind:selectedWeek />

@@ -1,7 +1,7 @@
 import type { RequestHandler } from "./$types";
 import type { WeekData, DebugData, LessonsApiResponse } from "$lib/types";
 import { MSLU_BACKEND_ENDPOINT } from "$env/static/private";
-import { transform } from "./utils";
+import { transform } from "./transform";
 import { json, error } from "@sveltejs/kit";
 
 export const GET: RequestHandler = async ({ params }): Promise<Response> => {
@@ -9,11 +9,7 @@ export const GET: RequestHandler = async ({ params }): Promise<Response> => {
     const type = params.type;
     const week = params.week;
 
-    // TODO: Find more elegant way, don't like this approach.
-    let msluRequestStart: number;
-    let msluRequestTotal: number;
-    let transformStart: number;
-    let transformTotal: number;
+    const debugData: DebugData = {}
 
     const fetchUrl = new URL(MSLU_BACKEND_ENDPOINT);
 
@@ -27,9 +23,9 @@ export const GET: RequestHandler = async ({ params }): Promise<Response> => {
 
     fetchUrl.searchParams.append("weekType", week);
 
-    msluRequestStart = Date.now();
+    const msluRequestStart = performance.now();
     const res = await fetch(fetchUrl);
-    msluRequestTotal = Date.now() - msluRequestStart;
+    debugData.mslu_response = performance.now() - msluRequestStart;
 
     if (!res.ok) {
         console.error(res.status, res.statusText);
@@ -39,20 +35,14 @@ export const GET: RequestHandler = async ({ params }): Promise<Response> => {
     let weekData: WeekData;
     const data = await res.json().then((data) => data.data);
 
-    transformStart = Date.now();
+    const transformStart = performance.now();
     try {
-        weekData = transform(data, type); // Magic happens here, see utils.ts
+        weekData = transform(data, type); // Magic happens here, see transform.ts
     } catch (err) {
         console.error(err);
         return error(503, "Неверный ответ сервера МГЛУ.");
     }
-    transformTotal = Date.now() - transformStart;
-
-    const debugData: DebugData = {
-        from_cache: false, // This is a placeholder, caching logic is not implemented yet
-        mslu_response: msluRequestTotal,
-        data_transform: transformTotal,
-    };
+    debugData.data_transform = performance.now() - transformStart;
 
     const response: LessonsApiResponse = {
         week: weekData,

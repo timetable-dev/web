@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { showDebug } from "$lib/persisted";
     import { Dialog, Switch } from "bits-ui";
     import { Icon as LucideIcon } from "@lucide/svelte";
     import RotateCw from "@lucide/svelte/icons/rotate-cw";
@@ -6,10 +7,7 @@
     import MousePointer2 from "@lucide/svelte/icons/mouse-pointer-2";
     import Github from "@lucide/svelte/icons/github";
 
-    let {
-        open: infoDialogOpen = $bindable(),
-        debugOn = $bindable(false),
-    }: { open: boolean; debugOn: boolean } = $props();
+    let { open: infoDialogOpen = $bindable() }: { open: boolean } = $props();
 
     let debugMenuOpen = $state<boolean>(false);
     let version = $state<string>("v 0.2");
@@ -108,7 +106,7 @@
                     <div class="flex flex-row items-center justify-between p-3">
                         <p>Show debug info</p>
                         <Switch.Root
-                            bind:checked={debugOn}
+                            bind:checked={showDebug.current}
                             class="block w-14 h-8 cursor-pointer items-center rounded-full outline-1 outline-zinc-300 dark:outline-zinc-700 data-[state=checked]:bg-sky-600 data-[state=unchecked]:bg-zinc-100 dark:data-[state=unchecked]:bg-zinc-800"
                         >
                             <Switch.Thumb
