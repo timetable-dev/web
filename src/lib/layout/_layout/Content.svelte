@@ -99,8 +99,8 @@
                 <div
                     class="mt-8 flex flex-col self-center rounded-xl px-6 py-3 text-zinc-800 outline-2 outline-zinc-500 outline-dashed dark:text-zinc-100"
                 >
-                    <p>Mslu response: {(response.debug?.mslu_response ?? 0).toFixed(4)} ms</p>
-                    <p>Data transform: {(response.debug?.data_transform ?? 0).toFixed(4)} ms</p>
+                    <p>Mslu response: {(response.debug.mslu_response ?? 0).toFixed(4)} ms</p>
+                    <p>Data transform: {(response.debug.data_transform ?? 0).toFixed(4)} ms</p>
                     <p>Total response: {totalRequestTime} ms</p>
                 </div>
             {/if}
