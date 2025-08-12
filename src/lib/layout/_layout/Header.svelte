@@ -157,7 +157,7 @@
         <div class="flex aspect-square self-center">
             <Button.Root
                 onclick={() => (addDialogOpen = true)}
-                class="flex flex-row rounded-xl bg-sky-100 p-3 transition-all duration-150 outline-[1.5px] outline-sky-300 dark:outline-zinc-600 hover:bg-sky-200 active:scale-[0.98] dark:bg-zinc-700 dark:hover:bg-zinc-600"
+                class="flex flex-row rounded-xl bg-sky-100 p-3 transition-all duration-150 outline-[1.5px] outline-sky-200 dark:outline-zinc-600 hover:bg-sky-200 active:scale-[0.98] dark:bg-zinc-700 dark:hover:bg-zinc-600"
             >
                 <Plus class="flex text-sky-800 dark:text-white" />
             </Button.Root>
