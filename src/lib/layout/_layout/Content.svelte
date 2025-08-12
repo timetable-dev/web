@@ -101,7 +101,7 @@
                 >
                     <p>Mslu response: {(response.debug.mslu_response ?? 0).toFixed(4)} ms</p>
                     <p>Data transform: {(response.debug.data_transform ?? 0).toFixed(4)} ms</p>
-                    <p>Total response: {totalRequestTime} ms</p>
+                    <p>Total response: {(totalRequestTime ?? 0).toFixed(4)} ms</p>
                 </div>
             {/if}
 
