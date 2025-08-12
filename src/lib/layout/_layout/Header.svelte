@@ -132,7 +132,7 @@
 <div
     class="flex w-full flex-col gap-3
             rounded-2xl bg-zinc-50 py-3
-            outline-1 outline-zinc-200 md:w-2/3 lg:w-full
+            outline-1 outline-zinc-200 self-center md:w-2/3 lg:w-full
             lg:flex-nowrap lg:gap-4 dark:bg-zinc-800 dark:outline-zinc-700"
 >
     <div class="flex px-3 flex-row gap-2 flex-wrap lg:flex-nowrap justify-between">
@@ -157,7 +157,7 @@
         <div class="flex aspect-square self-center">
             <Button.Root
                 onclick={() => (addDialogOpen = true)}
-                class="flex flex-row rounded-xl bg-sky-100 p-3 transition-all duration-150 outline-[1.5px] outline-sky-200 dark:outline-zinc-600 hover:bg-sky-200 active:scale-[0.98] dark:bg-zinc-700 dark:hover:bg-zinc-600"
+                class="flex flex-row rounded-xl bg-sky-100 p-3 transition-all duration-150 outline-[1.5px] outline-sky-300 dark:outline-zinc-600 hover:bg-sky-200 active:scale-[0.98] dark:bg-zinc-700 dark:hover:bg-zinc-600"
             >
                 <Plus class="flex text-sky-800 dark:text-white" />
             </Button.Root>
