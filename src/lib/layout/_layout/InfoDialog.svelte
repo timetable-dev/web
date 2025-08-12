@@ -10,7 +10,7 @@
     let { open: infoDialogOpen = $bindable() }: { open: boolean } = $props();
 
     let debugMenuOpen = $state<boolean>(false);
-    let version = $state<string>("v 1.0-pr.0");
+    let version = $state<string>("v 1.0-pr.1");
     let counter: number = 0;
 
     function showDebugMenu() {
@@ -28,7 +28,7 @@
     {@const Icon = icon}
     <div class="flex flex-col gap-2 md:flex-row md:gap-4">
         <span
-            class="flex h-min w-min rounded-md border-2 border-sky-400 bg-sky-100 p-2.5 text-sky-600 dark:border-sky-800 dark:bg-sky-900 dark:text-sky-200"
+            class="flex h-min w-min rounded-md border-[1.5px] border-sky-400 bg-sky-100 p-2.5 text-sky-600 dark:border-sky-800 dark:bg-sky-900 dark:text-sky-200"
         >
             <Icon size="20" />
         </span>

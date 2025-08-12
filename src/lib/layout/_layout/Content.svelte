@@ -158,8 +158,8 @@
                     onclick={() => {
                         addDialogOpen = true;
                     }}
-                    class="flex flex-row items-center justify-center gap-3 w-full px-4 py-3 lg:py-2.5 outline-2 rounded-lg cursor-pointer transition-all duration-100 active:scale-[0.98]
-						bg-sky-200 text-sky-800 outline-sky-500 hover:bg-sky-300 hover:text-sky-900 hover:outline-sky-600
+                    class="flex flex-row items-center justify-center gap-3 w-full px-4 py-3 outline-[1.5px] rounded-lg cursor-pointer transition-all duration-150 active:scale-[0.98]
+						bg-sky-200 text-sky-800 outline-sky-400 hover:bg-sky-300 hover:text-sky-900 hover:outline-sky-500
 						dark:bg-sky-900 dark:text-sky-50 dark:outline-sky-700 hover:dark:bg-sky-800 hover:dark:text-sky-50 hover:dark:outline-sky-700"
                 >
                     <span>
@@ -172,7 +172,7 @@
                     onclick={() => {
                         infoDialogOpen = true;
                     }}
-                    class="flex flex-row items-center justify-center gap-3 w-full px-4 py-3 lg:py-2.5 outline-2 rounded-lg cursor-pointer transition-all duration-100 active:scale-[0.98]
+                    class="flex flex-row items-center justify-center gap-3 w-full px-4 py-3 outline-[1.5px] rounded-lg cursor-pointer transition-all duration-150 active:scale-[0.98]
 						bg-zinc-100 text-zinc-800 outline-zinc-200 hover:bg-zinc-200 hover:outline-zinc-300
 						dark:bg-zinc-700 dark:text-zinc-50 dark:outline-zinc-600 hover:dark:bg-zinc-800 hover:dark:outline-zinc-700"
                 >
