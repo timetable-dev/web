@@ -10,7 +10,7 @@
     let { open: infoDialogOpen = $bindable() }: { open: boolean } = $props();
 
     let debugMenuOpen = $state<boolean>(false);
-    let version = $state<string>("v 1.0-pr.2");
+    let version = $state<string>("v 1.0-pr.3");
     let counter: number = 0;
 
     function showDebugMenu() {
@@ -28,7 +28,7 @@
     {@const Icon = icon}
     <div class="flex flex-col gap-2 md:flex-row md:gap-4">
         <span
-            class="flex h-min w-min rounded-md border-[1.5px] border-sky-400 bg-sky-100 p-2.5 text-sky-600 dark:border-sky-800 dark:bg-sky-900 dark:text-sky-200"
+            class="flex h-min w-min rounded-md border-[1.5px] border-sky-400 bg-sky-100 p-3 text-sky-600 dark:border-sky-800 dark:bg-sky-900 dark:text-sky-200"
         >
             <Icon size="20" />
         </span>
@@ -75,16 +75,16 @@
                 <!-- Card with image -->
                 <div class="flex flex-col gap-2 md:flex-row md:gap-4">
                     <img
-                        class="flex aspect-square h-11 w-11 rounded-md"
+                        class="flex aspect-square h-12 w-12 rounded-md"
                         src="/icons/64m.svg"
                         alt=""
                     />
                     <div class="flex flex-col gap-1">
                         <p class="hyphens-auto" lang="ru">Добавьте приложение на главный экран:</p>
-                        <ul class="flex list-inside list-disc flex-col gap-1">
-                            <li>В меню Chrome выберите «Добавить на гл. экран» -> «Установить»;</li>
+                        <ul class="flex list-none flex-col gap-1">
+                            <li>• В меню Chrome выберите «Добавить на гл. экран» -> «Установить»;</li>
                             <li>
-                                В Safari нажмите «Поделиться» -> «На экран “Домой”» -> «Добавить».
+                                • В Safari нажмите «Поделиться» -> «На экран “Домой”» -> «Добавить».
                             </li>
                         </ul>
                     </div>
