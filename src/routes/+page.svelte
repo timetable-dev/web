@@ -2,11 +2,14 @@
     import { Content, Header } from "$lib/layout";
     import { addedEntities } from "$lib/persisted";
     import { ModeWatcher } from "mode-watcher";
+    import { onMount } from "svelte";
     import "../app.css";
 
-    let selectedEntityId = $state<string | undefined>(
-        addedEntities.current.length ? addedEntities.current[0].id : undefined,
-    );
+    let selectedEntityId = $state<string | undefined>();
+
+    onMount(() => {
+        selectedEntityId = addedEntities.current.length ? addedEntities.current[0].id : undefined;
+    })
 </script>
 
 <ModeWatcher />
