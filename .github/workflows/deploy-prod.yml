@@ -1,0 +1,26 @@
+# Production deployment to timetable.of.by on every push to main
+
+name: Fly Deploy Prod
+on:
+    push:
+        branches:
+            - main
+jobs:
+    deploy:
+        name: Deploy production app
+        runs-on: ubuntu-latest
+        concurrency: deploy-group
+        environment:
+            name: prod
+            url: https://timetable.of.by
+        steps:
+            - name: Get code
+              uses: actions/checkout@v4
+
+            - name: Set-up flyctl
+              uses: superfly/flyctl-actions/setup-flyctl@master
+
+            - name: Deploy with production config
+              run: flyctl deploy --remote-only --config fly.toml
+              env:
+                  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

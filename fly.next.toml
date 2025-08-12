@@ -1,18 +1,18 @@
-# fly.toml app configuration file generated for mslu-timetable on 2025-02-27T18:39:35+03:00
+# fly.toml app configuration file generated for next-mslu-timetable on 2025-08-01T22:34:11+03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'mslu-timetable'
+app = 'next-mslu-timetable'
 primary_region = 'fra'
 
 [build]
 
 [env]
-  ORIGIN = "https://timetable.of.by"
+  ORIGIN = "https://next-mslu-timetable.fly.dev"
 
 [build.args]
-  MSLU_BACKEND_ENDPOINT = "http://schedule.mslu.by"
+  MSLU_BACKEND_ENDPOINT = "https://bbaf9a53f261s823eb2e.containers.yandexcloud.net"
 
 [http_service]
   internal_port = 3000

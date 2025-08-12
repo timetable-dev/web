@@ -1,14 +1,22 @@
 <script lang="ts">
-    import { TimetableContent, TopAppBar } from "$lib/layout";
-    import { ErrorView } from "$lib/components";
-    import { addedEntities } from "$lib/stores";
+    import { Content, Header } from "$lib/layout";
+    import { addedEntities } from "$lib/persisted";
+    import { ModeWatcher } from "mode-watcher";
+    import { onMount } from "svelte";
+    import "../app.css";
 
-    let selectedEntityId = $state<string | undefined>(
-        [...$addedEntities].length ? [...$addedEntities][0].id : undefined
-    )
+    let selectedEntityId = $state<string | undefined>();
+
+    onMount(() => {
+        selectedEntityId = addedEntities.current.length ? addedEntities.current[0].id : undefined;
+    })
 </script>
 
-<div class="flex flex-col items-center w-full p-2">
-    <TopAppBar bind:selectedEntityId />
-    <TimetableContent bind:selectedEntityId/>
+<ModeWatcher />
+
+<div class="flex w-full flex-row justify-center">
+    <div class="flex w-full flex-col lg:w-2/3 p-3">
+        <Header bind:selectedEntityId />
+        <Content bind:selectedEntityId />
+    </div>
 </div>

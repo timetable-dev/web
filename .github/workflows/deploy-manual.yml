@@ -1,0 +1,31 @@
+# Deployment review app to next-mslu-timetable.fly.dev manually from dev
+
+name: Manual Review Deploy
+
+on: workflow_dispatch
+
+jobs:
+    manual-deploy:
+        name: Manual review deploy
+        runs-on: ubuntu-latest
+
+        # Only run one deployment at a time.
+        concurrency:
+            group: manual-review-deploy
+
+        environment:
+            name: next
+            url: https://next-mslu-timetable.fly.dev/
+
+        steps:
+            - name: Get code
+              uses: actions/checkout@v4
+
+            - name: Set-up flyctl
+              uses: superfly/flyctl-actions/setup-flyctl@master
+
+            - name: Deploy with next config
+              if:
+              run: flyctl deploy --remote-only --config fly.next.toml
+              env:
+                  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
