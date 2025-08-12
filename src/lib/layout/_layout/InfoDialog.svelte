@@ -81,10 +81,10 @@
                     />
                     <div class="flex flex-col gap-1">
                         <p class="hyphens-auto" lang="ru">Добавьте приложение на главный экран:</p>
-                        <ul class="flex list-inside list-disc flex-col gap-1">
-                            <li>В меню Chrome выберите «Добавить на гл. экран» -> «Установить»;</li>
+                        <ul class="flex list-none flex-col gap-1">
+                            <li>• В меню Chrome выберите «Добавить на гл. экран» -> «Установить»;</li>
                             <li>
-                                В Safari нажмите «Поделиться» -> «На экран “Домой”» -> «Добавить».
+                                • В Safari нажмите «Поделиться» -> «На экран “Домой”» -> «Добавить».
                             </li>
                         </ul>
                     </div>
