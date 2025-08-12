@@ -10,15 +10,15 @@
     // Props: local storage id of the selected entity
     let { selectedEntityId = $bindable() }: { selectedEntityId: string | undefined } = $props();
 
+    // Deriving selected entity from local storage by id
+    let selectedEntity = $derived<Entity | undefined>(
+        addedEntities.current.find(({ id }) => id === selectedEntityId),
+    );
+
     // Selected week and dialog's open states
     let selectedWeek = $state<WeekType>("currentWeek");
     let infoDialogOpen = $state(false);
     let addDialogOpen = $state(false);
-
-    // Getting selected entity from local storage by id
-    let selectedEntity = $derived<Entity | undefined>(
-        addedEntities.current.find(({ id }) => id === selectedEntityId),
-    );
 
     let totalRequestTime = $state<number>();
 
@@ -32,7 +32,6 @@
             return await res.json();
         } else {
             return error(res.status, { message: res.statusText });
-            // throw new Error(res.statusText);
         }
     }
 </script>
@@ -44,16 +43,22 @@
 		month: "short",
 	}).format(new Date(response.week[dayName].date)) : ""}
 
-    {@const specialDate: string = (
-	formattedDate === "3 сент." ? "День прощанья"
-	: formattedDate === "31 дек." ? "Новый год!"
-	: ""
-)}
+    {@const dateString: string = (
+        formattedDate === "3 сент." ? "День прощанья"
+        : formattedDate === "31 дек." ? "С новым годом!"
+        : ""
+    )}
 
     <div class="flex flex-row p-2 items-center justify-between">
         <p class="text-xl font-medium text-zinc-800 dark:text-zinc-50">{dayName}</p>
-        <p class="text-zinc-500 dark:text-zinc-400">{specialDate || formattedDate}</p>
+        <p class="text-zinc-500 dark:text-zinc-400">{formattedDate}</p>
     </div>
+    {#if dateString}   
+        <div class="outline-1 text-center w-full p-1 rounded-md text-sm 
+                    text-zinc-700 outline-zinc-300 bg-zinc-50 dark:text-zinc-300 dark:outline-zinc-700 dark:bg-zinc-800">
+            {dateString}
+        </div>
+    {/if}
     {#if response.week[dayName].lessons.length > 0}
         {#each response.week[dayName].lessons as lesson}
             <Lesson {lesson} />
@@ -105,7 +110,7 @@
                 </div>
             {/if}
 
-            <!-- In case of error, render error message and some instructions -->
+        <!-- In case of error, render error message and some instructions -->
         {:catch err}
             {@const errorMessage = isHttpError(err) ? "Неизвестная ошибка" : err.message}
             <div
@@ -136,7 +141,7 @@
             </div>
         {/await}
 
-        <!-- When no entity is selected, render welcome screen -->
+    <!-- When no entity is selected, render welcome screen -->
     {:else}
         <div class="flex w-full flex-col items-center gap-8 self-center md:w-2/3 lg:w-1/2">
             {#if addedEntities.current.length >= 1}
