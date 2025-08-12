@@ -159,7 +159,7 @@
                         addDialogOpen = true;
                     }}
                     class="flex flex-row items-center justify-center gap-3 w-full px-4 py-3 outline-[1.5px] rounded-lg cursor-pointer transition-all duration-150 active:scale-[0.98]
-						bg-sky-200 text-sky-800 outline-sky-400 hover:bg-sky-300 hover:text-sky-900 hover:outline-sky-500
+						bg-sky-100 text-sky-800 outline-sky-400 hover:bg-sky-300 hover:text-sky-900 hover:outline-sky-500
 						dark:bg-sky-900 dark:text-sky-50 dark:outline-sky-700 hover:dark:bg-sky-800 hover:dark:text-sky-50 hover:dark:outline-sky-700"
                 >
                     <span>
