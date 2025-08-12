@@ -10,7 +10,7 @@
     let { open: infoDialogOpen = $bindable() }: { open: boolean } = $props();
 
     let debugMenuOpen = $state<boolean>(false);
-    let version = $state<string>("v 1.0-pr.0");
+    let version = $state<string>("v 1.0-pr.1");
     let counter: number = 0;
 
     function showDebugMenu() {
