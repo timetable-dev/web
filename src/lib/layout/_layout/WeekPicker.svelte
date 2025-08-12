@@ -18,7 +18,7 @@
     class="fixed inset-x-0 bottom-0 flex w-full justify-center-safe overflow-scroll scrollbar-hidden"
 >
     <Tabs.List
-        class="m-2 flex w-max flex-row justify-center gap-1 rounded-lg bg-zinc-50 p-1 outline-1
+        class="m-3 flex w-max flex-row justify-center gap-1 rounded-lg bg-zinc-50 p-1 outline-1
                     outline-zinc-200 md:mb-1.5 dark:bg-zinc-800 dark:outline-zinc-700"
     >
         {#each weeks as week}
