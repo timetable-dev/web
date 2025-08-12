@@ -28,7 +28,7 @@
     {@const Icon = icon}
     <div class="flex flex-col gap-2 md:flex-row md:gap-4">
         <span
-            class="flex h-min w-min rounded-md border-[1.5px] border-sky-400 bg-sky-100 p-2.5 text-sky-600 dark:border-sky-800 dark:bg-sky-900 dark:text-sky-200"
+            class="flex h-min w-min rounded-md border-[1.5px] border-sky-400 bg-sky-100 p-3 text-sky-600 dark:border-sky-800 dark:bg-sky-900 dark:text-sky-200"
         >
             <Icon size="20" />
         </span>
@@ -75,7 +75,7 @@
                 <!-- Card with image -->
                 <div class="flex flex-col gap-2 md:flex-row md:gap-4">
                     <img
-                        class="flex aspect-square h-11 w-11 rounded-md"
+                        class="flex aspect-square h-12 w-12 rounded-md"
                         src="/icons/64m.svg"
                         alt=""
                     />
