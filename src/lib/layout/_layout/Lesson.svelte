@@ -14,6 +14,7 @@
     const st = lesson.start_time.slice(0, 5);
     const et = lesson.end_time.slice(0, 5);
     const entity = lesson.teacher || lesson.groups.join(", ");
+    const entityFull = lesson.teacherFull || lesson.groups.join(", ");
 
     const typeStyling: string =
         lesson.type === "Практ"
@@ -70,8 +71,8 @@
                 {@render infoBlock(et, Sunset)}
             </div>
             <div class="flex flex-col gap-2">
-                {@render infoBlock(lesson.title, BookCheck)}
-                {@render infoBlock(entity, User)}
+                {@render infoBlock(lesson.titleFull, BookCheck)}
+                {@render infoBlock(entityFull, User)}
             </div>
             <div class="flex flex-row gap-2">
                 {@render infoBlock(lesson.type, Presentation)}
