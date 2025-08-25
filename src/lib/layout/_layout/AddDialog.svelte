@@ -29,8 +29,8 @@
         selectedFaculty = faculties.find(({ value }) => value === selectedFacultyValue);
     });
 
-    // Automatically fetching either a list of groups if group tab is active
-    // and faculty and mode are selected or a list of teachers if teacher tab is active.
+    // Automatically fetching either a list of groups if group tab is active and faculty and mode are selected
+    // or a list of teachers if teacher tab is active.
 
     let groupList = $state<Promise<SelectItem<string, string>[]>>();
     let teacherList = $state<Promise<SelectItem<string, string>[]>>();
@@ -89,18 +89,28 @@
 
     function submitEntityAndClose() {
         if (selectedType === "group" && selectedGroup) {
+            const groupName = selectedGroup.label.split(" ");
+            groupName.splice(-1, 1);
             const selectedEntity: Entity = {
                 id: crypto.randomUUID(),
-                name: selectedGroup.label,
+                name: groupName.join(" "),
                 mslu_id: selectedGroup.value,
                 type: "group",
             };
             addedEntities.current.push(selectedEntity);
             selectedEntityId = selectedEntity.id;
+
         } else if (selectedType === "teacher" && selectedTeacher) {
+            const teacherNameParts = selectedTeacher.label.split(" ").filter((i) => i !== "" && i !== ".");
+            let teacherInitialsName: string;
+            if (teacherNameParts.length === 3) {
+                teacherInitialsName = `${teacherNameParts[1][0]}. ${teacherNameParts[2][0]}. ${teacherNameParts[0]}`;
+            } else {
+                teacherInitialsName = selectedTeacher.label;
+            }
             const selectedEntity: Entity = {
                 id: crypto.randomUUID(),
-                name: selectedTeacher.label,
+                name: teacherInitialsName,
                 mslu_id: selectedTeacher.value,
                 type: "teacher",
             };
@@ -227,7 +237,7 @@
                             >
                             <Combobox
                                 items={response}
-                                placeholder="Фамилия И. О."
+                                placeholder="Фамилия Имя Отчество"
                                 bind:selectedItem={selectedTeacher}
                             />
                         {/await}

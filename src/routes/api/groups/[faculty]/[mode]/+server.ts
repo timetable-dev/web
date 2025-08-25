@@ -4,14 +4,16 @@ import { MSLU_BACKEND_ENDPOINT } from "$env/static/private";
 import { json, error } from "@sveltejs/kit";
 import * as v from "valibot";
 
-const MsluResponseSchema = v.object({
-    data: v.array(
-        v.object({
-            IdGroup: v.number(),
-            Name: v.string(),
-        })
-    )
-})
+const MsluResponseSchema = v.array(
+    v.object({
+        idGroup: v.number(),
+        name: v.string(),
+        idF: v.number(),
+        facultName: v.string(),
+        idFormaTime: v.number(),
+        year: v.number(),
+    })
+)
 
 export const GET: RequestHandler = async ({ params }): Promise<Response> => {
     const endpoint = MSLU_BACKEND_ENDPOINT;
@@ -19,9 +21,10 @@ export const GET: RequestHandler = async ({ params }): Promise<Response> => {
     const mode = params.mode;
 
     // Requesting MSLU backend
-    let groupUrl = new URL(`${endpoint}/backend/buttonClicked`);
-    groupUrl.searchParams.append("facultyId", faculty);
-    groupUrl.searchParams.append("educationForm", mode);
+    let groupUrl = new URL(`${endpoint}/api/searchGroups`);
+    groupUrl.searchParams.append("idF", faculty);
+    groupUrl.searchParams.append("idFormaTime", mode);
+    groupUrl.searchParams.append("query", "");
     const res = await fetch(groupUrl);
 
     // Checking if the response is ok
@@ -33,11 +36,11 @@ export const GET: RequestHandler = async ({ params }): Promise<Response> => {
     try {
         const data = await res.json(); // Parse the response as JSON
         const parsedData = v.parse(MsluResponseSchema, data); // Validate its structure
-        const groups = parsedData.data.map(
+        const groups = parsedData.map(
             // Map the data to SelectItem format
-            ({ IdGroup, Name }) => ({
-                value: IdGroup,
-                label: Name,
+            ({ idGroup, name, year }) => ({
+                value: idGroup,
+                label: `${name} ${year}`,
             }),
         );
         console.info("Fetched groups from MSLU backend.");
