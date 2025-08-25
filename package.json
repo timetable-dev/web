@@ -1,7 +1,7 @@
 {
     "name": "web",
     "private": true,
-    "version": "1.0-pr.3",
+    "version": "1.0-pr.4",
     "type": "module",
     "scripts": {
         "dev": "vite dev",
@@ -29,6 +29,7 @@
         "vite": "^7.1.1"
     },
     "dependencies": {
+        "@internationalized/date": "^3.8.2",
         "@lucide/svelte": "^0.539.0",
         "bits-ui": "^2.9.2",
         "mode-watcher": "^1.1.0",
