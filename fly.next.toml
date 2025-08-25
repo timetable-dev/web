@@ -12,7 +12,8 @@ primary_region = 'fra'
   ORIGIN = "https://next-mslu-timetable.fly.dev"
 
 [build.args]
-  MSLU_BACKEND_ENDPOINT = "https://bbaf9a53f261s823eb2e.containers.yandexcloud.net"
+  MSLU_BACKEND_ENDPOINT = "http://www.timetable.bsufl.by"
+  # MSLU_BACKEND_ENDPOINT = "https://bbaf9a53f261s823eb2e.containers.yandexcloud.net"
 
 [http_service]
   internal_port = 3000
