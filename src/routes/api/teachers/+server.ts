@@ -4,18 +4,20 @@ import { MSLU_BACKEND_ENDPOINT } from "$env/static/private";
 import { json, error } from "@sveltejs/kit";
 import * as v from "valibot";
 
-const MsluResponseSchema = v.object({
-    data: v.array(
-        v.object({
-            IdTeacher: v.number(),
-            FIO_teacher: v.string(),
-        })
-    )
-})
+const MsluResponseSchema = v.array(
+    v.object({
+        idTeacher: v.number(),
+        nameF: v.string(),
+        nameI: v.string(),
+        nameO: v.string(),
+        isDeleted: v.boolean(),
+        namePost: v.string(),
+    })
+);
 
 export const GET: RequestHandler = async (): Promise<Response> => {
     const endpoint = MSLU_BACKEND_ENDPOINT;
-    const res = await fetch(`${endpoint}/backend/getTeacherNames`);
+    const res = await fetch(`${endpoint}/api/searchTeachers?query=`);
 
     // Checking if the response is ok
     if (!res.ok) {
@@ -26,11 +28,11 @@ export const GET: RequestHandler = async (): Promise<Response> => {
     try {
         const data = await res.json(); // Parse the response as JSON
         const parsedData = v.parse(MsluResponseSchema, data); // Validate its structure
-        const teachers = parsedData.data.map(
+        const teachers = parsedData.map(
             // Map the data to SelectItem format
-            ({ IdTeacher, FIO_teacher }) => ({
-                value: IdTeacher,
-                label: FIO_teacher,
+            ({ idTeacher, nameF, nameI, nameO }) => ({
+                value: idTeacher,
+                label: `${nameF} ${nameI} ${nameO}`,
             }),
         );
         console.info("Fetched teachers from MSLU backend.");

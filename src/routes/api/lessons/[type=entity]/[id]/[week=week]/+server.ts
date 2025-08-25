@@ -1,7 +1,7 @@
 import type { RequestHandler } from "./$types";
 import type { WeekData, DebugData, LessonsApiResponse } from "$lib/types";
 import { MSLU_BACKEND_ENDPOINT } from "$env/static/private";
-import { transform } from "./transform";
+import { transform, getWeekBoundaries } from "./utils";
 import { json, error } from "@sveltejs/kit";
 
 export const GET: RequestHandler = async ({ params }): Promise<Response> => {
@@ -9,19 +9,23 @@ export const GET: RequestHandler = async ({ params }): Promise<Response> => {
     const type = params.type;
     const week = params.week;
 
+    const { weekStart, weekEnd } = getWeekBoundaries(params.week);
+
     const debugData: DebugData = {}
 
     const fetchUrl = new URL(MSLU_BACKEND_ENDPOINT);
 
     if (type === "group") {
-        fetchUrl.pathname = "/backend";
-        fetchUrl.searchParams.append("groupId", id);
+        fetchUrl.pathname = "/api/groupschedule";
+        fetchUrl.searchParams.append("startDate", weekStart);
+        fetchUrl.searchParams.append("endDate", weekEnd);
+        fetchUrl.searchParams.append("idGroup", id);
     } else {
-        fetchUrl.pathname = "/backend/teachers";
-        fetchUrl.searchParams.append("teacherId", id);
+        fetchUrl.pathname = "/api/teacherschedule";
+        fetchUrl.searchParams.append("startDate", weekStart);
+        fetchUrl.searchParams.append("endDate", weekEnd);
+        fetchUrl.searchParams.append("idTeacher", id);
     }
-
-    fetchUrl.searchParams.append("weekType", week);
 
     const msluRequestStart = performance.now();
     const res = await fetch(fetchUrl);
@@ -33,11 +37,11 @@ export const GET: RequestHandler = async ({ params }): Promise<Response> => {
     }
 
     let weekData: WeekData;
-    const data = await res.json().then((data) => data.data);
+    const data = await res.json();
 
     const transformStart = performance.now();
     try {
-        weekData = transform(data, type); // Magic happens here, see transform.ts
+        weekData = transform(data, type, week); // Magic happens here, see transform.ts
     } catch (err) {
         console.error(err);
         return error(503, "Неверный ответ сервера МГЛУ.");

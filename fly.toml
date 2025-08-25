@@ -12,12 +12,12 @@ primary_region = 'fra'
   ORIGIN = "https://timetable.of.by"
 
 [build.args]
-  MSLU_BACKEND_ENDPOINT = "http://schedule.mslu.by"
+  MSLU_BACKEND_ENDPOINT = "http://www.timetable.bsufl.by"
 
 [http_service]
   internal_port = 3000
   force_https = true
-  auto_stop_machines = 'suspend'
+  auto_stop_machines = 'stop'
   auto_start_machines = true
   min_machines_running = 0
   processes = ['app']

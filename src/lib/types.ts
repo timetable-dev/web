@@ -26,9 +26,11 @@ export interface Lesson {
     start_time: string;
     end_time: string;
     title: string;
+    titleFull: string;
     type: string;
     room: string;
     teacher?: string;
+    teacherFull?: string;
     groups: string[];
 }
 
@@ -41,7 +43,7 @@ export type DayData = {
     lessons: Lesson[];
 };
 
-/** Two of the above types combined, is used in /lessons API endpoint. */
+/** DayName and DayData combined, is used in /lessons API endpoint. */
 export type WeekData = Record<DayName, DayData>;
 
 /** Debug information for API responses. */
