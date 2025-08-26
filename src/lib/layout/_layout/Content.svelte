@@ -143,7 +143,7 @@
 
     <!-- When no entity is selected, render welcome screen -->
     {:else}
-        <p class="outline-1 md:w-2/3 lg:w-full self-center rounded-xl px-4 py-3 bg-sky-100 dark:bg-sky-950 text-sky-50 outline-sky-800">Привет, ребят! Я переписал запросы к серверу БГУИЯ, всё каким-то чудом работает, но надо ещё тестировать и сверять с оф. сайтом. Если что-то не так, пишите в лс мне или тем, кто скинул вам этот проект. АТ</p>
+        <p class="outline-1 md:w-2/3 lg:w-full self-center rounded-xl px-4 py-3 bg-sky-100 dark:bg-sky-950 text-sky-900 dark:text-sky-50 outline-sky-300 dark:outline-sky-800">Привет, ребят! Я переписал запросы к серверу БГУИЯ, всё каким-то чудом работает, но надо ещё тестировать и сверять с оф. сайтом. Если что-то не так, пишите в лс мне или тем, кто скинул вам этот проект. АТ</p>
         <div class="flex w-full flex-col items-center gap-8 self-center md:w-2/3 lg:w-1/2">
             {#if addedEntities.current.length >= 1}
                 <p class="pt-12 text-center text-xl text-balance">
