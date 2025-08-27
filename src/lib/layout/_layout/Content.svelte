@@ -3,9 +3,11 @@
     import { AddDialog, InfoDialog, WeekPicker, Lesson } from "$lib/layout";
     import { SkeletonLarge } from "$lib/components";
     import { addedEntities, showDebug } from "$lib/persisted";
-    import { error, isHttpError, json } from "@sveltejs/kit";
+    import { error } from "@sveltejs/kit";
     import { Button } from "bits-ui";
     import Plus from "@lucide/svelte/icons/plus";
+
+    let copyButtonText= $state("Copy")
 
     // Props: local storage id of the selected entity
     let { selectedEntityId = $bindable() }: { selectedEntityId: string | undefined } = $props();
@@ -163,8 +165,7 @@
             class="outline-1 md:w-2/3 lg:w-full self-center rounded-xl px-4 py-3 bg-sky-100 dark:bg-sky-950 text-sky-900 dark:text-sky-50 outline-sky-300 dark:outline-sky-800"
         >
             Привет, ребят! Я переписал запросы к серверу БГУИЯ, всё каким-то чудом работает, но надо ещё
-            тестировать и сверять с оф. сайтом. Если что-то не так, пишите в лс мне или тем, кто скинул вам
-            этот проект. АТ
+            тестировать и сверять с оф. сайтом. Если что-то не так, пишите мне в лс или на почту. АТ
         </p>
         <div class="flex w-full flex-col items-center gap-8 self-center md:w-2/3 lg:w-1/2">
             {#if addedEntities.current.length >= 1}
@@ -201,6 +202,15 @@
                 >
                     <p class="truncate pr-2 font-medium">Как это работает?</p>
                 </Button.Root>
+                <div class="flex flex-row gap-2 absolute bottom-10">
+                    <!-- Use mailto link -->
+                    <a href="mailto:timetable-dev@yandex.by" class="text-zinc-600 dark:text-zinc-300">timetable-dev@yandex.by</a>
+                    <Button.Root onclick={async () => {
+                        await navigator.clipboard.writeText("timetable-dev@yandex.by");
+                        copyButtonText = "Copied";
+                        }}
+                        class="text-zinc-700 active:text-zinc-500 dark:text-zinc-50 dark:active:text-zinc-400 cursor-pointer transition duration-150">{copyButtonText}</Button.Root>
+                </div>
             </div>
         </div>
     {/if}
