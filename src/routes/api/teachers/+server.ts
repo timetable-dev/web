@@ -12,7 +12,7 @@ const MsluResponseSchema = v.array(
         nameO: v.string(),
         isDeleted: v.boolean(),
         namePost: v.string(),
-    })
+    }),
 );
 
 export const GET: RequestHandler = async (): Promise<Response> => {
@@ -21,16 +21,16 @@ export const GET: RequestHandler = async (): Promise<Response> => {
     let res: Response;
 
     try {
-        res = await fetch(`${endpoint}/api/searchTeachers?query=`, {signal: AbortSignal.timeout(15000)});
+        res = await fetch(`${endpoint}/api/searchTeachers?query=`, { signal: AbortSignal.timeout(15000) });
     } catch {
         console.error("Timeout error");
-        return error(503, {message: "Service Unavailable", user_message: "Сервер БГУИЯ вне зоны доступа."});
+        return error(503, { message: "Service Unavailable", user_message: "Сервер БГУИЯ вне зоны доступа." });
     }
 
     // Checking if the response is ok
     if (!res.ok) {
         console.error(res.status, res.statusText);
-        return error(503, {message: "Service Unavailable", user_message: "Сервер БГУИЯ вне зоны доступа."});
+        return error(503, { message: "Service Unavailable", user_message: "Сервер БГУИЯ вне зоны доступа." });
     }
 
     try {
@@ -47,6 +47,6 @@ export const GET: RequestHandler = async (): Promise<Response> => {
         return json(teachers, { status: 200 });
     } catch (err) {
         console.error("Error parsing MSLU response: ", err);
-        return error(503, {message: "Service Unavailable", user_message: "Неверный ответ сервера БГУИЯ."});
+        return error(503, { message: "Service Unavailable", user_message: "Неверный ответ сервера БГУИЯ." });
     }
 };

@@ -1,6 +1,6 @@
 import type { Entity } from "./types";
 import { PersistedState } from "runed";
-import * as v from "valibot"
+import * as v from "valibot";
 
 type Serializer<T> = {
     serialize: (value: T) => string;
@@ -16,7 +16,7 @@ const AddedEntitiesSchema = v.array(
     }),
 );
 
-const ShowDebugSchema = v.boolean()
+const ShowDebugSchema = v.boolean();
 
 const entitiesSerializer: Serializer<Entity[]> = {
     deserialize: (value: string): Entity[] => {
@@ -33,10 +33,7 @@ const entitiesSerializer: Serializer<Entity[]> = {
             const entities = v.parse(AddedEntitiesSchema, value);
             return JSON.stringify(entities);
         } catch (err) {
-            console.warn(
-                err,
-                "Error serializing provided object. Written empty list to local storage.",
-            );
+            console.warn(err, "Error serializing provided object. Written empty list to local storage.");
             return "[]";
         }
     },
@@ -57,10 +54,7 @@ const debugSerializer: Serializer<boolean> = {
             const showDebug = v.parse(ShowDebugSchema, value);
             return JSON.stringify(showDebug);
         } catch (err) {
-            console.warn(
-                err,
-                "Error serializing provided value. Written false to local storage.",
-            );
+            console.warn(err, "Error serializing provided value. Written false to local storage.");
             return "false";
         }
     },

@@ -28,9 +28,7 @@
 
 {#snippet infoBlock(text: string, icon: typeof LucideIcon)}
     {@const Icon = icon}
-    <div
-        class="flex flex-row gap-4 items-center w-full p-3 rounded-md bg-zinc-100 dark:bg-zinc-800"
-    >
+    <div class="flex flex-row gap-4 items-center w-full p-3 rounded-md bg-zinc-100 dark:bg-zinc-800">
         <span class="grid place-content-center">
             <Icon color="#71717b" size="22" />
         </span>

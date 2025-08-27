@@ -34,7 +34,7 @@
 
     // Getting lessons from the api
     async function getLessons(entity: Entity): Promise<LessonsApiResponse> {
-        const apiRequestStart = performance.now()
+        const apiRequestStart = performance.now();
         const url = `/api/lessons/${entity.type}/${entity.mslu_id}/${selectedWeek}`;
         const res = await fetch(url);
         totalRequestTime = performance.now() - apiRequestStart;
@@ -42,7 +42,10 @@
             return await res.json();
         } else {
             const errorObject = await res.json();
-            return error(res.status, { message: errorObject.message, user_message: errorObject.user_message });
+            return error(res.status, {
+                message: errorObject.message,
+                user_message: errorObject.user_message,
+            });
         }
     }
 </script>
@@ -64,9 +67,11 @@
         <p class="text-xl font-medium text-zinc-800 dark:text-zinc-50">{dayName}</p>
         <p class="text-zinc-500 dark:text-zinc-400">{formattedDate}</p>
     </div>
-    {#if dateString}   
-        <div class="outline-1 text-center w-full p-1 rounded-md text-sm 
-                    text-zinc-700 outline-zinc-300 bg-zinc-50 dark:text-zinc-300 dark:outline-zinc-700 dark:bg-zinc-800">
+    {#if dateString}
+        <div
+            class="outline-1 text-center w-full p-1 rounded-md text-sm
+                    text-zinc-700 outline-zinc-300 bg-zinc-50 dark:text-zinc-300 dark:outline-zinc-700 dark:bg-zinc-800"
+        >
             {dateString}
         </div>
     {/if}
@@ -121,7 +126,7 @@
                 </div>
             {/if}
 
-        <!-- In case of error, render error message and some instructions -->
+            <!-- In case of error, render error message and some instructions -->
         {:catch err}
             {@const errorMessage = getErrorMessage(err)}
             <div
@@ -135,8 +140,8 @@
                     {errorMessage}
                 </p>
                 <p>
-                    Пожалуйста, проверьте ваше интернет-соединение, подождите несколько минут и
-                    перезагрузите страницу.
+                    Пожалуйста, проверьте ваше интернет-соединение, подождите несколько минут и перезагрузите
+                    страницу.
                 </p>
                 <p>
                     Если ошибка сохраняется, рекомендуем пользоваться официальным сайтом
@@ -152,9 +157,15 @@
             </div>
         {/await}
 
-    <!-- When no entity is selected, render welcome screen -->
+        <!-- When no entity is selected, render welcome screen -->
     {:else}
-        <p class="outline-1 md:w-2/3 lg:w-full self-center rounded-xl px-4 py-3 bg-sky-100 dark:bg-sky-950 text-sky-900 dark:text-sky-50 outline-sky-300 dark:outline-sky-800">Привет, ребят! Я переписал запросы к серверу БГУИЯ, всё каким-то чудом работает, но надо ещё тестировать и сверять с оф. сайтом. Если что-то не так, пишите в лс мне или тем, кто скинул вам этот проект. АТ</p>
+        <p
+            class="outline-1 md:w-2/3 lg:w-full self-center rounded-xl px-4 py-3 bg-sky-100 dark:bg-sky-950 text-sky-900 dark:text-sky-50 outline-sky-300 dark:outline-sky-800"
+        >
+            Привет, ребят! Я переписал запросы к серверу БГУИЯ, всё каким-то чудом работает, но надо ещё
+            тестировать и сверять с оф. сайтом. Если что-то не так, пишите в лс мне или тем, кто скинул вам
+            этот проект. АТ
+        </p>
         <div class="flex w-full flex-col items-center gap-8 self-center md:w-2/3 lg:w-1/2">
             {#if addedEntities.current.length >= 1}
                 <p class="pt-12 text-center text-xl text-balance">
