@@ -12,17 +12,25 @@ const MsluResponseSchema = v.array(
         nameO: v.string(),
         isDeleted: v.boolean(),
         namePost: v.string(),
-    })
+    }),
 );
 
 export const GET: RequestHandler = async (): Promise<Response> => {
     const endpoint = MSLU_BACKEND_ENDPOINT;
-    const res = await fetch(`${endpoint}/api/searchTeachers?query=`);
+
+    let res: Response;
+
+    try {
+        res = await fetch(`${endpoint}/api/searchTeachers?query=`, { signal: AbortSignal.timeout(15000), referrer: "http://www.timetable.bsufl.by" });
+    } catch {
+        console.error("Timeout error");
+        return error(503, { message: "Service Unavailable", user_message: "Сервер БГУИЯ вне зоны доступа." });
+    }
 
     // Checking if the response is ok
     if (!res.ok) {
         console.error(res.status, res.statusText);
-        return error(503, "Ошибка связи с сервером МГЛУ.");
+        return error(503, { message: "Service Unavailable", user_message: "Сервер БГУИЯ вне зоны доступа." });
     }
 
     try {
@@ -39,6 +47,6 @@ export const GET: RequestHandler = async (): Promise<Response> => {
         return json(teachers, { status: 200 });
     } catch (err) {
         console.error("Error parsing MSLU response: ", err);
-        return error(503, "Неверный ответ сервера МГЛУ.");
+        return error(503, { message: "Service Unavailable", user_message: "Неверный ответ сервера БГУИЯ." });
     }
 };

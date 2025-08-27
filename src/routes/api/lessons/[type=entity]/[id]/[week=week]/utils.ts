@@ -1,6 +1,6 @@
-import {today, startOfWeek, endOfWeek, parseDate } from '@internationalized/date';
+import { today, startOfWeek, endOfWeek, parseDate } from "@internationalized/date";
 import type { Lesson, WeekData, DayName, WeekType } from "$lib/types";
-import * as v from "valibot"
+import * as v from "valibot";
 
 const MsluDataSchema = v.array(
     v.object({
@@ -8,7 +8,7 @@ const MsluDataSchema = v.array(
         dateOut: v.pipe(v.string(), v.isoDate()),
         timeIn: v.pipe(v.string(), v.isoTime()),
         timeOut: v.pipe(v.string(), v.isoTime()),
-    
+
         lessonNumber: v.number(), // TODO: Check lesson number to time
 
         day: v.union([
@@ -43,7 +43,7 @@ const MsluDataSchema = v.array(
     }),
 );
 
-export function getWeekBoundaries(week: WeekType): { weekStart: string, weekEnd: string } {
+export function getWeekBoundaries(week: WeekType): { weekStart: string; weekEnd: string } {
     const currentDate = today("Europe/Minsk");
     const currentWeekStart = startOfWeek(currentDate, "ru-RU", "mon");
     const currentWeekEnd = endOfWeek(currentDate, "ru-RU", "mon");
@@ -67,7 +67,7 @@ export function getWeekBoundaries(week: WeekType): { weekStart: string, weekEnd:
     return {
         weekStart: currentWeekStart.add({ days: offsetDays }).toString(),
         weekEnd: currentWeekEnd.add({ days: offsetDays }).toString(),
-    }
+    };
 }
 
 export function getWeekSpan(week: WeekType): string[] {
@@ -76,7 +76,7 @@ export function getWeekSpan(week: WeekType): string[] {
     return Array.from([0, 1, 2, 3, 4, 5], (i) => start.add({ days: i }).toString());
 }
 
-// Function to validate and transform MSLU response 
+// Function to validate and transform MSLU response
 export function transform(data: any, type: "group" | "teacher", week: WeekType): WeekData {
     // Validate data with Valibot
     const validatedItems = v.parse(MsluDataSchema, data);
@@ -131,12 +131,13 @@ export function transform(data: any, type: "group" | "teacher", week: WeekType):
                 titleFull: item.disciplineFull,
                 type: item.disciplineType,
                 groups: [item.groupName],
-                teacher: `${item.teacherN ? item.teacherN[0] : ""}. ${item.teacherO ? item.teacherO[0] : ""}. ${item.teacherF ?? ""}`.trim(),
+                teacher:
+                    `${item.teacherN ? item.teacherN[0] : ""}. ${item.teacherO ? item.teacherO[0] : ""}. ${item.teacherF ?? ""}`.trim(),
                 teacherFull: `${item.teacherF ?? ""} ${item.teacherN ?? ""} ${item.teacherO ?? ""}`.trim(),
                 room: item.classroom,
             }));
 
-        // For teachers, combine groups for the same lesson
+            // For teachers, combine groups for the same lesson
         } else {
             const lessons: Lesson[] = [];
             for (const item of items) {

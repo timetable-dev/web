@@ -11,7 +11,7 @@ export const GET: RequestHandler = async ({ params }): Promise<Response> => {
 
     const { weekStart, weekEnd } = getWeekBoundaries(params.week);
 
-    const debugData: DebugData = {}
+    const debugData: DebugData = {};
 
     const fetchUrl = new URL(MSLU_BACKEND_ENDPOINT);
 
@@ -28,12 +28,18 @@ export const GET: RequestHandler = async ({ params }): Promise<Response> => {
     }
 
     const msluRequestStart = performance.now();
-    const res = await fetch(fetchUrl);
+    let res: Response;
+    try {
+        res = await fetch(fetchUrl, { signal: AbortSignal.timeout(15000), referrer: "http://www.timetable.bsufl.by"});
+    } catch {
+        console.error("Timeout error");
+        return error(503, { message: "Service Unavailable", user_message: "Сервер БГУИЯ вне зоны доступа." });
+    }
     debugData.mslu_response = performance.now() - msluRequestStart;
 
     if (!res.ok) {
         console.error(res.status, res.statusText);
-        return error(503, "Сервер МГЛУ вне зоны доступа.");
+        return error(503, { message: "Service Unavailable", user_message: "Сервер БГУИЯ вне зоны доступа." });
     }
 
     let weekData: WeekData;
@@ -44,7 +50,7 @@ export const GET: RequestHandler = async ({ params }): Promise<Response> => {
         weekData = transform(data, type, week); // Magic happens here, see transform.ts
     } catch (err) {
         console.error(err);
-        return error(503, "Неверный ответ сервера МГЛУ.");
+        return error(503, { message: "Service Unavailable", user_message: "Неверный ответ сервера БГУИЯ." });
     }
     debugData.data_transform = performance.now() - transformStart;
 

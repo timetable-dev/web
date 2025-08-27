@@ -9,7 +9,7 @@
 
     onMount(() => {
         selectedEntityId = addedEntities.current.length ? addedEntities.current[0].id : undefined;
-    })
+    });
 </script>
 
 <ModeWatcher />

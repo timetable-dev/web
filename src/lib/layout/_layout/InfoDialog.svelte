@@ -74,18 +74,12 @@
 
                 <!-- Card with image -->
                 <div class="flex flex-col gap-2 md:flex-row md:gap-4">
-                    <img
-                        class="flex aspect-square h-12 w-12 rounded-md"
-                        src="/icons/64m.svg"
-                        alt=""
-                    />
+                    <img class="flex aspect-square h-12 w-12 rounded-md" src="/icons/64m.svg" alt="" />
                     <div class="flex flex-col gap-1">
                         <p class="hyphens-auto" lang="ru">Добавьте приложение на главный экран:</p>
                         <ul class="flex list-none flex-col gap-1">
                             <li>• В меню Chrome выберите «Добавить на гл. экран» -> «Установить»;</li>
-                            <li>
-                                • В Safari нажмите «Поделиться» -> «На экран “Домой”» -> «Добавить».
-                            </li>
+                            <li>• В Safari нажмите «Поделиться» -> «На экран “Домой”» -> «Добавить».</li>
                         </ul>
                     </div>
                 </div>

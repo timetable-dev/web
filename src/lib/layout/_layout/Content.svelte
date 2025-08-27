@@ -3,9 +3,11 @@
     import { AddDialog, InfoDialog, WeekPicker, Lesson } from "$lib/layout";
     import { SkeletonLarge } from "$lib/components";
     import { addedEntities, showDebug } from "$lib/persisted";
-    import { error, isHttpError } from "@sveltejs/kit";
+    import { error } from "@sveltejs/kit";
     import { Button } from "bits-ui";
     import Plus from "@lucide/svelte/icons/plus";
+
+    let copyButtonText= $state("Copy")
 
     // Props: local storage id of the selected entity
     let { selectedEntityId = $bindable() }: { selectedEntityId: string | undefined } = $props();
@@ -14,6 +16,16 @@
     let selectedEntity = $derived<Entity | undefined>(
         addedEntities.current.find(({ id }) => id === selectedEntityId),
     );
+
+    function getErrorMessage(err: any): string {
+        try {
+            const errorObject = JSON.parse(err);
+            const errorMessage = errorObject.user_message ?? "Неизвестная ошибка";
+            return errorMessage;
+        } catch {
+            return "Неизвестная ошибка";
+        }
+    }
 
     // Selected week and dialog's open states
     let selectedWeek = $state<WeekType>("currentWeek");
@@ -24,14 +36,18 @@
 
     // Getting lessons from the api
     async function getLessons(entity: Entity): Promise<LessonsApiResponse> {
-        const apiRequestStart = performance.now()
+        const apiRequestStart = performance.now();
         const url = `/api/lessons/${entity.type}/${entity.mslu_id}/${selectedWeek}`;
         const res = await fetch(url);
         totalRequestTime = performance.now() - apiRequestStart;
         if (res.ok) {
             return await res.json();
         } else {
-            return error(res.status, { message: res.statusText });
+            const errorObject = await res.json();
+            return error(res.status, {
+                message: errorObject.message,
+                user_message: errorObject.user_message,
+            });
         }
     }
 </script>
@@ -53,9 +69,11 @@
         <p class="text-xl font-medium text-zinc-800 dark:text-zinc-50">{dayName}</p>
         <p class="text-zinc-500 dark:text-zinc-400">{formattedDate}</p>
     </div>
-    {#if dateString}   
-        <div class="outline-1 text-center w-full p-1 rounded-md text-sm 
-                    text-zinc-700 outline-zinc-300 bg-zinc-50 dark:text-zinc-300 dark:outline-zinc-700 dark:bg-zinc-800">
+    {#if dateString}
+        <div
+            class="outline-1 text-center w-full p-1 rounded-md text-sm
+                    text-zinc-700 outline-zinc-300 bg-zinc-50 dark:text-zinc-300 dark:outline-zinc-700 dark:bg-zinc-800"
+        >
             {dateString}
         </div>
     {/if}
@@ -96,7 +114,7 @@
                     class="underline"
                     target="_blank"
                     rel="noreferrer noopener"
-                    href="http://schedule.mslu.by">schedule.mslu.by</a
+                    href="http://www.timetable.bsufl.by">www.timetable.bsufl.by</a
                 >
             </p>
 
@@ -110,9 +128,9 @@
                 </div>
             {/if}
 
-        <!-- In case of error, render error message and some instructions -->
+            <!-- In case of error, render error message and some instructions -->
         {:catch err}
-            {@const errorMessage = isHttpError(err) ? "Неизвестная ошибка" : err.message}
+            {@const errorMessage = getErrorMessage(err)}
             <div
                 class="mt-2 flex w-full flex-col gap-4 self-center rounded-lg bg-orange-100 p-4 text-pretty text-orange-950 outline-1 outline-orange-300 md:w-2/3 dark:bg-zinc-800 dark:text-zinc-50 dark:outline-zinc-700"
             >
@@ -124,8 +142,8 @@
                     {errorMessage}
                 </p>
                 <p>
-                    Пожалуйста, проверьте ваше интернет-соединение, подождите несколько минут и
-                    перезагрузите страницу.
+                    Пожалуйста, проверьте ваше интернет-соединение, подождите несколько минут и перезагрузите
+                    страницу.
                 </p>
                 <p>
                     Если ошибка сохраняется, рекомендуем пользоваться официальным сайтом
@@ -134,16 +152,21 @@
                         target="_blank"
                         rel="noreferrer noopener"
                         href="http://www.timetable.bsufl.by"
-                        >www.timetable.bsufl.by
+                        >timetable.bsufl.by
                     </a>
                     или, если он тоже не работает, расписанием на стенде, пока мы всё не починим.
                 </p>
             </div>
         {/await}
 
-    <!-- When no entity is selected, render welcome screen -->
+        <!-- When no entity is selected, render welcome screen -->
     {:else}
-        <p class="outline-1 md:w-2/3 lg:w-full self-center rounded-xl px-4 py-3 bg-sky-100 dark:bg-sky-950 text-sky-900 dark:text-sky-50 outline-sky-300 dark:outline-sky-800">Привет, ребят! Я переписал запросы к серверу БГУИЯ, всё каким-то чудом работает, но надо ещё тестировать и сверять с оф. сайтом. Если что-то не так, пишите в лс мне или тем, кто скинул вам этот проект. АТ</p>
+        <p
+            class="outline-1 md:w-2/3 lg:w-full self-center rounded-xl px-4 py-3 bg-sky-100 dark:bg-sky-950 text-sky-900 dark:text-sky-50 outline-sky-300 dark:outline-sky-800"
+        >
+            Привет, ребят! Я переписал запросы к серверу БГУИЯ, всё каким-то чудом работает, но надо ещё
+            тестировать и сверять с оф. сайтом. Если что-то не так, пишите мне в лс или на почту. АТ
+        </p>
         <div class="flex w-full flex-col items-center gap-8 self-center md:w-2/3 lg:w-1/2">
             {#if addedEntities.current.length >= 1}
                 <p class="pt-12 text-center text-xl text-balance">
@@ -179,6 +202,15 @@
                 >
                     <p class="truncate pr-2 font-medium">Как это работает?</p>
                 </Button.Root>
+                <div class="flex flex-row gap-2 absolute bottom-10">
+                    <!-- Use mailto link -->
+                    <a href="mailto:timetable-dev@yandex.by" class="text-zinc-600 dark:text-zinc-300">timetable-dev@yandex.by</a>
+                    <Button.Root onclick={async () => {
+                        await navigator.clipboard.writeText("timetable-dev@yandex.by");
+                        copyButtonText = "Copied";
+                        }}
+                        class="text-zinc-700 active:text-zinc-500 dark:text-zinc-50 dark:active:text-zinc-400 cursor-pointer transition duration-150">{copyButtonText}</Button.Root>
+                </div>
             </div>
         </div>
     {/if}

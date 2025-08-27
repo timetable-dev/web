@@ -38,10 +38,7 @@
     let selectedGroup = $state<SelectItem<string, string>>();
     let selectedTeacher = $state<SelectItem<string, string>>();
 
-    async function getGroups(
-        selectedFaculty: any,
-        selectedMode: any,
-    ): Promise<SelectItem<string, string>[]> {
+    async function getGroups(selectedFaculty: any, selectedMode: any): Promise<SelectItem<string, string>[]> {
         const res = await fetch(`/api/groups/${selectedFaculty.value}/${selectedMode}`);
         return await res.json();
     }
@@ -99,7 +96,6 @@
             };
             addedEntities.current.push(selectedEntity);
             selectedEntityId = selectedEntity.id;
-
         } else if (selectedType === "teacher" && selectedTeacher) {
             const teacherNameParts = selectedTeacher.label.split(" ").filter((i) => i !== "" && i !== ".");
             let teacherInitialsName: string;
@@ -170,11 +166,7 @@
                     <Label.Root class="my-1.5 p-2 font-medium text-zinc-900 dark:text-zinc-100"
                         >Выбери факультет:</Label.Root
                     >
-                    <Select
-                        items={faculties}
-                        bind:selectedItem={selectedFaculty}
-                        placeholder="Факультет"
-                    />
+                    <Select items={faculties} bind:selectedItem={selectedFaculty} placeholder="Факультет" />
 
                     <!-- Выбор формы обучения -->
                     <Label.Root class="my-1.5 p-2 font-medium text-zinc-900 dark:text-zinc-100"
@@ -212,8 +204,7 @@
                         {#await groupList}
                             <SkeletonSmall />
                         {:then response}
-                            <Label.Root
-                                class="my-1.5 p-2 font-medium text-zinc-900 dark:text-zinc-100"
+                            <Label.Root class="my-1.5 p-2 font-medium text-zinc-900 dark:text-zinc-100"
                                 >Выбери группу:</Label.Root
                             >
                             <Combobox
@@ -231,8 +222,7 @@
                         {#await teacherList}
                             <SkeletonSmall />
                         {:then response}
-                            <Label.Root
-                                class="my-1.5 p-2 font-medium text-zinc-900 dark:text-zinc-100"
+                            <Label.Root class="my-1.5 p-2 font-medium text-zinc-900 dark:text-zinc-100"
                                 >Выберите преподавателя:</Label.Root
                             >
                             <Combobox

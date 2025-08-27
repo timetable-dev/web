@@ -60,9 +60,7 @@
                 {item.label}
             </Combobox.Item>
         {:else}
-            <span class="px-4 py-0.5 text-zinc-600 dark:text-zinc-300">
-                Нет доступных вариантов
-            </span>
+            <span class="px-4 py-0.5 text-zinc-600 dark:text-zinc-300"> Нет доступных вариантов </span>
         {/each}
     </Combobox.Content>
 </Combobox.Root>

@@ -12,8 +12,8 @@ const MsluResponseSchema = v.array(
         facultName: v.string(),
         idFormaTime: v.number(),
         year: v.number(),
-    })
-)
+    }),
+);
 
 export const GET: RequestHandler = async ({ params }): Promise<Response> => {
     const endpoint = MSLU_BACKEND_ENDPOINT;
@@ -25,12 +25,20 @@ export const GET: RequestHandler = async ({ params }): Promise<Response> => {
     groupUrl.searchParams.append("idF", faculty);
     groupUrl.searchParams.append("idFormaTime", mode);
     groupUrl.searchParams.append("query", "");
-    const res = await fetch(groupUrl);
+
+    let res: Response;
+
+    try {
+        res = await fetch(groupUrl, { signal: AbortSignal.timeout(15000), referrer: "http://www.timetable.bsufl.by" });
+    } catch {
+        console.error("Timeout error");
+        return error(503, { message: "Service Unavailable", user_message: "Сервер БГУИЯ вне зоны доступа." });
+    }
 
     // Checking if the response is ok
     if (!res.ok) {
         console.error(res.status, res.statusText);
-        return error(503, "Ошибка связи с сервером МГЛУ.");
+        return error(503, { message: "Service Unavailable", user_message: "Сервер БГУИЯ вне зоны доступа." });
     }
 
     try {
@@ -47,6 +55,6 @@ export const GET: RequestHandler = async ({ params }): Promise<Response> => {
         return json(groups, { status: 200 });
     } catch (err) {
         console.error("Error parsing MSLU response:", err);
-        return error(503, "Неверный ответ сервера МГЛУ.");
+        return error(503, { message: "Service Unavailable", user_message: "Неверный ответ сервера БГУИЯ." });
     }
 };
