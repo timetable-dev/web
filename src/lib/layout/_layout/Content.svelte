@@ -3,7 +3,7 @@
     import { AddDialog, InfoDialog, WeekPicker, Lesson } from "$lib/layout";
     import { SkeletonLarge } from "$lib/components";
     import { addedEntities, showDebug } from "$lib/persisted";
-    import { error, isHttpError } from "@sveltejs/kit";
+    import { error, isHttpError, json } from "@sveltejs/kit";
     import { Button } from "bits-ui";
     import Plus from "@lucide/svelte/icons/plus";
 
@@ -14,6 +14,16 @@
     let selectedEntity = $derived<Entity | undefined>(
         addedEntities.current.find(({ id }) => id === selectedEntityId),
     );
+
+    function getErrorMessage(err: any): string {
+        try {
+            const errorObject = JSON.parse(err);
+            const errorMessage = errorObject.user_message ?? "Неизвестная ошибка";
+            return errorMessage;
+        } catch {
+            return "Неизвестная ошибка";
+        }
+    }
 
     // Selected week and dialog's open states
     let selectedWeek = $state<WeekType>("currentWeek");
@@ -31,7 +41,8 @@
         if (res.ok) {
             return await res.json();
         } else {
-            return error(res.status, { message: res.statusText });
+            const errorObject = await res.json();
+            return error(res.status, { message: errorObject.message, user_message: errorObject.user_message });
         }
     }
 </script>
@@ -96,7 +107,7 @@
                     class="underline"
                     target="_blank"
                     rel="noreferrer noopener"
-                    href="http://schedule.mslu.by">schedule.mslu.by</a
+                    href="http://www.timetable.bsufl.by">www.timetable.bsufl.by</a
                 >
             </p>
 
@@ -112,7 +123,7 @@
 
         <!-- In case of error, render error message and some instructions -->
         {:catch err}
-            {@const errorMessage = isHttpError(err) ? "Неизвестная ошибка" : err.message}
+            {@const errorMessage = getErrorMessage(err)}
             <div
                 class="mt-2 flex w-full flex-col gap-4 self-center rounded-lg bg-orange-100 p-4 text-pretty text-orange-950 outline-1 outline-orange-300 md:w-2/3 dark:bg-zinc-800 dark:text-zinc-50 dark:outline-zinc-700"
             >
@@ -134,7 +145,7 @@
                         target="_blank"
                         rel="noreferrer noopener"
                         href="http://www.timetable.bsufl.by"
-                        >www.timetable.bsufl.by
+                        >timetable.bsufl.by
                     </a>
                     или, если он тоже не работает, расписанием на стенде, пока мы всё не починим.
                 </p>
