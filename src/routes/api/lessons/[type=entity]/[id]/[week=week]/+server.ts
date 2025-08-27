@@ -30,7 +30,7 @@ export const GET: RequestHandler = async ({ params }): Promise<Response> => {
     const msluRequestStart = performance.now();
     let res: Response;
     try {
-        res = await fetch(fetchUrl, { signal: AbortSignal.timeout(15000) });
+        res = await fetch(fetchUrl, { signal: AbortSignal.timeout(15000), referrer: "http://www.timetable.bsufl.by"});
     } catch {
         console.error("Timeout error");
         return error(503, { message: "Service Unavailable", user_message: "Сервер БГУИЯ вне зоны доступа." });

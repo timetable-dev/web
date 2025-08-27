@@ -21,7 +21,7 @@ export const GET: RequestHandler = async (): Promise<Response> => {
     let res: Response;
 
     try {
-        res = await fetch(`${endpoint}/api/searchTeachers?query=`, { signal: AbortSignal.timeout(15000) });
+        res = await fetch(`${endpoint}/api/searchTeachers?query=`, { signal: AbortSignal.timeout(15000), referrer: "http://www.timetable.bsufl.by" });
     } catch {
         console.error("Timeout error");
         return error(503, { message: "Service Unavailable", user_message: "Сервер БГУИЯ вне зоны доступа." });
