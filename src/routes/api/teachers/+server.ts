@@ -1,4 +1,3 @@
-// import { MSLU_BACKEND_ENDPOINT } from '$env/static/private';
 import type { RequestHandler } from "./$types";
 import { MSLU_BACKEND_ENDPOINT } from "$env/static/private";
 import { json, error } from "@sveltejs/kit";
@@ -21,7 +20,25 @@ export const GET: RequestHandler = async (): Promise<Response> => {
     let res: Response;
 
     try {
-        res = await fetch(`${endpoint}/api/searchTeachers?query=`, { signal: AbortSignal.timeout(15000), referrer: "http://www.timetable.bsufl.by" });
+        res = await fetch(`${endpoint}/api/api/searchTeachers?query=`, {
+            signal: AbortSignal.timeout(15000),
+            credentials: "omit",
+            headers: {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:142.0) Gecko/20100101 Firefox/142.0",
+                "Accept": "application/json",
+                "Accept-Language": "en-US,en;q=0.5",
+                "X-Request-Origin": "http://www.timetable.bsufl.by",
+                "X-Timestamp": Date.now().toString(),
+                "X-Request-Id": crypto.randomUUID(),
+                "Sec-GPC": "1",
+                "Priority": "u=4",
+                "Pragma": "no-cache",
+                "Cache-Control": "no-cache"
+            },
+            referrer: "http://www.timetable.bsufl.by/",
+            method: "GET",
+            mode: "cors",
+        });
     } catch {
         console.error("Timeout error");
         return error(503, { message: "Service Unavailable", user_message: "Сервер БГУИЯ вне зоны доступа." });
