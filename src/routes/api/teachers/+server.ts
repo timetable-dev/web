@@ -1,7 +1,7 @@
 import type { RequestHandler } from "./$types";
 import { MSLU_BACKEND_ENDPOINT } from "$env/static/private";
 import { json, error } from "@sveltejs/kit";
-import { type MsluTeacher } from "$lib/types";
+import { type BsuflTeacher } from "$lib/types";
 import * as v from "valibot";
 
 const TeachersResponseSchema = v.array(
@@ -65,7 +65,7 @@ export const GET: RequestHandler = async (): Promise<Response> => {
         const data = await res.json();
 
         // Validate its structure
-        const parsedData: MsluTeacher[] = v.parse(TeachersResponseSchema, data);
+        const parsedData: BsuflTeacher[] = v.parse(TeachersResponseSchema, data);
 
         // Sending back to client
         return json(parsedData, { status: 200 });

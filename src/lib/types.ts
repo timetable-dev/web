@@ -26,11 +26,13 @@ export interface Group {
     base64: string;
 }
 
-export interface Teacher {
-    id: string;
-    name: string;
-    shortName: string;
-    base64: string;
+export interface BsuflTeacher {
+    idTeacher: number,
+    nameF: string,
+    nameI: string,
+    nameO: string,
+    isDeleted: boolean,
+    namePost: string,
 }
 
 /** Represents a single lesson in the timetable.
