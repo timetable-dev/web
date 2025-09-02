@@ -9,7 +9,7 @@ export interface Entity {
     id: string;
     name: string;
     type: EntityType;
-    mslu_id: string;
+    mslu_id: number;
     base64: string;
 }
 

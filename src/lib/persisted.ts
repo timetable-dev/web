@@ -12,7 +12,7 @@ const AddedEntitiesSchema = v.array(
         id: v.pipe(v.string(), v.uuid()),
         name: v.string(),
         type: v.union([v.literal("group"), v.literal("teacher")]),
-        mslu_id: v.string(),
+        mslu_id: v.number(),
         base64: v.string(),
     }),
 );
