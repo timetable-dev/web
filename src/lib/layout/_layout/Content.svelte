@@ -2,12 +2,10 @@
     import type { Entity, LessonsApiResponse, DayName, WeekType } from "$lib/types";
     import { AddDialog, InfoDialog, WeekPicker, Lesson } from "$lib/layout";
     import { SkeletonLarge } from "$lib/components";
-    import { addedEntities, showDebug } from "$lib/persisted";
+    import { addedEntities, showDebug, bannerClosed } from "$lib/persisted";
     import { error } from "@sveltejs/kit";
     import { Button } from "bits-ui";
     import Plus from "@lucide/svelte/icons/plus";
-
-    let copyButtonText= $state("Copy")
 
     // Props: local storage id of the selected entity
     let { selectedEntityId = $bindable() }: { selectedEntityId: string | undefined } = $props();
@@ -204,12 +202,7 @@
                 </Button.Root>
                 <div class="flex flex-row gap-2 absolute bottom-10">
                     <!-- Use mailto link -->
-                    <a href="mailto:timetable-dev@yandex.by" class="text-zinc-600 text-lg dark:text-zinc-300">timetable-dev@yandex.by</a>
-                    <Button.Root onclick={async () => {
-                        await navigator.clipboard.writeText("timetable-dev@yandex.by");
-                        copyButtonText = "Copied";
-                        }}
-                        class="text-zinc-700 text-lg active:text-zinc-500 dark:text-zinc-50 dark:active:text-zinc-400 cursor-pointer transition duration-150">{copyButtonText}</Button.Root>
+                    <a href="mailto:timetable-dev@yandex.by" class="text-zinc-600 dark:text-zinc-300">timetable-dev@yandex.by</a>
                 </div>
             </div>
         </div>
