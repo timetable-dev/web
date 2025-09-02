@@ -1,6 +1,7 @@
 import type { RequestHandler } from "./$types";
 import { MSLU_BACKEND_ENDPOINT } from "$env/static/private";
 import { json, error } from "@sveltejs/kit";
+import { type ResponseTeacher } from "$lib/types";
 import * as v from "valibot";
 
 const MsluResponseSchema = v.array(
@@ -15,12 +16,11 @@ const MsluResponseSchema = v.array(
 );
 
 export const GET: RequestHandler = async (): Promise<Response> => {
-    const endpoint = MSLU_BACKEND_ENDPOINT;
 
     let res: Response;
 
     try {
-        res = await fetch(`${endpoint}/api/api/searchTeachers?query=`, {
+        res = await fetch(`${MSLU_BACKEND_ENDPOINT}/api/api/searchTeachers?query=`, {
             signal: AbortSignal.timeout(15000),
             credentials: "omit",
             headers: {
@@ -50,17 +50,32 @@ export const GET: RequestHandler = async (): Promise<Response> => {
         return error(503, { message: "Service Unavailable", user_message: "Сервер БГУИЯ вне зоны доступа." });
     }
 
+    function getFullName (f: string, i: string, o: string) {
+        return `${f} ${i} ${o.length > 1 ? o : ""}`.trim();
+    }
+
+    function getShortName (f: string, i: string, o: string) {
+        return f.length > 0 && i.length > 0 && o.length > 1
+               ? `${i[0]}. ${o[0]}. ${f[0]}.` // Russian name
+               : `${f} ${i}`                  // Foreign name
+    }
+
     try {
-        const data = await res.json(); // Parse the response as JSON
-        const parsedData = v.parse(MsluResponseSchema, data); // Validate its structure
-        const teachers = parsedData.map(
-            // Map the data to SelectItem format
-            ({ idTeacher, nameF, nameI, nameO }) => ({
-                value: idTeacher,
-                label: `${nameF} ${nameI} ${nameO}`,
+        // Parse the response as JSON
+        const data = await res.json();
+
+        // Validate its structure
+        const parsedData = v.parse(MsluResponseSchema, data);
+
+        // Map to the desired format
+        const teachers: ResponseTeacher[] = parsedData.map(
+            (teacher) => ({
+                id: teacher.idTeacher.toString(),
+                name: getFullName(teacher.nameF, teacher.nameI, teacher.nameO),
+                shortName: getShortName(teacher.nameF, teacher.nameI, teacher.nameO),
+                base64: Buffer.from(JSON.stringify(teacher)).toString('base64'),
             }),
         );
-        console.info("Fetched teachers from MSLU backend.");
         return json(teachers, { status: 200 });
     } catch (err) {
         console.error("Error parsing MSLU response: ", err);
