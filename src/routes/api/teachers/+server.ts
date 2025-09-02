@@ -1,10 +1,10 @@
 import type { RequestHandler } from "./$types";
 import { MSLU_BACKEND_ENDPOINT } from "$env/static/private";
 import { json, error } from "@sveltejs/kit";
-import { type ResponseTeacher } from "$lib/types";
+import { type MsluTeacher } from "$lib/types";
 import * as v from "valibot";
 
-const MsluResponseSchema = v.array(
+const TeachersResponseSchema = v.array(
     v.object({
         idTeacher: v.number(),
         nameF: v.string(),
@@ -65,18 +65,10 @@ export const GET: RequestHandler = async (): Promise<Response> => {
         const data = await res.json();
 
         // Validate its structure
-        const parsedData = v.parse(MsluResponseSchema, data);
+        const parsedData: MsluTeacher[] = v.parse(TeachersResponseSchema, data);
 
-        // Map to the desired format
-        const teachers: ResponseTeacher[] = parsedData.map(
-            (teacher) => ({
-                id: teacher.idTeacher.toString(),
-                name: getFullName(teacher.nameF, teacher.nameI, teacher.nameO),
-                shortName: getShortName(teacher.nameF, teacher.nameI, teacher.nameO),
-                base64: Buffer.from(JSON.stringify(teacher)).toString('base64'),
-            }),
-        );
-        return json(teachers, { status: 200 });
+        // Sending back to client
+        return json(parsedData, { status: 200 });
     } catch (err) {
         console.error("Error parsing MSLU response: ", err);
         return error(503, { message: "Service Unavailable", user_message: "Неверный ответ сервера БГУИЯ." });
