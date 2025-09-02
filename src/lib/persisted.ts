@@ -12,11 +12,13 @@ const AddedEntitiesSchema = v.array(
         id: v.pipe(v.string(), v.uuid()),
         name: v.string(),
         type: v.union([v.literal("group"), v.literal("teacher")]),
-        mslu_id: v.union([v.string(), v.number()]),
+        mslu_id: v.string(),
+        base64: v.string(),
     }),
 );
 
 const ShowDebugSchema = v.boolean();
+const BannerClosedSchema = v.string();
 
 const entitiesSerializer: Serializer<Entity[]> = {
     deserialize: (value: string): Entity[] => {
@@ -60,10 +62,35 @@ const debugSerializer: Serializer<boolean> = {
     },
 };
 
+const bannerSerializer: Serializer<string> = {
+    deserialize: (value: string): string => {
+        try {
+            const showDebug = v.parse(BannerClosedSchema, JSON.parse(value));
+            return showDebug;
+        } catch (err) {
+            console.warn(err, "Error parsing local storage. Fallback to empty string.");
+            return "";
+        }
+    },
+    serialize: (value: string): string => {
+        try {
+            const showDebug = v.parse(BannerClosedSchema, value);
+            return JSON.stringify(showDebug);
+        } catch (err) {
+            console.warn(err, "Error serializing provided value. Written empty string to local storage.");
+            return "";
+        }
+    },
+};
+
 export const addedEntities = new PersistedState<Entity[]>("added_entities", [], {
     serializer: entitiesSerializer,
 });
 
 export const showDebug = new PersistedState<boolean>("show_debug", false, {
     serializer: debugSerializer,
+});
+
+export const bannerClosed = new PersistedState<string>("closed_banners", "", {
+    serializer: bannerSerializer,
 });
