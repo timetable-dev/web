@@ -1,16 +1,16 @@
-// TODO: not used for now but should be to have a single source of truth
-/** Constant used in this app when making API requests */
-// export type EntityType = "group" | "teacher";
-
 /** Internal MSLU backend week id used when getting lessons. */
 export type WeekType = "currentWeek" | "nextWeek" | "thirdWeek" | "fourthWeek";
+
+/** Constant used when making API requests */
+export type EntityType = "group" | "teacher";
 
 /** Represents a single entity (group or teacher) saved in local storage. */
 export interface Entity {
     id: string;
     name: string;
-    type: "group" | "teacher";
-    mslu_id: string | number;
+    type: EntityType;
+    mslu_id: string;
+    base64: string;
 }
 
 /** Returned by groups and teachers api endpoints.
@@ -18,6 +18,19 @@ export interface Entity {
 export interface SelectItem<ValueType, LabelType> {
     value: ValueType;
     label: LabelType;
+}
+
+export interface Group {
+    id: string;
+    name: string;
+    base64: string;
+}
+
+export interface Teacher {
+    id: string;
+    name: string;
+    shortName: string;
+    base64: string;
 }
 
 /** Represents a single lesson in the timetable.
