@@ -9,7 +9,15 @@ export interface Entity {
     id: string;
     name: string;
     type: EntityType;
-    mslu_id: number;
+    mslu_id: string;
+    base64: string;
+}
+
+/** Represents a single entity (group or teacher) returned by the API. */
+export interface ResponseEntity {
+    mslu_id: string;
+    name: string;
+    label: string;
     base64: string;
 }
 
@@ -18,21 +26,6 @@ export interface Entity {
 export interface SelectItem<ValueType, LabelType> {
     value: ValueType;
     label: LabelType;
-}
-
-export interface Group {
-    id: string;
-    name: string;
-    base64: string;
-}
-
-export interface BsuflTeacher {
-    idTeacher: number,
-    nameF: string,
-    nameI: string,
-    nameO: string,
-    isDeleted: boolean,
-    namePost: string,
 }
 
 /** Represents a single lesson in the timetable.
@@ -70,7 +63,7 @@ export interface DebugData {
 /** Represents the response from the /groups and /teachers API endpoints (with debug data). */
 export interface EntitiesApiResponse {
     entities: Entity[];
-    debug: DebugData;
+    debug?: DebugData;
 }
 /** Represents the response from the /lessons API endpoint (with debug data). */
 export interface LessonsApiResponse {
