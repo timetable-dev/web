@@ -1,23 +1,27 @@
 <script lang="ts">
-    import type { SelectItem } from "$lib/types";
+    import type { ResponseEntity } from "$lib/types";
     import { Combobox } from "bits-ui";
     import ChevronsUpDown from "@lucide/svelte/icons/chevrons-up-down";
+    import { Debounced } from "runed";
 
     let {
-        items = $bindable(),
-        selectedTeacherId = $bindable(),
-    }: {
-        items: SelectItem<string, string>[];
-        selectedTeacherId: string | undefined;
+        groups = $bindable(),
+        selectedGroup = $bindable(),
+   }: {
+        groups: ResponseEntity[];
+        selectedGroup: ResponseEntity | undefined;
     } = $props();
 
     let open = $state(false);
     let searchValue = $state<string>("");
+    const debouncedSearchValue = new Debounced(() => searchValue, 500);
 
-    const filteredItems = $derived(
-        searchValue === ""
-            ? items
-            : items.filter((item) => item.label.toLowerCase().includes(searchValue.toLowerCase())),
+    $inspect(debouncedSearchValue.current);
+
+    const filteredGroups = $derived(
+        debouncedSearchValue.current === ""
+            ? groups
+            : groups.filter((group) => group.name.toLowerCase().includes(debouncedSearchValue.current.toLowerCase()))
     );
 </script>
 
@@ -25,7 +29,7 @@
     type="single"
     bind:open
     onValueChange={(value) => {
-        selectedTeacherId = value;
+        selectedGroup = filteredGroups.find((group) => group.mslu_id === value);
     }}
 >
     <div class="relative flex flex-row">
@@ -33,8 +37,10 @@
             <ChevronsUpDown />
         </span>
         <Combobox.Input
+            oninput={(e) => {
+                searchValue = e.currentTarget.value;
+            }}
             onclick={() => (open = !open)}
-            oninput={(e) => (searchValue = e.currentTarget.value)}
             placeholder="Введите фамилию"
             class="flex w-full truncate rounded-md border-2 border-zinc-200 bg-zinc-50 p-3 pl-11 text-zinc-800 ring-offset-2 ring-offset-zinc-50
                outline-0 transition-all duration-150 focus:ring-2 focus:ring-blue-600
@@ -47,15 +53,15 @@
                bg-zinc-50
                px-1 py-3 dark:border-zinc-700 dark:bg-zinc-800"
     >
-        {#each filteredItems as item}
+        {#each filteredGroups as group}
             <Combobox.Item
                 class="flex w-full rounded-md px-5 py-2.5 text-zinc-950 transition-all duration-100
                         active:scale-[0.95] data-[highlighted]:bg-zinc-100 data-[selected]:bg-zinc-200
                         dark:text-white dark:data-[highlighted]:bg-zinc-700 dark:data-[selected]:bg-zinc-600"
-                value={item.value}
-                label={item.label}
+                value={group.mslu_id}
+                label={group.name}
             >
-                {item.label}
+                {group.name}
             </Combobox.Item>
         {:else}
             <span class="px-4 py-0.5 text-zinc-600 dark:text-zinc-300"> Нет доступных вариантов </span>

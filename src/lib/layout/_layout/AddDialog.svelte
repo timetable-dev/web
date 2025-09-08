@@ -1,8 +1,10 @@
 <script lang="ts">
-    import type { Entity, SelectItem } from "$lib/types";
-    import { Select, Combobox, SkeletonSmall } from "$lib/components";
+    import type { ResponseEntity, SelectItem, Entity } from "$lib/types";
+    import { Select, SkeletonSmall } from "$lib/components";
     import { Dialog, Tabs, RadioGroup, Label } from "bits-ui";
     import { addedEntities } from "$lib/persisted";
+    import GroupCombobox from "./GroupCombobox.svelte";
+    import TeacherCombobox from "./TeacherCombobox.svelte";
 
     let {
         dialogOpen = $bindable(false),
@@ -32,27 +34,27 @@
     // Automatically fetching either a list of groups if group tab is active and faculty and mode are selected
     // or a list of teachers if teacher tab is active.
 
-    let groupList = $state<Promise<SelectItem<string, string>[]>>();
-    let teacherList = $state<Promise<SelectItem<string, string>[]>>();
+    let groupsPromise = $state<Promise<ResponseEntity[]>>();
+    let teachersPromise = $state<Promise<ResponseEntity[]>>();
 
-    let selectedGroup = $state<SelectItem<string, string>>();
-    let selectedTeacher = $state<SelectItem<string, string>>();
+    let selectedGroup = $state<ResponseEntity>();
+    let selectedTeacher = $state<ResponseEntity>();
 
-    async function getGroups(selectedFaculty: any, selectedMode: any): Promise<SelectItem<string, string>[]> {
+    async function getGroups(selectedFaculty: any, selectedMode: any): Promise<ResponseEntity[]> {
         const res = await fetch(`/api/groups/${selectedFaculty.value}/${selectedMode}`);
         return await res.json();
     }
 
-    async function getTeachers(): Promise<SelectItem<string, string>[]> {
+    async function getTeachers(): Promise<ResponseEntity[]> {
         let res = await fetch("/api/teachers");
         return await res.json();
     }
 
     $effect(() => {
         if (selectedType === "group" && selectedFaculty && selectedMode) {
-            groupList = getGroups(selectedFaculty, selectedMode);
+            groupsPromise = getGroups(selectedFaculty, selectedMode);
         } else if (selectedType === "teacher") {
-            teacherList = getTeachers();
+            teachersPromise = getTeachers();
         }
     });
 
@@ -79,39 +81,32 @@
         selectedMode = "";
         selectedGroup = undefined;
         selectedTeacher = undefined;
-        groupList = undefined;
-        teacherList = undefined;
+        groupsPromise = undefined;
+        teachersPromise = undefined;
         submitButtonActive = false;
     }
 
     function submitEntityAndClose() {
         if (selectedType === "group" && selectedGroup) {
-            const groupName = selectedGroup.label.split(" ");
-            groupName.splice(-1, 1);
-            const selectedEntity: Entity = {
+            const entity: Entity = {
                 id: crypto.randomUUID(),
-                name: groupName.join(" "),
-                mslu_id: selectedGroup.value,
+                name: selectedGroup.label,
                 type: "group",
-            };
-            addedEntities.current.push(selectedEntity);
-            selectedEntityId = selectedEntity.id;
-        } else if (selectedType === "teacher" && selectedTeacher) {
-            const teacherNameParts = selectedTeacher.label.split(" ").filter((i) => i !== "" && i !== ".");
-            let teacherInitialsName: string;
-            if (teacherNameParts.length === 3) {
-                teacherInitialsName = `${teacherNameParts[1][0]}. ${teacherNameParts[2][0]}. ${teacherNameParts[0]}`;
-            } else {
-                teacherInitialsName = selectedTeacher.label;
+                mslu_id: selectedGroup.mslu_id,
+                base64: selectedGroup.base64,
             }
-            const selectedEntity: Entity = {
+            addedEntities.current.push(entity);
+            selectedEntityId = entity.id;
+        } else if (selectedType === "teacher" && selectedTeacher) {
+            const entity: Entity = {
                 id: crypto.randomUUID(),
-                name: teacherInitialsName,
-                mslu_id: selectedTeacher.value,
+                name: selectedTeacher.label,
                 type: "teacher",
-            };
-            addedEntities.current.push(selectedEntity);
-            selectedEntityId = selectedEntity.id;
+                mslu_id: selectedTeacher.mslu_id,
+                base64: selectedTeacher.base64,
+            }
+            addedEntities.current.push(entity);
+            selectedEntityId = entity.id;
         }
 
         clearInput();
@@ -200,17 +195,16 @@
                     </RadioGroup.Root>
 
                     <!-- Выбор группы -->
-                    {#if groupList}
-                        {#await groupList}
+                    {#if groupsPromise}
+                        {#await groupsPromise}
                             <SkeletonSmall />
-                        {:then response}
+                        {:then groups}
                             <Label.Root class="my-1.5 p-2 font-medium text-zinc-900 dark:text-zinc-100"
                                 >Выбери группу:</Label.Root
                             >
-                            <Combobox
-                                items={response}
-                                placeholder="Номер группы"
-                                bind:selectedItem={selectedGroup}
+                            <GroupCombobox
+                                {groups}
+                                bind:selectedGroup
                             />
                         {/await}
                     {/if}
@@ -218,17 +212,16 @@
 
                 <!-- Для преподавателей -->
                 <Tabs.Content value="teacher" class="flex flex-col">
-                    {#if teacherList}
-                        {#await teacherList}
+                    {#if teachersPromise}
+                        {#await teachersPromise}
                             <SkeletonSmall />
-                        {:then response}
+                        {:then teachers}
                             <Label.Root class="my-1.5 p-2 font-medium text-zinc-900 dark:text-zinc-100"
                                 >Выберите преподавателя:</Label.Root
                             >
-                            <Combobox
-                                items={response}
-                                placeholder="Фамилия Имя Отчество"
-                                bind:selectedItem={selectedTeacher}
+                            <TeacherCombobox
+                                {teachers}
+                                bind:selectedTeacher
                             />
                         {/await}
                     {/if}
