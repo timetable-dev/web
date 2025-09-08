@@ -1,6 +1,7 @@
 import type { RequestHandler } from "./$types";
 import { MSLU_BACKEND_ENDPOINT } from "$env/static/private";
 import { json, error } from "@sveltejs/kit";
+import { type ResponseEntity } from "$lib/types";
 import * as v from "valibot";
 
 const MsluResponseSchema = v.array(
@@ -26,11 +27,6 @@ export const GET: RequestHandler = async ({ params }): Promise<Response> => {
     groupUrl.searchParams.append("query", "");
 
     let res: Response;
-
-    function genXRequestId () {
-        const array = new Uint16Array(16);
-        crypto.getRandomValues(array);
-    }
 
     try {
         res = await fetch(groupUrl, {
@@ -66,11 +62,13 @@ export const GET: RequestHandler = async ({ params }): Promise<Response> => {
     try {
         const data = await res.json(); // Parse the response as JSON
         const parsedData = v.parse(MsluResponseSchema, data); // Validate its structure
-        const groups = parsedData.map(
+        const groups: ResponseEntity[] = parsedData.map(
             // Map the data to SelectItem format
-            ({ idGroup, name, year }) => ({
-                value: idGroup,
-                label: `${name} ${year}`,
+            (group) => ({
+                mslu_id: group.idGroup.toString(),
+                name: `${group.name} ${group.year}`,
+                label: group.name,
+                base64: Buffer.from(JSON.stringify(group)).toString('base64url'),
             }),
         );
         console.info("Fetched groups from MSLU backend.");

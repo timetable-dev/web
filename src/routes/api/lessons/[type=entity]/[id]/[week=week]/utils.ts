@@ -132,8 +132,8 @@ export function transform(data: any, type: "group" | "teacher", week: WeekType):
                 type: item.disciplineType,
                 groups: [item.groupName],
                 teacher:
-                    `${item.teacherN ? item.teacherN[0] : ""}. ${item.teacherO ? item.teacherO[0] : ""}. ${item.teacherF ?? ""}`.trim(),
-                teacherFull: `${item.teacherF ?? ""} ${item.teacherN ?? ""} ${item.teacherO ?? ""}`.trim(),
+                    `${item.teacherNamePost} ${item.teacherN ? item.teacherN[0] : ""}. ${item.teacherO ? item.teacherO[0] : ""}. ${item.teacherF ?? ""}`.trim(),
+                teacherFull: `${item.teacherNamePost} ${item.teacherF ?? ""} ${item.teacherN ?? ""} ${item.teacherO ?? ""}`.trim(),
                 room: item.classroom,
             }));
 

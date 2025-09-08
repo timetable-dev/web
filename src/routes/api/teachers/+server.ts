@@ -1,7 +1,7 @@
 import type { RequestHandler } from "./$types";
 import { MSLU_BACKEND_ENDPOINT } from "$env/static/private";
 import { json, error } from "@sveltejs/kit";
-import { type BsuflTeacher } from "$lib/types";
+import { type ResponseEntity } from "$lib/types";
 import * as v from "valibot";
 
 const TeachersResponseSchema = v.array(
@@ -54,10 +54,10 @@ export const GET: RequestHandler = async (): Promise<Response> => {
         return `${f} ${i} ${o.length > 1 ? o : ""}`.trim();
     }
 
-    function getShortName (f: string, i: string, o: string) {
-        return f.length > 0 && i.length > 0 && o.length > 1
-               ? `${i[0]}. ${o[0]}. ${f[0]}.` // Russian name
-               : `${f} ${i}`                  // Foreign name
+    function getShortenedName (f: string, i: string, o: string) {
+        return i.length > 0 && o.length > 1
+               ? `${i[0]}. ${o[0]}. ${f}` // Russian name
+               : `${f} ${i}`              // Foreign name
     }
 
     try {
@@ -65,10 +65,19 @@ export const GET: RequestHandler = async (): Promise<Response> => {
         const data = await res.json();
 
         // Validate its structure
-        const parsedData: BsuflTeacher[] = v.parse(TeachersResponseSchema, data);
+        const parsedData = v.parse(TeachersResponseSchema, data);
+
+        const teachers: ResponseEntity[] = parsedData.map(
+            (teacher) => ({
+                mslu_id: teacher.idTeacher.toString(),
+                name: getFullName(teacher.nameF, teacher.nameI, teacher.nameO),
+                label: getShortenedName(teacher.nameF, teacher.nameI, teacher.nameO),
+                base64: Buffer.from(JSON.stringify(teacher)).toString('base64url'),
+            })
+        )
 
         // Sending back to client
-        return json(parsedData, { status: 200 });
+        return json(teachers, { status: 200 });
     } catch (err) {
         console.error("Error parsing MSLU response: ", err);
         return error(503, { message: "Service Unavailable", user_message: "Неверный ответ сервера БГУИЯ." });
