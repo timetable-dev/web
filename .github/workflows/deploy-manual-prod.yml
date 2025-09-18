@@ -1,6 +1,6 @@
 # Deploy production app to timetable.of.by manually
 
-name: Manual Review Deploy
+name: Manual Production Deploy
 
 on: workflow_dispatch
 
@@ -14,8 +14,8 @@ jobs:
             group: manual-prod-deploy
 
         environment:
-            name: next
-            url: https://next-mslu-timetable.fly.dev/
+            name: prod
+            url: https://timetable.of.by/
 
         steps:
             - name: Get code
@@ -26,6 +26,6 @@ jobs:
 
             - name: Deploy with production config
               if:
-              run: flyctl deploy --remote-only --config fly.next.toml
+              run: flyctl deploy --remote-only --config fly.toml
               env:
                   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
