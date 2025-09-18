@@ -14,12 +14,14 @@
     let counter: number = 0;
 
     function showDebugMenu() {
-        if (counter < 5) {
+        if (!debugMenuOpen && counter < 5) {
             counter += 1;
             console.log(`Click ${6 - counter} more time${counter == 5 ? "" : "s"}`);
         } else if (counter == 5) {
             counter = 0;
             debugMenuOpen = true;
+        } else if (debugMenuOpen) {
+            console.log("Debug menu is already open");
         }
     }
 </script>
@@ -47,17 +49,21 @@
 >
     <Dialog.Portal>
         <Dialog.Overlay
-            class="fixed inset-0 z-49 bg-black/50 dark:bg-zinc-800/80 data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out"
+            class="bits-ui-overlay bg-overlay data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out"
         />
         <Dialog.Content
-            class="data-[state=open]:animate-scale-in data-[state=closed]:animate-scale-out dialog-center flex max-h-3/4 w-[90%] flex-col rounded-xl bg-white
-                    outline-zinc-300 md:w-1/2 lg:max-h-5/6 lg:w-1/3 dark:bg-zinc-900 dark:outline-zinc-800"
+            class="data-[state=open]:animate-scale-in data-[state=closed]:animate-scale-out bits-ui-modal flex flex-col bg-bg outline-border"
         >
             <!-- Title -->
-            <Dialog.Title class="py-4 text-center text-xl font-medium">О приложении</Dialog.Title>
+            <Dialog.Title class="py-2 text-center text-xl font-medium">О приложении</Dialog.Title>
 
             <!-- Info -->
-            <div class="scrollbar-hidden flex flex-col gap-6 overflow-y-auto px-5">
+            <div class="scrollbar-hidden flex flex-col gap-5 overflow-y-auto">
+
+                <p class="p-2 bg-bg-accent text-fg-accent rounded-md">
+                    <b>Важно:</b> Это неофициальный проект, Не аффилированный с администрацией БГУИЯ, созданный для личного использования.
+                </p>
+
                 <!-- Icon cards -->
                 {@render infoCard(
                     "Чтобы открыть расписание, нажмите на плюсик, а чтобы закрыть – на три точки -> «Закрыть».",
@@ -112,18 +118,16 @@
             {/if}
 
             <!-- Controls -->
-            <div class="flex flex-row items-center justify-between p-3">
+            <div class="flex flex-row items-center justify-between pt-2">
                 <button
-                    class="rounded-md py-2.5 pr-12 pl-6 text-zinc-500 duration-75 active:scale-[0.95] active:bg-zinc-200 active:transition-all dark:text-zinc-400 active:dark:bg-zinc-700"
+                    class="rounded-md py-2.5 pr-12 pl-6 text-fg-muted duration-75 active:scale-[0.95] active:bg-bg-elevated active:transition-all"
                     onclick={showDebugMenu}
                 >
                     {version}
                 </button>
 
                 <Dialog.Close
-                    class="cursor-pointer rounded-md bg-zinc-100 px-6 py-2.5 font-medium text-zinc-800  outline-1
-								   outline-zinc-200 transition-all duration-150 hover:bg-zinc-200 hover:outline-zinc-300 active:scale-[0.98] 
-           						   dark:bg-zinc-700 dark:text-zinc-50 dark:outline-zinc-600 hover:dark:bg-zinc-800 hover:dark:outline-zinc-700"
+                    class="cursor-pointer rounded-md px-8 py-2.5 font-medium border-[1.5px] transition-all duration-150 active:scale-[0.98] bg-bg-elevated text-fg border-border hover:bg-bg-elevated-hover"
                 >
                     Понятно
                 </Dialog.Close>

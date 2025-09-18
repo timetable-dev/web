@@ -1,10 +1,11 @@
 <script lang="ts">
-    import { ToggleGroup, Button, DropdownMenu } from "bits-ui";
-    import { AddDialog } from "$lib/layout";
+    import { EntityModal } from "$lib/modals";
     import { addedEntities } from "$lib/persisted";
-    import EllipsisVertical from "@lucide/svelte/icons/ellipsis-vertical";
-    import Plus from "@lucide/svelte/icons/plus";
+    import { ToggleGroup, Button, DropdownMenu } from "bits-ui";
+
     import X from "@lucide/svelte/icons/x";
+    import Plus from "@lucide/svelte/icons/plus";
+    import EllipsisVertical from "@lucide/svelte/icons/ellipsis-vertical";
     import ArrowLeftToLine from "@lucide/svelte/icons/arrow-left-to-line";
 
     let { selectedEntityId = $bindable() }: { selectedEntityId: string | undefined } = $props();
@@ -33,7 +34,7 @@
     }
 </script>
 
-<AddDialog bind:selectedEntityId bind:dialogOpen={addDialogOpen} />
+<EntityModal bind:selectedEntityId bind:open={addDialogOpen} />
 
 {#snippet entity_selector()}
     <!-- Container styling -->
@@ -128,7 +129,6 @@
     </ToggleGroup.Root>
 {/snippet}
 
-<!-- rounded-xl? -->
 <div
     class="flex w-full flex-col gap-3
             rounded-2xl bg-zinc-50 py-3
