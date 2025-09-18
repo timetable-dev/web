@@ -18,7 +18,7 @@
             Выберите расписание из списка выше или откройте ещё одно
         </p>
     {:else}
-        <p class="pt-12 text-center text-xl text-balance">
+        <p class="pt-36 text-center text-xl text-balance">
             Откройте новое расписание для группы или преподавателя
         </p>
     {/if}
