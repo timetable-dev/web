@@ -15,7 +15,7 @@ export interface Entity {
 
 /** Represents a single entity (group or teacher) returned by the API. */
 export interface ResponseEntity {
-    mslu_id: string;
+    id: string;
     name: string;
     label: string;
     base64: string;
@@ -61,12 +61,12 @@ export interface DebugData {
 }
 
 /** Represents the response from the /groups and /teachers API endpoints (with debug data). */
-export interface EntitiesApiResponse {
+export interface EntitiesResponse {
     entities: Entity[];
     debug?: DebugData;
 }
 /** Represents the response from the /lessons API endpoint (with debug data). */
-export interface LessonsApiResponse {
+export interface LessonsResponse {
     week: WeekData;
     debug: DebugData;
 }
