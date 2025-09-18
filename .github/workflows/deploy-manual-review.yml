@@ -1,4 +1,4 @@
-# Deployment review app to next-mslu-timetable.fly.dev manually from dev
+# Deploy review app to next-mslu-timetable.fly.dev manually
 
 name: Manual Review Deploy
 

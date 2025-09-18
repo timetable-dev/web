@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Content, Header } from "$lib/layout";
+    import { Header, Content } from "$lib/layout";
     import { addedEntities } from "$lib/persisted";
     import { ModeWatcher } from "mode-watcher";
     import { onMount } from "svelte";

@@ -1,6 +1,12 @@
+import type { Lesson, WeekData, DayName, WeekType, DebugData, LessonsResponse } from "$lib/types";
 import { today, startOfWeek, endOfWeek, parseDate } from "@internationalized/date";
-import type { Lesson, WeekData, DayName, WeekType } from "$lib/types";
+import { MSLU_BACKEND_ENDPOINT } from "$env/static/private";
+import { query } from '$app/server';
+import { error } from "@sveltejs/kit";
 import * as v from "valibot";
+
+
+// Schemas
 
 const MsluDataSchema = v.array(
     v.object({
@@ -43,7 +49,16 @@ const MsluDataSchema = v.array(
     }),
 );
 
-export function getWeekBoundaries(week: WeekType): { weekStart: string; weekEnd: string } {
+const LessonsRequestSchema = v.object({
+    id: v.string(),
+    type: v.union([v.literal("group"), v.literal("teacher")]),
+    week: v.union([v.literal("currentWeek"), v.literal("nextWeek"), v.literal("thirdWeek"), v.literal("fourthWeek")]),
+})
+
+
+// Helper functions
+
+function getWeekBoundaries(week: WeekType): { weekStart: string; weekEnd: string } {
     const currentDate = today("Europe/Minsk");
     const currentWeekStart = startOfWeek(currentDate, "ru-RU", "mon");
     const currentWeekEnd = endOfWeek(currentDate, "ru-RU", "mon");
@@ -70,14 +85,14 @@ export function getWeekBoundaries(week: WeekType): { weekStart: string; weekEnd:
     };
 }
 
-export function getWeekSpan(week: WeekType): string[] {
+function getWeekSpan(week: WeekType): string[] {
     const { weekStart, weekEnd } = getWeekBoundaries(week);
     const start = parseDate(weekStart);
     return Array.from([0, 1, 2, 3, 4, 5], (i) => start.add({ days: i }).toString());
 }
 
 // Function to validate and transform MSLU response
-export function transform(data: any, type: "group" | "teacher", week: WeekType): WeekData {
+function transform(data: any, type: "group" | "teacher", week: WeekType): WeekData {
     // Validate data with Valibot
     const validatedItems = v.parse(MsluDataSchema, data);
 
@@ -132,8 +147,8 @@ export function transform(data: any, type: "group" | "teacher", week: WeekType):
                 type: item.disciplineType,
                 groups: [item.groupName],
                 teacher:
-                    `${item.teacherN ? item.teacherN[0] : ""}. ${item.teacherO ? item.teacherO[0] : ""}. ${item.teacherF ?? ""}`.trim(),
-                teacherFull: `${item.teacherF ?? ""} ${item.teacherN ?? ""} ${item.teacherO ?? ""}`.trim(),
+                    `${item.teacherNamePost} ${item.teacherN ? item.teacherN[0] : ""}. ${item.teacherO ? item.teacherO[0] : ""}. ${item.teacherF ?? ""}`.trim(),
+                teacherFull: `${item.teacherNamePost} ${item.teacherF ?? ""} ${item.teacherN ?? ""} ${item.teacherO ?? ""}`.trim(),
                 room: item.classroom,
             }));
 
@@ -170,3 +185,84 @@ export function transform(data: any, type: "group" | "teacher", week: WeekType):
 
     return weekData;
 }
+
+
+// Main function
+
+export const getLessons = query(LessonsRequestSchema, async (params): Promise<LessonsResponse> => {
+
+    const { weekStart, weekEnd } = getWeekBoundaries(params.week);
+
+    const debugData: DebugData = {};
+
+    const fetchUrl = new URL(MSLU_BACKEND_ENDPOINT);
+
+    if (params.type === "group") {
+        fetchUrl.pathname = "/api/api/groupschedule";
+        fetchUrl.searchParams.append("startDate", weekStart);
+        fetchUrl.searchParams.append("endDate", weekEnd);
+        fetchUrl.searchParams.append("idGroup", params.id);
+    } else {
+        fetchUrl.pathname = "/api/api/teacherschedule";
+        fetchUrl.searchParams.append("startDate", weekStart);
+        fetchUrl.searchParams.append("endDate", weekEnd);
+        fetchUrl.searchParams.append("idTeacher", params.id);
+    }
+
+    const msluRequestStart = performance.now();
+    let res: Response;
+    try {
+        res = await fetch(fetchUrl, {
+            signal: AbortSignal.timeout(15000),
+            credentials: "omit",
+            headers: {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:142.0) Gecko/20100101 Firefox/142.0",
+                "Accept": "application/json",
+                "Accept-Language": "en-US,en;q=0.5",
+                "X-Request-Origin": "http://www.timetable.bsufl.by",
+                "X-Timestamp": Date.now().toString(),
+                "X-Request-Id": crypto.randomUUID(),
+                "Sec-GPC": "1",
+                "Priority": "u=4",
+                "Pragma": "no-cache",
+                "Cache-Control": "no-cache"
+            },
+            referrer: "http://www.timetable.bsufl.by/",
+            method: "GET",
+            mode: "cors",
+        });
+
+    // Timeout error (15 seconds)
+    } catch(err) {
+        console.error(err);
+        throw error(503, "Сервер БГУИЯ не отвечает.");
+    }
+
+    debugData.mslu_response = performance.now() - msluRequestStart;
+
+    // Checking if the response is ok
+    if (!res.ok) {
+        console.error(res.status, res.statusText);
+        throw error(503, "Сервер БГУИЯ вне зоны доступа.");
+    }
+
+    let weekData: WeekData;
+    const data = await res.json();
+
+    const transformStart = performance.now();
+
+    try {
+        // Magic happens here
+        weekData = transform(data, params.type, params.week);
+    } catch (err) {
+        // In case BSUFL backend response's structure is unexpected
+        console.error("Error parsing MSLU response:", err);
+        throw error(503, "Неверный ответ сервера БГУИЯ.");
+    }
+    debugData.data_transform = performance.now() - transformStart;
+
+    return {
+        week: weekData,
+        debug: debugData,
+    };
+});
