@@ -48,7 +48,7 @@
             <p class="truncate pr-2 font-medium">Как это работает?</p>
         </Button.Root>
 
-        <Button.Root
+        <!-- <Button.Root
             onclick={() => {
                 changelogOpen = true;
             }}
@@ -57,7 +57,7 @@
                 dark:bg-zinc-700 dark:text-zinc-50 dark:outline-zinc-600 hover:dark:bg-zinc-800 hover:dark:outline-zinc-700"
         >
             <p class="truncate pr-2 font-medium">Что нового?</p>
-        </Button.Root>
+        </Button.Root> -->
     </div>
 </div>
 

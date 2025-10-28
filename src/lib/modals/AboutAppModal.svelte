@@ -6,6 +6,7 @@
     import CirclePlus from "@lucide/svelte/icons/circle-plus";
     import MousePointer2 from "@lucide/svelte/icons/mouse-pointer-2";
     import Github from "@lucide/svelte/icons/github";
+    import TriangleAlert from "@lucide/svelte/icons/triangle-alert";
 
     let { open: infoDialogOpen = $bindable() }: { open: boolean } = $props();
 
@@ -60,10 +61,6 @@
             <!-- Info -->
             <div class="scrollbar-hidden flex flex-col gap-5 overflow-y-auto">
 
-                <p class="p-2 bg-bg-accent text-fg-accent rounded-md">
-                    <b>Важно:</b> Это неофициальный проект, не аффилированный с администрацией БГУИЯ, созданный для личного использования.
-                </p>
-
                 <!-- Icon cards -->
                 {@render infoCard(
                     "Чтобы открыть расписание, нажмите на плюсик, а чтобы закрыть – на три точки -> «Закрыть».",
@@ -76,6 +73,10 @@
                 {@render infoCard(
                     "Нажмите на занятие, чтобы просмотреть подробную информацию о нём.",
                     MousePointer2,
+                )}
+                {@render infoCard(
+                    "Важно: это неофициальный проект, не аффилированный с администрацией БГУИЯ, созданный для личного использования.",
+                    TriangleAlert,
                 )}
 
                 <!-- Card with image -->

@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { ResponseEntity, SelectItem } from "$lib/types";
     import type { RemoteQuery } from "@sveltejs/kit";
-    import { RadioGroup, Label, Select, Combobox } from "bits-ui";
+    import { RadioGroup, Label, Select, Combobox, Portal } from "bits-ui";
     import { getGroups } from "$lib/remote/entities.remote";
     import Chevrons from "@lucide/svelte/icons/chevrons-up-down";
     import TextCursorInput from "@lucide/svelte/icons/text-cursor-input";
@@ -157,24 +157,26 @@
                             focus:outline-2 focus:outline-offset-2 focus:outline-focus"
                 />
             </div>
-            <Combobox.Content
-                class="data-[state=open]:animate-scale-in data-[state=closed]:animate-scale-out mt-2 flex max-h-52 w-[var(--bits-combobox-anchor-width)] flex-col overflow-y-auto rounded-xl
-                    border-[1.5px] border-border bg-bg
-                    p-1"
-            >
-                {#each filteredGroups as group}
-                    <Combobox.Item
-                        class="flex w-full rounded-md cursor-pointer px-4 py-2.5 text-fg transition-all duration-100
-                                active:scale-[0.95] data-[highlighted]:bg-bg-elevated data-[selected]:bg-bg-accent"
-                        value={group.id}
-                        label={group.name}
-                    >
-                        {group.name}
-                    </Combobox.Item>
-                {:else}
-                    <span class="px-4 py-0.5 text-zinc-600 dark:text-zinc-300"> Нет доступных вариантов </span>
-                {/each}
-            </Combobox.Content>
+            <Combobox.Portal> 
+                <Combobox.Content
+                    class="data-[state=open]:animate-scale-in z-51 data-[state=closed]:animate-scale-out mt-2 flex max-h-52 w-[var(--bits-combobox-anchor-width)] flex-col overflow-y-auto rounded-xl
+                        border-[1.5px] border-border bg-bg
+                        p-1"
+                >
+                    {#each filteredGroups as group}
+                        <Combobox.Item
+                            class="flex w-full rounded-md cursor-pointer px-4 py-2.5 text-fg transition-all duration-100
+                                    active:scale-[0.95] data-[highlighted]:bg-bg-elevated data-[selected]:bg-bg-accent"
+                            value={group.id}
+                            label={group.name}
+                        >
+                            {group.name}
+                        </Combobox.Item>
+                    {:else}
+                        <span class="px-4 py-0.5 text-zinc-600 dark:text-zinc-300"> Нет доступных вариантов </span>
+                    {/each}
+                </Combobox.Content>
+            </Combobox.Portal>
         </Combobox.Root>    
     {:catch err}
         <p class="p-3 w-full rounded-xl border-border bg-bg-elevated">{JSON.parse(err).message}</p>

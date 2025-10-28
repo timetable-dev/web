@@ -6,10 +6,9 @@
     let { selectedWeek = $bindable("currentWeek") }: Props = $props();
 
     const weeks: SelectItem<WeekType, string>[] = [
+        { label: "Пред. нед.", value: "prevWeek" },
         { label: "Тек. нед.", value: "currentWeek" },
         { label: "След. нед.", value: "nextWeek" },
-        { label: "3-я нед.", value: "thirdWeek" },
-        { label: "4-я нед.", value: "fourthWeek" },
     ];
 </script>
 

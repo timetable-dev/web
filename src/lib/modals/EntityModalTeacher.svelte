@@ -50,24 +50,26 @@
                        focus:outline-2 focus:outline-offset-2 focus:outline-focus"
             />
         </div>
-        <Combobox.Content
-            class="data-[state=open]:animate-scale-in data-[state=closed]:animate-scale-out mt-2 flex max-h-52 w-[var(--bits-combobox-anchor-width)] flex-col overflow-y-auto rounded-xl
-                border-[1.5px] border-border bg-bg
-                p-1"
-        >
-            {#each filteredTeachers as teacher}
-                <Combobox.Item
-                    class="flex w-full rounded-md px-4 py-2.5 text-fg transition-all duration-100 cursor-pointer
-                            active:scale-[0.95] data-[highlighted]:bg-bg-elevated data-[selected]:bg-bg-accent"
-                    value={teacher.id}
-                    label={teacher.name}
-                >
-                    {teacher.name}
-                </Combobox.Item>
-            {:else}
-                <span class="px-4 py-0.5 text-zinc-600 dark:text-zinc-300"> Нет доступных вариантов </span>
-            {/each}
-        </Combobox.Content>
+        <Combobox.Portal> 
+            <Combobox.Content
+                class="data-[state=open]:animate-scale-in z-51 data-[state=closed]:animate-scale-out mt-2 flex max-h-52 w-[var(--bits-combobox-anchor-width)] flex-col overflow-y-auto rounded-xl
+                    border-[1.5px] border-border bg-bg
+                    p-1"
+            >
+                {#each filteredTeachers as teacher}
+                    <Combobox.Item
+                        class="flex w-full rounded-md px-4 py-2.5 text-fg transition-all duration-100 cursor-pointer
+                                active:scale-[0.95] data-[highlighted]:bg-bg-elevated data-[selected]:bg-bg-accent"
+                        value={teacher.id}
+                        label={teacher.name}
+                    >
+                        {teacher.name}
+                    </Combobox.Item>
+                {:else}
+                    <span class="px-4 py-0.5 text-zinc-600 dark:text-zinc-300"> Нет доступных вариантов </span>
+                {/each}
+            </Combobox.Content>
+        </Combobox.Portal>
     </Combobox.Root>
 {:catch err}
     <p class="p-3 w-full rounded-xl border-border bg-bg-elevated">{JSON.parse(err).message}</p>

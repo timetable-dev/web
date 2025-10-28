@@ -1,7 +1,6 @@
 <script lang="ts">
-    import type { Entity, WeekType } from "$lib/types";
+    import type { WeekType } from "$lib/types";
     import { addedEntities } from "$lib/persisted";
-    import { error } from "@sveltejs/kit";
 
     import { getLessons } from "$lib/remote/lessons.remote";
     
@@ -73,7 +72,7 @@
 
     {:else}
         <!-- When no entity is selected, render welcome screen -->
-        <WelcomeScreen {selectedEntityId} />
+        <WelcomeScreen bind:selectedEntityId />
     {/if}
 
 </div>

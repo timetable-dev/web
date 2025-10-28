@@ -1,5 +1,5 @@
 /** Internal MSLU backend week id used when getting lessons. */
-export type WeekType = "currentWeek" | "nextWeek" | "thirdWeek" | "fourthWeek";
+export type WeekType = "currentWeek" | "nextWeek" | "prevWeek";
 
 /** Constant used when making API requests */
 export type EntityType = "group" | "teacher";

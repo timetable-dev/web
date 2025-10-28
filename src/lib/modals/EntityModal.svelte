@@ -57,7 +57,7 @@
     <Dialog.Overlay class="bits-ui-overlay bg-overlay data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out" />
 
     <!-- Modal contents -->
-    <Dialog.Content class="bits-ui-modal bg-bg data-[state=open]:animate-scale-in data-[state=closed]:animate-scale-out" >
+    <Dialog.Content class="bits-ui-modal overflow-auto bg-bg data-[state=open]:animate-scale-in data-[state=closed]:animate-scale-out" >
 
         <!-- Modal title -->
         <Dialog.Title class="text-center text-xl pt-1 pb-4">Открыть расписание</Dialog.Title>

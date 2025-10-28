@@ -52,7 +52,7 @@ const MsluDataSchema = v.array(
 const LessonsRequestSchema = v.object({
     id: v.string(),
     type: v.union([v.literal("group"), v.literal("teacher")]),
-    week: v.union([v.literal("currentWeek"), v.literal("nextWeek"), v.literal("thirdWeek"), v.literal("fourthWeek")]),
+    week: v.union([v.literal("currentWeek"), v.literal("nextWeek"), v.literal("prevWeek")]),
 })
 
 
@@ -71,11 +71,8 @@ function getWeekBoundaries(week: WeekType): { weekStart: string; weekEnd: string
         case "nextWeek":
             offsetDays = 7;
             break;
-        case "thirdWeek":
-            offsetDays = 14;
-            break;
-        case "fourthWeek":
-            offsetDays = 21;
+        case "prevWeek":
+            offsetDays = -7;
             break;
     }
 
@@ -148,7 +145,7 @@ function transform(data: any, type: "group" | "teacher", week: WeekType): WeekDa
                 groups: [item.groupName],
                 teacher:
                     `${item.teacherNamePost} ${item.teacherN ? item.teacherN[0] : ""}. ${item.teacherO ? item.teacherO[0] : ""}. ${item.teacherF ?? ""}`.trim(),
-                teacherFull: `${item.teacherNamePost} ${item.teacherF ?? ""} ${item.teacherN ?? ""} ${item.teacherO ?? ""}`.trim(),
+                teacherFull: `${item.teacherNamePost} ${item.teacherN ?? ""} ${item.teacherO ?? ""} ${item.teacherF ?? ""}`.trim(),
                 room: item.classroom,
             }));
 

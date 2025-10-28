@@ -47,18 +47,18 @@
             <!-- Individual element styling -->
             <div
                 class="flex cursor-pointer flex-row flex-nowrap items-center
-                            gap-1 rounded-xl border-[1.5px] border-zinc-300 pr-1.5
-                            text-slate-800 transition-all duration-150
-
-                            hover:bg-zinc-50 active:scale-[0.99]
-                            has-data-[state=on]:border-sky-500 has-data-[state=on]:bg-sky-100
-                            has-data-[state=on]:text-sky-700 hover:has-data-[state=on]:bg-sky-100
-
-                            lg:pr-1 dark:border-zinc-500
-                            dark:text-zinc-50 hover:dark:bg-zinc-700
-                            dark:has-data-[state=on]:border-sky-700 dark:has-data-[state=on]:bg-sky-800
-                            dark:has-data-[state=on]:text-white hover:dark:has-data-[state=on]:bg-sky-800
-                            "
+                       gap-1 rounded-xl border-[1.5px] border-zinc-300 pr-1.5
+                       text-slate-800 transition-all duration-150
+   
+                       hover:bg-zinc-50 active:scale-[0.99]
+                       has-data-[state=on]:border-sky-500 has-data-[state=on]:bg-sky-100
+                       has-data-[state=on]:text-sky-700 hover:has-data-[state=on]:bg-sky-100
+   
+                       lg:pr-1 dark:border-zinc-500
+                       dark:text-zinc-50 hover:dark:bg-zinc-700
+                       dark:has-data-[state=on]:border-sky-700 dark:has-data-[state=on]:bg-sky-800
+                       dark:has-data-[state=on]:text-white hover:dark:has-data-[state=on]:bg-sky-800
+                    "
             >
                 <!-- Entity name -->
                 <ToggleGroup.Item
