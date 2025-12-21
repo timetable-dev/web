@@ -23,7 +23,7 @@
 
     {@const dateString: string = (
         formattedDate === "3 сент." ? "День прощанья"
-        : formattedDate === "31 дек." ? "С новым годом!"
+        : formattedDate === "1 янв." ? "С новым годом!"
         : ""
     )}
 
