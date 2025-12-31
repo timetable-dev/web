@@ -63,8 +63,8 @@
 </div>
 
 <!-- Links to the official website -->
-<div class="mt-8 p-2 flex flex-col md:flex-row outline-1 rounded-xl bg-zinc-50 text-zinc-900 outline-zinc-200 dark:bg-zinc-800 dark:text-zinc-50 dark:outline-zinc-700">
-    <p class="p-2">
+<div class="mt-8 p-2 flex flex-col md:flex-row gap-3 md:gap-4 md:self-center-safe md:w-min outline-1 rounded-xl bg-zinc-50 text-zinc-900 outline-zinc-200 dark:bg-zinc-800 dark:text-zinc-50 dark:outline-zinc-700">
+    <p class="p-2 md:text-nowrap">
         Источник: <a
             class="underline"
             target="_blank"
@@ -72,16 +72,13 @@
             href="http://www.timetable.bsufl.by">www.timetable.bsufl.by</a
         >
     </p>
-    <p class="p-2 pb-5">
-        Откройте это расписание на официальном сайте по ссылке ниже:
-    </p>
     <a
         target="_blank"
         rel="noreferrer noopener"
-        class="flex flex-row gap-3 justify-center items-center outline-1 rounded-lg p-2 bg-zinc-100 outline-zinc-300 text-zinc-900 dark:bg-zinc-700 dark:outline-zinc-600 dark:text-zinc-50"
+        class="flex flex-row gap-3 md:text-nowrap justify-center items-center outline-1 rounded-lg p-2 bg-zinc-100 outline-zinc-300 text-zinc-900 dark:bg-zinc-700 dark:outline-zinc-600 dark:text-zinc-50"
         href="http://www.timetable.bsufl.by/schedule/{base64}"
     >
-        <p>Открыть</p>
+        <p>Открыть на оф. сайте</p>
         <span><ExternalLink size={16}/></span>
     </a>
 </div>
