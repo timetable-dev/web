@@ -1,4 +1,4 @@
-import type { Lesson, WeekData, DayName, WeekType, DebugData, LessonsResponse } from "$lib/types";
+import type { Lesson, WeekData, DayName, DebugData, LessonsResponse } from "$lib/types";
 import { today, startOfWeek, endOfWeek, parseDate } from "@internationalized/date";
 import { MSLU_BACKEND_ENDPOINT } from "$env/static/private";
 import { query } from '$app/server';
@@ -52,29 +52,18 @@ const MsluDataSchema = v.array(
 const LessonsRequestSchema = v.object({
     id: v.string(),
     type: v.union([v.literal("group"), v.literal("teacher")]),
-    week: v.union([v.literal("currentWeek"), v.literal("nextWeek"), v.literal("prevWeek")]),
+    weekOffset: v.pipe(v.string(), v.toNumber()),
 })
 
 
 // Helper functions
 
-function getWeekBoundaries(week: WeekType): { weekStart: string; weekEnd: string } {
+function getWeekBoundaries(weekOffset: number): { weekStart: string; weekEnd: string } {
     const currentDate = today("Europe/Minsk");
     const currentWeekStart = startOfWeek(currentDate, "ru-RU", "mon");
     const currentWeekEnd = endOfWeek(currentDate, "ru-RU", "mon");
 
-    let offsetDays: number;
-    switch (week) {
-        case "currentWeek":
-            offsetDays = 0;
-            break;
-        case "nextWeek":
-            offsetDays = 7;
-            break;
-        case "prevWeek":
-            offsetDays = -7;
-            break;
-    }
+    let offsetDays = weekOffset * 7;
 
     return {
         weekStart: currentWeekStart.add({ days: offsetDays }).toString(),
@@ -82,21 +71,21 @@ function getWeekBoundaries(week: WeekType): { weekStart: string; weekEnd: string
     };
 }
 
-function getWeekSpan(week: WeekType): string[] {
-    const { weekStart, weekEnd } = getWeekBoundaries(week);
+function getWeekSpan(weekOffset: number): string[] {
+    const { weekStart, weekEnd } = getWeekBoundaries(weekOffset);
     const start = parseDate(weekStart);
     return Array.from([0, 1, 2, 3, 4, 5], (i) => start.add({ days: i }).toString());
 }
 
 // Function to validate and transform MSLU response
-function transform(data: any, type: "group" | "teacher", week: WeekType): WeekData {
+function transform(data: any, type: "group" | "teacher", weekOffset: number): WeekData {
     // Validate data with Valibot
     const validatedItems = v.parse(MsluDataSchema, data);
 
     // Group by day
     const groupedItems = Object.groupBy(validatedItems, (item) => item.day);
 
-    const weekSpan = getWeekSpan(week);
+    const weekSpan = getWeekSpan(weekOffset);
 
     const weekData: WeekData = {
         Понедельник: { lessons: [], date: weekSpan[0] },
@@ -117,7 +106,7 @@ function transform(data: any, type: "group" | "teacher", week: WeekType): WeekDa
         Суббота: 6,
     };
 
-    const weekBoundaries = getWeekBoundaries(week);
+    const weekBoundaries = getWeekBoundaries(weekOffset);
 
     for (const [day, items] of Object.entries(groupedItems)) {
         // Check DayName <-> DayNumber consistency
@@ -149,7 +138,7 @@ function transform(data: any, type: "group" | "teacher", week: WeekType): WeekDa
                 room: item.classroom,
             }));
 
-            // For teachers, combine groups for the same lesson
+        // For teachers, combine groups for the same lesson
         } else {
             const lessons: Lesson[] = [];
             for (const item of items) {
@@ -183,12 +172,10 @@ function transform(data: any, type: "group" | "teacher", week: WeekType): WeekDa
     return weekData;
 }
 
-
 // Main function
-
 export const getLessons = query(LessonsRequestSchema, async (params): Promise<LessonsResponse> => {
 
-    const { weekStart, weekEnd } = getWeekBoundaries(params.week);
+    const { weekStart, weekEnd } = getWeekBoundaries(params.weekOffset);
 
     const debugData: DebugData = {};
 
@@ -250,7 +237,7 @@ export const getLessons = query(LessonsRequestSchema, async (params): Promise<Le
 
     try {
         // Magic happens here
-        weekData = transform(data, params.type, params.week);
+        weekData = transform(data, params.type, params.weekOffset);
     } catch (err) {
         // In case BSUFL backend response's structure is unexpected
         console.error("Error parsing MSLU response:", err);
