@@ -11,11 +11,16 @@
 
     const { lesson }: { lesson: Lesson } = $props();
 
+    // svelte-ignore state_referenced_locally
     const st = lesson.start_time.slice(0, 5);
+    // svelte-ignore state_referenced_locally
     const et = lesson.end_time.slice(0, 5);
+    // svelte-ignore state_referenced_locally
     const entity = lesson.teacher || lesson.groups.join(", ");
+    // svelte-ignore state_referenced_locally
     const entityFull = lesson.teacherFull || lesson.groups.join(", ");
 
+    // svelte-ignore state_referenced_locally
     const typeStyling: string =
         lesson.type === "Практ"
             ? "bg-rose-100 text-rose-800 outline-rose-200 dark:bg-rose-950 dark:text-rose-100 dark:outline-rose-800"
