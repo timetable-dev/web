@@ -42,8 +42,6 @@
         { label: "След. нед.", value: "1" },
     ];
 
-    let calendarContent = $state<HTMLDivElement>();
-
 </script>
 
 <Tabs.Root
