@@ -1,5 +1,4 @@
 <script lang="ts">
-    import type { WeekType } from "$lib/types";
     import { addedEntities } from "$lib/persisted";
 
     import { getLessons } from "$lib/remote/lessons.remote";
@@ -9,16 +8,17 @@
     import ContentError from "./ContentError.svelte";
     import WelcomeScreen from "./WelcomeScreen.svelte";
     import WeekPicker from "./WeekPicker.svelte";
+    import type { WeekOffset } from "$lib/types";
 
     // Props: local storage id of a selected entity
     let { selectedEntityId = $bindable() }: { selectedEntityId: string | undefined } = $props();
 
-    let selectedWeek = $state<WeekType>("currentWeek");
+    let weekOffset = $state<WeekOffset>("0");
 
     interface LessonsParams {
         id: string;
         type: "group" | "teacher";
-        week: WeekType;
+        weekOffset: WeekOffset;
     }
 
     let selectedEntity = $derived(addedEntities.current.find(({ id }) => id === selectedEntityId));
@@ -29,7 +29,7 @@
             lessonsParams = {
                 id: selectedEntity.mslu_id,
                 type: selectedEntity.type,
-                week: selectedWeek,
+                weekOffset: weekOffset,
             }
         } else {
             lessonsParams = undefined;
@@ -79,5 +79,5 @@
 
 <!-- Week picker (absolute) -->
 {#if selectedEntity}
-    <WeekPicker bind:selectedWeek />
+    <WeekPicker bind:weekOffset />
 {/if}
