@@ -55,7 +55,6 @@ const LessonsRequestSchema = v.object({
     weekOffset: v.pipe(v.string(), v.toNumber()),
 })
 
-
 // Helper functions
 
 function getWeekBoundaries(weekOffset: number): { weekStart: string; weekEnd: string } {

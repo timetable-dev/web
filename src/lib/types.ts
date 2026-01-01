@@ -1,5 +1,7 @@
-/** Internal MSLU backend week id used when getting lessons. */
-export type WeekType = "currentWeek" | "nextWeek" | "prevWeek";
+/** Internal MSLU backend week id used when getting lessons.
+ * Простите за этот индусский код; чтобы было нормально, нужно переписать свойства Tabs из Bits UI,
+ * чтобы они принимали number, но мне пока не хочется в это вникать */
+export type WeekOffset = "-6" | "-5" | "-4" | "-3" | "-2" | "-1" | "0" | "1" | "2" | "3" | "4" | "5" | "6";
 
 /** Constant used when making API requests */
 export type EntityType = "group" | "teacher";
