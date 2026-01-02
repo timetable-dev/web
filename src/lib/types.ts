@@ -1,18 +1,17 @@
-/** Internal MSLU backend week id used when getting lessons.
- * Простите за этот индусский код; чтобы было нормально, нужно переписать свойства Tabs из Bits UI,
- * чтобы они принимали number, но мне пока не хочется в это вникать */
-export type WeekOffset = "-6" | "-5" | "-4" | "-3" | "-2" | "-1" | "0" | "1" | "2" | "3" | "4" | "5" | "6";
+/** Week offset is just an integer */
+export type WeekOffset = number;
 
 /** Constant used when making API requests */
 export type EntityType = "group" | "teacher";
 
 /** Represents a single entity (group or teacher) saved in local storage. */
-export interface Entity {
-    id: string;
+export interface SavedEntity {
+    uuid: string;
     name: string;
     type: EntityType;
-    mslu_id: string;
+    bsuflId: string;
     base64: string;
+    customName: string;
 }
 
 /** Represents a single entity (group or teacher) returned by the API. */
@@ -63,10 +62,11 @@ export interface DebugData {
 }
 
 /** Represents the response from the /groups and /teachers API endpoints (with debug data). */
-export interface EntitiesResponse {
-    entities: Entity[];
-    debug?: DebugData;
-}
+// export interface EntitiesResponse {
+//     entities: ResponseEntity[];
+//     debug?: DebugData;
+// }
+
 /** Represents the response from the /lessons API endpoint (with debug data). */
 export interface LessonsResponse {
     week: WeekData;

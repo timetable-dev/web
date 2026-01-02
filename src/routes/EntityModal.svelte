@@ -1,15 +1,13 @@
 <script lang="ts">
-    import EntityModalGroup from "./EntityModalGroup.svelte";
-    import EntityModalTeacher from "./EntityModalTeacher.svelte";
-
-    import type { ResponseEntity, Entity, EntityType } from "$lib/types";
+    import type { ResponseEntity, SavedEntity, EntityType } from "$lib/types";
+    import EntityModalGroup from "./EntityModalGroup.svelte"
+    import EntityModalTeacher from "./EntityModalTeacher.svelte"
+    import { savedEntities } from "./saved-entities.svelte";
     import { Dialog, Tabs } from "bits-ui";
-    import { addedEntities } from "$lib/persisted";
+    import { Cached } from "$lib/cached";
+    import { goto } from "$app/navigation";
 
-    let {
-        open = $bindable(false),
-        selectedEntityId = $bindable(),
-    }: { open: boolean; selectedEntityId: string | undefined } = $props();
+    let { open = $bindable(false) }: { open: boolean } = $props();
 
     let selectedType = $state<EntityType>("group");
     let selectedGroup = $state<ResponseEntity>();
@@ -27,25 +25,29 @@
 
     function submitEntity() {
         if (selectedType === "group" && selectedGroup) {
-            const entity: Entity = {
-                id: crypto.randomUUID(),
+            const entity: SavedEntity = {
+                uuid: crypto.randomUUID(),
                 name: selectedGroup.label,
                 type: "group",
-                mslu_id: selectedGroup.id,
+                bsuflId: selectedGroup.id,
                 base64: selectedGroup.base64,
+                customName: "",
             }
-            addedEntities.current.push(entity);
-            selectedEntityId = entity.id;
+            savedEntities.push(entity);
+            Cached.updateSaved(savedEntities);
+            goto(`/${entity.uuid}`);
         } else if (selectedType === "teacher" && selectedTeacher) {
-            const entity: Entity = {
-                id: crypto.randomUUID(),
+            const entity: SavedEntity = {
+                uuid: crypto.randomUUID(),
                 name: selectedTeacher.label,
                 type: "teacher",
-                mslu_id: selectedTeacher.id,
+                bsuflId: selectedTeacher.id,
                 base64: selectedTeacher.base64,
+                customName: "",
             }
-            addedEntities.current.push(entity);
-            selectedEntityId = entity.id;
+            savedEntities.push(entity);
+            Cached.updateSaved(savedEntities);
+            goto(`${entity.uuid}`);
         }
     }
         

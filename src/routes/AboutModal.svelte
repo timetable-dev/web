@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { showDebug } from "$lib/persisted";
     import { Dialog, Switch } from "bits-ui";
     import { Icon as LucideIcon } from "@lucide/svelte";
     import RotateCw from "@lucide/svelte/icons/rotate-cw";
@@ -31,7 +30,7 @@
     {@const Icon = icon}
     <div class="flex flex-col gap-2 md:flex-row md:gap-4">
         <span
-            class="flex h-min w-min rounded-md border-[1.5px] border-sky-400 bg-sky-100 p-3 text-sky-600 dark:border-sky-800 dark:bg-sky-900 dark:text-sky-200"
+            class="flex h-min w-min rounded-md border-[1.5px] md:mt-1 border-sky-400 bg-sky-100 p-3 text-sky-600 dark:border-sky-800 dark:bg-sky-900 dark:text-sky-200"
         >
             <Icon size="20" />
         </span>
@@ -104,7 +103,7 @@
                         <Github size={22} />
                         GitHub
                     </a>
-                    <div class="flex flex-row items-center justify-between p-3">
+                    <!-- <div class="flex flex-row items-center justify-between p-3">
                         <p>Show debug info</p>
                         <Switch.Root
                             bind:checked={showDebug.current}
@@ -113,9 +112,8 @@
                             <Switch.Thumb
                                 class="block aspect-square rounded-full w-6 m-1 bg-zinc-200 data-[state=checked]:translate-x-6 transition-transform duration-150"
                             />
-                        </Switch.Root>
+                        </Switch.Root> -->
                     </div>
-                </div>
             {/if}
 
             <!-- Controls -->

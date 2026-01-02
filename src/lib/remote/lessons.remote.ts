@@ -5,7 +5,6 @@ import { query } from '$app/server';
 import { error } from "@sveltejs/kit";
 import * as v from "valibot";
 
-
 // Schemas
 
 const MsluDataSchema = v.array(
@@ -52,7 +51,7 @@ const MsluDataSchema = v.array(
 const LessonsRequestSchema = v.object({
     id: v.string(),
     type: v.union([v.literal("group"), v.literal("teacher")]),
-    weekOffset: v.pipe(v.string(), v.toNumber()),
+    weekOffset: v.pipe(v.number(), v.integer()),
 })
 
 // Helper functions
