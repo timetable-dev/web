@@ -19,7 +19,7 @@
 >
     <p class="pt-2 pb-1 text-center text-xl">Произошла ошибка</p>
     <p
-        class="rounded-lg px-4 py-3 break-words outline-1 bg-orange-50 outline-orange-200 text-orange-800 dark:bg-amber-950 dark:text-amber-50 dark:outline-amber-700"
+        class="rounded-lg px-4 py-3 wrap-break-word outline-1 bg-orange-50 outline-orange-200 text-orange-800 dark:bg-amber-950 dark:text-amber-50 dark:outline-amber-700"
     >
         {errorMessage}
     </p>

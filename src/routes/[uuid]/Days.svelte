@@ -1,16 +1,14 @@
 <script lang="ts">
     import type { LessonsResponse, DayName } from "$lib/types";
-    import { showDebug } from "$lib/persisted";
-    import Lesson from "./ContentLesson.svelte";
+    import Lesson from "./Lesson.svelte";
     import ExternalLink from "@lucide/svelte/icons/external-link";
 
     interface Props {
         lessons: LessonsResponse;
-        totalRequestTime: number | undefined;
         base64: string;
     }
 
-    let { lessons, base64, totalRequestTime }: Props = $props();
+    let { lessons, base64 }: Props = $props();
 
 </script>
 
@@ -84,7 +82,7 @@
 </div>
 
 <!-- Debug info if available and enabled -->
-{#if lessons.debug && showDebug.current}
+<!-- {#if lessons.debug && showDebug.current}
     <div
         class="mt-8 flex flex-col self-center rounded-xl px-6 py-3 text-zinc-800 outline-2 outline-zinc-500 outline-dashed dark:text-zinc-100"
     >
@@ -92,4 +90,4 @@
         <p>Data transform: { (lessons.debug.data_transform ?? 0).toFixed(4) } ms</p>
         <p>Total response: { (totalRequestTime ?? 0).toFixed(4) } ms</p>
     </div>
-{/if}
+{/if} -->
