@@ -52,14 +52,14 @@
         </div>
         <Combobox.Portal> 
             <Combobox.Content
-                class="data-[state=open]:animate-scale-in z-51 data-[state=closed]:animate-scale-out mt-2 flex max-h-52 w-[var(--bits-combobox-anchor-width)] flex-col overflow-y-auto rounded-xl
+                class="data-[state=open]:animate-scale-in z-51 data-[state=closed]:animate-scale-out mt-2 flex max-h-52 w-(--bits-combobox-anchor-width) flex-col overflow-y-auto rounded-xl
                     border-[1.5px] border-border bg-bg
                     p-1"
             >
                 {#each filteredTeachers as teacher}
                     <Combobox.Item
                         class="flex w-full rounded-md px-4 py-2.5 text-fg transition-all duration-100 cursor-pointer
-                                active:scale-[0.95] data-[highlighted]:bg-bg-elevated data-[selected]:bg-bg-accent"
+                                active:scale-[0.95] data-highlighted:bg-bg-elevated data-selected:bg-bg-accent"
                         value={teacher.id}
                         label={teacher.name}
                     >
