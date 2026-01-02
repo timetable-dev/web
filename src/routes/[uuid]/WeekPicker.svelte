@@ -1,12 +1,12 @@
 <script lang="ts">
     import type { SelectItem, WeekOffset } from "$lib/types";
     import { today, startOfWeek, endOfWeek, DateFormatter } from "@internationalized/date";
-    import { Tabs, Separator, Select, type BitsElementAttributes } from "bits-ui";
+    import { Tabs, Separator, Select } from "bits-ui";
     import Calendar from "@lucide/svelte/icons/calendar";
-    import Content from "./Content.svelte";
 
     type Props = { weekOffset: WeekOffset };
-    let { weekOffset = $bindable("0") }: Props = $props();
+
+    let { weekOffset = $bindable(0) }: Props = $props();
 
     interface SelectWeek {
         weekOffset: WeekOffset;
@@ -29,27 +29,35 @@
             const weekEnd = endOfWeek(currentDate, "ru-RU", "mon").add({ days: offsetDays });
 
             expandedWeeks.push({
-                weekOffset: weekOffset.toString() as WeekOffset, // !!!
+                weekOffset: weekOffset,
                 label: `${formatter.format(weekStart.toDate("Europe/Minsk"))} – ${formatter.format(weekEnd.toDate("Europe/Minsk"))}`
             })
         })
         return expandedWeeks;
     }
 
-    const weeks: SelectItem<WeekOffset, string>[] = [
+    const weeks: SelectItem<string, string>[] = [
         { label: "Пред. нед.", value: "-1" },
         { label: "Тек. нед.", value: "0" },
         { label: "След. нед.", value: "1" },
     ];
 
+    function getValue() {
+        return weekOffset.toString();
+    }
+ 
+    function setValue(newValue: string) {
+        weekOffset = Number(newValue);
+    }
+
 </script>
 
 <Tabs.Root
-    bind:value={weekOffset}
+    bind:value={getValue, setValue}
     class="flex fixed w-full h-14 md:h-13 inset-x-0 bottom-3 justify-center-safe overflow-scroll scrollbar-hidden"
 >
     <Tabs.List
-        class="flex flex-row items-center gap-1 rounded-lg bg-bg border-1 border-border-alt px-1"
+        class="flex flex-row items-center gap-1 rounded-lg bg-bg border border-border-alt px-1"
     >
         {#each weeks as week}
             <Tabs.Trigger
@@ -62,9 +70,9 @@
                 <p>{week.label}</p>
             </Tabs.Trigger>
         {/each}
-        <Separator.Root orientation="vertical" class="w-[1px] h-full bg-border-alt"/>
+        <Separator.Root orientation="vertical" class="w-px h-full bg-border-alt"/>
         <Select.Root type="single"
-            bind:value={weekOffset}>
+            bind:value={getValue, setValue}>
             <Select.Trigger>
                 <span class="flex w-12 md:w-11 h-12 md:h-11 rounded-md items-center justify-center hover:bg-bg-elevated duration-150">
                     <Calendar size=22/>
@@ -72,11 +80,12 @@
             </Select.Trigger>
             <Select.Portal>
                 <Select.Content
-                    class="flex flex-col m-2 bg-bg rounded-lg p-1 border-1 border-border-alt h-64 overflow-scroll data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out"
+                    class="flex flex-col m-2 bg-bg rounded-lg p-1 border border-border-alt h-64 overflow-scroll data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out"
                 >
                     {#each expandedWeeks() as expandedWeek}
                         <Select.Item
-                            class="bg-bg px-6 py-2 md:px-4 md:py-1.5 rounded-md hover:bg-bg-elevated data-[selected]:bg-bg-elevated cursor-pointer" value={expandedWeek.weekOffset} >
+                            class="bg-bg px-6 py-2 md:px-4 md:py-1.5 rounded-md hover:bg-bg-elevated data-selected:bg-bg-elevated cursor-pointer"
+                            value={expandedWeek.weekOffset.toString()} >
                             {expandedWeek.label}
                         </Select.Item>
                     {/each}
