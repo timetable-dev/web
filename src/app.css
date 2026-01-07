@@ -5,25 +5,25 @@
  
 :root {
 	/* Background colors */
-    --bg: hsl(0 0% 98%);
-    --bg-elevated: hsl(240 4.8% 95.9%);
-    --bg-elevated-hover: hsl(240 5.9% 90%);
-    --bg-elevated-alt: hsl(240 5.9% 90%);
+    --bg: oklch(100% 0 0);
+    --bg-hover: oklch(92% 0.004 286.32);
+    --bg-elevated-1: oklch(98.5% 0 0);
+    --bg-elevated-2: oklch(96.7% 0.001 286.375);
+    --bg-elevated-3: oklch(92% 0.004 286.32);
     --bg-accent: hsl(204 93.8% 93.7%);
-    --bg-accent-hover: hsl(200.6 94.4% 86.1%);
     --bg-accent-alt: hsl(200.6 94.4% 86.1%);
-    --bg-accent-alt-hover: hsl(199.4 95.5% 73.9%);
+    --bg-accent-hover: hsl(200.6 94.4% 86.1%);
     --bg-destructive: hsl(0 93.3% 94.1%);
 
     /* Text colors */
-    --fg: hsl(240 5.9% 10%);
-    --fg-muted: hsl(240 5% 64.9%);
-    --fg-accent: hsl(201 90% 27.5%);
-    --fg-destructive: hsl(0 84.2% 60.2%);
+    --fg: oklch(21% 0.006 285.885); /* hsl(240 5.9% 10%) */
+    --fg-muted: oklch(70.5% 0.015 286.067);
+    --fg-accent: oklch(39.1% 0.09 240.876);
+    --fg-destructive: oklch(50.5% 0.213 27.518);
 
     /* Border colors */
-    --border: hsl(240 4.9% 83.9%);
-    --border-alt: oklch(92% 0.004 286.32);
+    --border: oklch(92% 0.004 286.32);
+    --border-alt: oklch(87.1% 0.006 286.286);
     --border-accent: hsl(198.6 88.7% 48.4%);
     --border-accent-alt: hsl(200.4 98% 39.4%);
     --focus: hsl(198.6 88.7% 48.4%);
@@ -35,14 +35,14 @@
  
 .dark {
 	/* Background colors */
-    --bg: hsl(240 3.7% 15.9%);
-    --bg-elevated: hsl(240 5.3% 26.1%);
-    --bg-elevated-hover: hsl(240 3.8% 46.1%);
-    --bg-elevated-alt: hsl(240 3.8% 46.1%);
+    --bg: oklch(21% 0.006 285.885);
+    --bg-hover: oklch(44.2% 0.017 285.786);
+    --bg-elevated-1: oklch(27.4% 0.006 286.033);
+    --bg-elevated-2: oklch(37% 0.013 285.805);
+    --bg-elevated-3: oklch(44.2% 0.017 285.786);
     --bg-accent: hsl(201 90% 27.5%);
-    --bg-accent-hover: hsl(201.3 96.3% 32.2%);
     --bg-accent-alt: hsl(201.3 96.3% 32.2%);
-    --bg-accent-alt-hover: hsl(200.4 98% 39.4%);
+    --bg-accent-hover: hsl(201.3 96.3% 32.2%);
     --bg-destructive: hsl(0 62.8% 30.6%);
 
     /* Text colors */
@@ -67,13 +67,13 @@
     --default-font-family: "Inter", "sans-serif";
 
     --color-bg: var(--bg);
-    --color-bg-elevated: var(--bg-elevated);
-    --color-bg-elevated-hover: var(--bg-elevated-hover);
-    --color-bg-elevated-alt: var(--bg-elevated-alt);
+    --color-bg-hover: var(--bg-hover);
+    --color-bg-elevated-1: var(--bg-elevated-1);
+    --color-bg-elevated-2: var(--bg-elevated-2);
+    --color-bg-elevated-3: var(--bg-elevated-3);
     --color-bg-accent: var(--bg-accent);
-    --color-bg-accent-hover: var(--bg-accent-hover);
     --color-bg-accent-alt: var(--bg-accent-alt);
-    --color-bg-accent-alt-hover: var(--bg-accent-alt-hover);
+    --color-bg-accent-hover: var(--bg-accent-hover);
     --color-bg-destructive: var(--bg-destructive);
 
     /* Text colors */
@@ -87,8 +87,7 @@
     --color-border-alt: var(--border-alt);
     --color-border-accent: var(--border-accent);
     --color-border-accent-alt: var(--border-accent-alt);
-
-    --color-focus: var(--focus);
+    --color-color-focus: var(--focus);
 
     /* Other UI colors */
     --color-overlay: var(--overlay);
