@@ -21,11 +21,21 @@
     const entityFull = lesson.teacherFull || lesson.groups.join(", ");
 
     // svelte-ignore state_referenced_locally
+    // const typeStyling: string =
+    //     lesson.type === "Практ"
+    //         ? "bg-rose-100 text-rose-800 outline-rose-200 dark:bg-rose-950 dark:text-rose-100 dark:outline-rose-800"
+    //         : lesson.type === "Лек"
+    //           ? "bg-emerald-100 text-emerald-800 outline-emerald-200 dark:bg-emerald-950 dark:text-emerald-100 dark:outline-emerald-800"
+    //           : lesson.type === "Сем"
+    //             ? "bg-amber-100 text-amber-800 outline-amber-200 dark:bg-amber-950 dark:text-amber-100 dark:outline-amber-800"
+    //             : "bg-zinc-100 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-200";
+
+    // svelte-ignore state_referenced_locally
     const typeStyling: string =
         lesson.type === "Практ"
-            ? "bg-rose-100 text-rose-800 outline-rose-200 dark:bg-rose-950 dark:text-rose-100 dark:outline-rose-800"
+            ? "bg-red-100 text-red-800 outline-red-200 dark:bg-red-950 dark:text-red-100 dark:outline-red-800"
             : lesson.type === "Лек"
-              ? "bg-emerald-100 text-emerald-800 outline-emerald-200 dark:bg-emerald-950 dark:text-emerald-100 dark:outline-emerald-800"
+              ? "bg-green-100 text-green-800 outline-green-200 dark:bg-green-950 dark:text-green-100 dark:outline-green-800"
               : lesson.type === "Сем"
                 ? "bg-amber-100 text-amber-800 outline-amber-200 dark:bg-amber-950 dark:text-amber-100 dark:outline-amber-800"
                 : "bg-zinc-100 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-200";
