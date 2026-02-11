@@ -18,14 +18,15 @@
     /* Text colors */
     --fg: oklch(21% 0.006 285.885); /* hsl(240 5.9% 10%) */
     --fg-muted: oklch(70.5% 0.015 286.067);
-    --fg-accent: oklch(39.1% 0.09 240.876);
+    --fg-accent: oklch(44.3% 0.11 240.79);
+    --fg-accent-alt: oklch(39.1% 0.09 240.876);
     --fg-destructive: oklch(50.5% 0.213 27.518);
 
     /* Border colors */
     --border: oklch(92% 0.004 286.32);
     --border-alt: oklch(87.1% 0.006 286.286);
-    --border-accent: hsl(198.6 88.7% 48.4%);
-    --border-accent-alt: hsl(200.4 98% 39.4%);
+    --border-accent: var(--color-sky-400);
+    --border-accent-alt: var(--color-sky-500);
     --focus: hsl(198.6 88.7% 48.4%);
 
     /* Other UI colors */
@@ -49,6 +50,7 @@
     --fg: hsl(0 0% 98%);
     --fg-muted: hsl(240 4.9% 83.9%);
     --fg-accent: hsl(204 100% 97.1%);
+    --fg-accent-alt: hsl(204 100% 97.1%);
     --fg-destructive: hsl(0 93.5% 81.8%);
 
     /* Border colors */
@@ -80,6 +82,7 @@
     --color-fg: var(--fg);
     --color-fg-muted: var(--fg-muted);
     --color-fg-accent: var(--fg-accent);
+    --color-fg-accent-alt: var(--fg-accent-alt);
     --color-fg-destructive: var(--fg-destructive);
 
     /* Border colors */
