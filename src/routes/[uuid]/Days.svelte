@@ -46,6 +46,8 @@
     {/if}
 {/snippet}
 
+<div class="text-center text-balance text-zinc-500 dark:text-zinc-400">Обязательно сверяйтесь с официальным сайтом.</div>
+
 <!-- Each day with its lessons -->
 <div class="flex flex-col md:flex-row md:gap-8">
     <div class="w-full md:w-1/2">
