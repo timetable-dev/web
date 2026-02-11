@@ -41,6 +41,7 @@ export interface Lesson {
     teacher?: string;
     teacherFull?: string;
     groups: string[];
+    isMuted: boolean;
 }
 
 /** Is used for type checking when grouping by day in /lessons API endpoint. */
