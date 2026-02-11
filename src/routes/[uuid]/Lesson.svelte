@@ -21,6 +21,9 @@
     const entityFull = lesson.teacherFull || lesson.groups.join(", ");
 
     // svelte-ignore state_referenced_locally
+    const opacity = lesson.isMuted ? "opacity-50" : "opacity-100"
+
+    // svelte-ignore state_referenced_locally
     const typeStyling: string =
         lesson.type === "Практ"
             ? "bg-rose-100 text-rose-800 outline-rose-200 dark:bg-rose-950 dark:text-rose-100 dark:outline-rose-800"
@@ -43,7 +46,7 @@
 
 <Dialog.Root>
     <Dialog.Trigger
-        class="my-1 py-2.5 grid w-full cursor-pointer grid-cols-5 gap-1 rounded-md bg-zinc-50 text-zinc-950 dark:bg-zinc-800 dark:text-zinc-50"
+        class="my-1 py-2.5 grid w-full cursor-pointer grid-cols-5 gap-1 rounded-md {opacity} bg-zinc-50 text-zinc-950 dark:bg-zinc-800 dark:text-zinc-50"
     >
         <div class="col-span-1 w-full flex flex-col items-center-safe justify-center">
             <div class="">{st}</div>

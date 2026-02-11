@@ -1,5 +1,5 @@
 import type { Lesson, WeekData, DayName, DebugData, LessonsResponse } from "$lib/types";
-import { today, startOfWeek, endOfWeek, parseDate } from "@internationalized/date";
+import { today, startOfWeek, endOfWeek, parseDate, startOfYear, createCalendar, isSameYear } from "@internationalized/date";
 import { MSLU_BACKEND_ENDPOINT } from "$env/static/private";
 import { query } from '$app/server';
 import { error } from "@sveltejs/kit";
@@ -39,6 +39,7 @@ const MsluDataSchema = v.array(
         teacherO: v.optional(v.string()),
         teacherNamePost: v.optional(v.string()),
         groupName: v.string(),
+        isEven: v.number(),
 
         // Fields I don't care about
         idSchedule: v.number(),
@@ -60,13 +61,33 @@ function getWeekBoundaries(weekOffset: number): { weekStart: string; weekEnd: st
     const currentDate = today("Europe/Minsk");
     const currentWeekStart = startOfWeek(currentDate, "ru-RU", "mon");
     const currentWeekEnd = endOfWeek(currentDate, "ru-RU", "mon");
-
-    let offsetDays = weekOffset * 7;
+    const offsetDays = weekOffset * 7;
 
     return {
         weekStart: currentWeekStart.add({ days: offsetDays }).toString(),
         weekEnd: currentWeekEnd.add({ days: offsetDays }).toString(),
     };
+}
+
+function getWeekParity(weekOffset: number): number {
+    const offsetDays = weekOffset * 7;
+    const currentDate = today("Europe/Minsk");
+    const currentWeekStart = startOfWeek(currentDate, "ru-RU", "mon");
+
+    const offsetWeekStart = currentWeekStart.add({ days: offsetDays });
+    const offsetWeekEnd = endOfWeek(offsetWeekStart, "ru-RU", "mon");
+
+    const yearStart = startOfYear(offsetWeekStart);
+    const firstYearWeekStart = startOfWeek(yearStart, "ru-RU", "mon");
+
+    const elapsedDays = offsetWeekStart.compare(firstYearWeekStart);
+    let offsetWeekNumber = elapsedDays / 7 + 1;
+
+    if (!isSameYear(offsetWeekStart, offsetWeekEnd)) {
+        offsetWeekNumber = 1;
+    }
+
+    return (offsetWeekNumber & 1) === 0 ? 1 : 2;
 }
 
 function getWeekSpan(weekOffset: number): string[] {
@@ -79,6 +100,8 @@ function getWeekSpan(weekOffset: number): string[] {
 function transform(data: any, type: "group" | "teacher", weekOffset: number): WeekData {
     // Validate data with Valibot
     const validatedItems = v.parse(MsluDataSchema, data);
+
+    const weekParity = getWeekParity(weekOffset);
 
     // Group by day
     const groupedItems = Object.groupBy(validatedItems, (item) => item.day);
@@ -134,6 +157,7 @@ function transform(data: any, type: "group" | "teacher", weekOffset: number): We
                     `${item.teacherNamePost} ${item.teacherN ? item.teacherN[0] : ""}. ${item.teacherO ? item.teacherO[0] : ""}. ${item.teacherF ?? ""}`.trim(),
                 teacherFull: `${item.teacherNamePost} ${item.teacherN ?? ""} ${item.teacherO ?? ""} ${item.teacherF ?? ""}`.trim(),
                 room: item.classroom,
+                isMuted: item.isEven === 1 || item.isEven === 2 ? item.isEven !== weekParity ? true : false : false,
             }));
 
         // For teachers, combine groups for the same lesson
@@ -147,7 +171,8 @@ function transform(data: any, type: "group" | "teacher", weekOffset: number): We
                         lesson.title === item.discipline &&
                         lesson.titleFull === item.disciplineFull &&
                         lesson.type === item.disciplineType &&
-                        lesson.room === item.classroom,
+                        lesson.room === item.classroom &&
+                        lesson.isMuted === (item.isEven === 1 || item.isEven === 2 ? item.isEven !== weekParity ? true : false : false),
                 );
                 if (existing) {
                     existing.groups.push(`${item.groupName} ${item.faculty}`);
@@ -159,7 +184,8 @@ function transform(data: any, type: "group" | "teacher", weekOffset: number): We
                         titleFull: item.disciplineFull,
                         type: item.disciplineType,
                         room: item.classroom,
-                        groups: [item.groupName],
+                        groups: [`${item.groupName} ${item.faculty}`],
+                        isMuted: item.isEven === 1 || item.isEven === 2 ? item.isEven !== weekParity ? true : false : false,
                     });
                 }
             }
@@ -247,4 +273,74 @@ export const getLessons = query(LessonsRequestSchema, async (params): Promise<Le
         week: weekData,
         debug: debugData,
     };
+});
+
+export type MsluData = v.InferInput<typeof MsluDataSchema>;
+
+export const getRawLessons = query(LessonsRequestSchema, async (params): Promise<MsluData> => {
+
+    const { weekStart, weekEnd } = getWeekBoundaries(params.weekOffset);
+
+    const debugData: DebugData = {};
+
+    const fetchUrl = new URL(MSLU_BACKEND_ENDPOINT);
+
+    if (params.type === "group") {
+        fetchUrl.pathname = "/api/api/groupschedule";
+        fetchUrl.searchParams.append("startDate", weekStart);
+        fetchUrl.searchParams.append("endDate", weekEnd);
+        fetchUrl.searchParams.append("idGroup", params.id);
+    } else {
+        fetchUrl.pathname = "/api/api/teacherschedule";
+        fetchUrl.searchParams.append("startDate", weekStart);
+        fetchUrl.searchParams.append("endDate", weekEnd);
+        fetchUrl.searchParams.append("idTeacher", params.id);
+    }
+
+    const msluRequestStart = performance.now();
+    let res: Response;
+    try {
+        res = await fetch(fetchUrl, {
+            signal: AbortSignal.timeout(15000),
+            credentials: "omit",
+            headers: {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:142.0) Gecko/20100101 Firefox/142.0",
+                "Accept": "application/json",
+                "Accept-Language": "en-US,en;q=0.5",
+                "X-Request-Origin": "http://www.timetable.bsufl.by",
+                "X-Timestamp": Date.now().toString(),
+                "X-Request-Id": crypto.randomUUID(),
+                "Sec-GPC": "1",
+                "Priority": "u=4",
+                "Pragma": "no-cache",
+                "Cache-Control": "no-cache"
+            },
+            referrer: "http://www.timetable.bsufl.by/",
+            method: "GET",
+            mode: "cors",
+        });
+
+    // Timeout error (15 seconds)
+    } catch(err) {
+        console.error(err);
+        throw error(503, "Сервер БГУИЯ не отвечает.");
+    }
+
+    debugData.mslu_response = performance.now() - msluRequestStart;
+
+    // Checking if the response is ok
+    if (!res.ok) {
+        console.error(res.status, res.statusText);
+        throw error(503, "Сервер БГУИЯ вне зоны доступа.");
+    }
+
+    let weekData: WeekData;
+    const data = await res.json();
+
+    try {
+        const validatedItems = v.parse(MsluDataSchema, data);
+        return validatedItems;
+    } catch(err) {
+        throw error(503, "Неверный ответ сервера БГУИЯ.");
+    }
 });
