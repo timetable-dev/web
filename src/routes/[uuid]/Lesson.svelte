@@ -85,6 +85,12 @@
                 {@render infoBlock(lesson.room, MapPin)}
             </div>
 
+            {#if lesson.isMuted}
+                <div class="flex flex-row gap-2">
+                    <p class="w-full p-3 pt-2.5 text-sm text-balance rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-950 dark:text-zinc-100">Судя по всему, это занятие запланировано на другую неделю, но мы всё равно рекомендуем сверяться с официальным сайтом.</p>
+                </div>
+            {/if}
+
             <Dialog.Close
                 class="w-full mt-2 p-2 rounded-lg cursor-pointer outline-1 duration-100 active:scale-[0.98]
 				bg-zinc-100 text-zinc-900 outline-zinc-200 hover:bg-zinc-200 hover:outline-zinc-300
