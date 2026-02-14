@@ -25,7 +25,9 @@
 
     // svelte-ignore state_referenced_locally
     const typeStyling: string =
-        lesson.type === "Практ"
+    lesson.isMuted === true
+        ? "bg-zinc-100 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-200"
+        : lesson.type === "Практ"
             ? "bg-rose-100 text-rose-800 outline-rose-200 dark:bg-rose-950 dark:text-rose-100 dark:outline-rose-800"
             : lesson.type === "Лек"
               ? "bg-emerald-100 text-emerald-800 outline-emerald-200 dark:bg-emerald-950 dark:text-emerald-100 dark:outline-emerald-800"
