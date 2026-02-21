@@ -29,6 +29,44 @@
         "type": "image/png"
         }
     ],
+    "shortcuts": [
+        {
+            "name": "Первое расписание",
+            "short_name": "Первое",
+            "description": "Открыть первое расписание из списка",
+            "url": "/go/1",
+            "icons": [
+            {
+                "src": "/icons/first.png",
+                "sizes": "192x192"
+                }
+            ]
+        },
+        {
+            "name": "Второе расписание",
+            "short_name": "Второе",
+            "description": "Открыть второе расписание из списка",
+            "url": "/go/2",
+            "icons": [
+            {
+                "src": "/icons/second.png",
+                "sizes": "192x192"
+                }
+            ]
+        },
+        {
+            "name": "Третье расписание",
+            "short_name": "Третье",
+            "description": "Открыть третье расписание из списка",
+            "url": "/go/3",
+            "icons": [
+            {
+                "src": "/icons/third.png",
+                "sizes": "192x192"
+                }
+            ]
+        }
+    ],
     "background_color": "#2B7FFF",
     "start_url": "/",
     "display": "standalone"
