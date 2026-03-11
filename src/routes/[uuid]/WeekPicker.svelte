@@ -84,7 +84,7 @@
                 >
                     {#each expandedWeeks() as expandedWeek}
                         <Select.Item
-                            class="bg-bg px-6 py-2 md:px-4 md:py-1.5 rounded-md hover:bg-bg-elevated data-selected:bg-bg-elevated cursor-pointer"
+                            class="bg-bg px-6 py-2 md:px-4 md:py-1.5 rounded-md hover:bg-bg-elevated data-selected:bg-zinc-200 cursor-pointer"
                             value={expandedWeek.weekOffset.toString()} >
                             {expandedWeek.label}
                         </Select.Item>
